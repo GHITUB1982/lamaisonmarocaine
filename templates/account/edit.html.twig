@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ <div class="container my-5 flex-column">
+         <h1>Espace Membre:</h1>
+        <div class="row">
+            <!-- Menu de gauche -->
+            <div class="col-md-4" style="flex: 1; display: flex;">
+                {% include "account/_menu.html.twig" %}
+            </div>
+            
+            <!-- Formulaire à droite -->
+            <div class="col-md-8">
+                <h3 class="">Modifier le Mot de passe:</h3>
+                {{ form(editform) }}
+            </div>
+        </div>
+
+{% endblock %}
