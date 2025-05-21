@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bonjour toutes les categories par Slug!{% endblock %}
+
+{% block body %}
+
+<div class="container"> 
+    <h2>Bonjour toutes les categories par Slug!</h2>
+
+    <div class="row">
+        <h1>Liste des catégories</h1>
+        <div><h2>{{ categories|length }} catégories trouvées.</h2></div>
+
+        {% if app.user %}
+            <p>Bonjour {{ app.user.firstname }}!</p>
+        {% else %}
+            <p>Bonjour Invité!</p>
+        {% endif %}
+
+        {% if categories is empty %}
+            <p>Aucune catégorie trouvée.</p>
+        {% else %}
+            {% for category in categories %}
+                <div class="col-12">
+                    <h3>{{ category.name }}</h3>
+                </div>
+                {% if category.products is not empty %}
+                    {% for product in category.products %}
+                        <div class="col-md-3">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5>{{ product.name }}</h5>
+                                </div>
+                                <img src="uploads/products/{{ product.illustration }}" alt="{{ product.name }}" class="img-fluid">
+                                <div class="card-body">
+                                    <p>Slug : {{ product.slug }}</p>
+                                    <h6>Prix : {{ product.pricewithtax }} €</h6>
+                                    <p>Description : {{ product.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <p>Aucun produit dans cette catégorie.</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

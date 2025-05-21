@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chaque Categorie par Slug!{% endblock %}
+
+{% block body %}
+
+<div class="container "> 
+                    <h2>Chaque Categorie par Slug!</h2> 
+
+                       
+                            <div>
+                                <h2>{{ category.name }}</h2>
+                                <p>{{ category.slug }}</p>
+
+                                <a href="{{ path('show_category', {'slug': category.slug}) }}">Voir la catégorie</a>
+                            </div>
+
+                        {% if category is empty %}
+                            <p>Aucune catégorie trouvée.</p>
+                        {% endif %}
+</div>
+{% endblock %}

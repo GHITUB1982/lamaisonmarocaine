@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+
+   <div class="container">
+
+   <h1>Description du Produit Choisi:</h1>
+
+   <br>
+                <div class="row">
+                    <div class="col-6">
+                        <h4>Illustration du Produit:</h4>
+                        {% for prod in product %}
+                            <div>
+                                
+                               <img src="/uploads/products/{{ prod.illustration }}" alt="{{ prod.name }}">
+                            </div>
+                        {% endfor %}
+                    
+                    </div>
+                    <div class="col-6"> <h4>Informations sur le produit: </h4><br>
+                    <br>
+                        {% for prod in product %}
+                            <div>
+                            <h4>{{ prod.name }}</h4>
+                                <span class="d-block"><h5>Prix: {{ prod.pricewithtax }} €</h5> </span>
+                                <h5>Description: {{ prod.description }}</h5>
+                                <h5>Slug: {{ prod.slug }}</h5>
+                                <div class="btn btn-outline-info"><h5>Catégorie: {{ prod.category.name }}</h5></div>
+                            
+                            </div>
+                        {% endfor %}
+                    
+                    </div>
+                    
+                </div>
+</div>
+{% endblock %}
