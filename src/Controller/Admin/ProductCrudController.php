@@ -3,9 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
-use BcMath\Number;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -14,8 +12,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use Symfony\Component\DomCrawler\Field\FileFormField;
 
 class ProductCrudController extends AbstractCrudController
 {
@@ -39,6 +35,10 @@ class ProductCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
+        $rerquired=true;
+        if($pageName='edit'){
+            $rerquired=false;
+        }
         return [
             TextField::new('name', 'Nom'),
             SlugField::new('slug', 'Slug')->setLabel('Slug ou URL')->setTargetFieldName('name')->setHelp('Genéré automatiquement à partir du nom de la catégorie'),
@@ -48,9 +48,15 @@ class ProductCrudController extends AbstractCrudController
                     '10%' => 10,
                     '5,5%' => 5,5,
                     '2,1%' => 2,1,
-                ])->setRequired(false),
-            ImageField::new('illustration', 'Illustration')->setLabel('Image du produit')->setUploadedFileNamePattern('[day]-[month]-[year]-[slug]-[contenthash].[extension]')->setHelp('Image du produit')->setBasePath('uploads\products')->setUploadDir('public\uploads\products')->setRequired(false),
-            TextareaField::new('description', 'Description'),
+                ])->setRequired( $rerquired),
+            ImageField::new('illustration', 'Illustration')
+                            ->setLabel('Image du produit')
+                            ->setUploadedFileNamePattern('[day]-[month]-[year]-[slug]-[contenthash].[extension]')
+                            ->setHelp('Image du produit')
+                            ->setBasePath('uploads\products')
+                            ->setUploadDir('public\uploads\products')
+                            ->setRequired( $rerquired),
+            TextEditorField::new('description', 'Description'),
             AssociationField::new('category', 'Catégorie Associé'),
         ];
     }

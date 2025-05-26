@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier{% endblock %}
+
+{% block body %}
+<div class="container my-5"> 
+    <h1>Mon Panier</h1> 
+
+    <div class="row">
+        <div class="col-12">
+            {% if cart is empty %}
+                <h4 class="mt-5">Votre panier est vide.</h4>
+            {% else %}
+                <h4 class="mt-3 ">Vous avez {{ cart|length }} produit(s) dans votre panier.</h4>
+                <table class="table table-fluid w-75">
+                    <thead>
+                        <tr>
+                            <th>Illustration</th>
+                            <th>Produit</th>
+                            <th>Prix</th>
+                            <th>Quantité</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set cart_total = 0 %}
+                        {% for item in cart %}
+                            <tr>
+                                <td>
+                                    {% if item.product.illustration %}
+                                        <img src="{{ asset('uploads/products/' ~ item.product.illustration) }}" alt="{{ item.product.name }}" class="img-fluid" style="width: 130px;">
+                                    {% else %}
+                                        <img src="{{ asset('images/default-product.png') }}" alt="Produit par défaut" class="img-fluid" style="width: 100px;">
+                                    {% endif %}
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.product.pricewithtax|format_price }}</td>
+                                <td><button class="btn btn-primary position-relative">X {{ item.quantity }}
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                        <a  href="{{ path('app_cart_add', { id: item.product.id }) }}"><h5>+</h5></a></span>
+                                        <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+                                        <a  href="{{ path('app_cart_decrease', { id: item.product.id }) }}"><h5>-</h5></a></span>
+                                
+                                </button>
+                                </td>
+                                <td>
+                                    {% set total = item.product.pricewithtax * item.quantity %}
+                                    {{ total|format_price }}
+                                    {% set cart_total = cart_total + total %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end">Total :</td>
+                            <td>{{ cart_total|format_price }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="text-end">
+                    <a href="#" class="btn btn-primary">Passer à la caisse</a>
+                    <a href="{{ path('app_cart_remove')}}" class="btn btn-danger">Vider le panier</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

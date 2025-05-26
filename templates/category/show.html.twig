@@ -5,18 +5,24 @@
 {% block body %}
 
 <div class="container "> 
-                    <h2>Chaque Categorie par Slug!</h2> 
-
+                    <h1>Nom de la Catégorie: <strong>{{ category.name }}</strong></h1> 
+                        {% if category.products is empty %}
+                            <h4 class="mt-5 ">Aucune catégorie trouvée.</h4>
+                        {% else %}
+                          {% for product in category.products %}
+                                <div class="col-12">
+                                        <div class="col-md-3">
+                                                <div class="card mb-3">                              
+                                                        <img src="/uploads/products/{{ product.illustration }}" alt="{{ product.name }}">
+                                                </div>
+                                        </div>
+                                        <p>{{ category.slug }}</p>
+                                    
+                                        <a href="{{ path('app_product', {'slug': product.slug}) }}">Voir le produit</a>
+                                    </div>  
+                                </div>
+                        {% endfor %}
                        
-                            <div>
-                                <h2>{{ category.name }}</h2>
-                                <p>{{ category.slug }}</p>
-
-                                <a href="{{ path('show_category', {'slug': category.slug}) }}">Voir la catégorie</a>
-                            </div>
-
-                        {% if category is empty %}
-                            <p>Aucune catégorie trouvée.</p>
                         {% endif %}
 </div>
 {% endblock %}

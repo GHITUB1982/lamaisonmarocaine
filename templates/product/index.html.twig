@@ -13,8 +13,7 @@
                     <div class="col-6">
                         <h4>Illustration du Produit:</h4>
                         {% for prod in product %}
-                            <div>
-                                
+                            <div> 
                                <img src="/uploads/products/{{ prod.illustration }}" alt="{{ prod.name }}">
                             </div>
                         {% endfor %}
@@ -25,11 +24,13 @@
                         {% for prod in product %}
                             <div>
                             <h4>{{ prod.name }}</h4>
-                                <span class="d-block"><h5>Prix: {{ prod.pricewithtax }} €</h5> </span>
-                                <h5>Description: {{ prod.description }}</h5>
+                                <span class="d-block"><h5>Prix: {{ prod.pricewithtax|format_price }}</h5> </span>
+
+                                <h5>Description: {{ prod.description|raw }}</h5>
                                 <h5>Slug: {{ prod.slug }}</h5>
-                                <div class="btn btn-outline-info"><h5>Catégorie: {{ prod.category.name }}</h5></div>
-                            
+                                {# {{dump(prod.category.slug)}} #}
+                                <div class="btn btn-outline-info"><a href="{{ path('show_category', { slug: prod.category.slug }) }}" ><h5>Catégorie: {{ prod.category.name }}</h5></a></div>
+                                <a  href="{{ path('app_cart_add', { id: prod.id }) }}"class="btn btn-success w-75 mt-4">Ajouter au Panier</a>
                             </div>
                         {% endfor %}
                     
