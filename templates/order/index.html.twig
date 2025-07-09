@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Commande{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="mb-4"><i data-feather="shopping-cart"></i> Ma Commande</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_start(deliveryForm)}}
+            <h2>Informations de Livraison</h2>
+            <div class="mb-3" style="margin-top: 20px; border-bottom: 2px solid #ccc; padding: 20px;">
+                {{form_row(deliveryForm.addresses, {'label': 'Choisir Adresses de livraison'})}}
+                 <a href="{{path('app_account_address_form')}}">
+                     Ajouter une nouvelle Adresse</a> 
+            </div>
+<tr>
+             <div class="mb-3">
+
+                {{ form_row(deliveryForm.carrier, {'label': 'Choisir le Transporteur'}) }}
+
+            </div>
+
+            {{ form_end(deliveryForm)}}
+                        
+        </div>
+    </div>
+    
+    
+</div>
+{% endblock %}

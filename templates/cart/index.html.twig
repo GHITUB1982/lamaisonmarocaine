@@ -3,66 +3,93 @@
 {% block title %}Mon panier{% endblock %}
 
 {% block body %}
-<div class="container my-5"> 
-    <h1>Mon Panier</h1> 
-
-    <div class="row">
-        <div class="col-12">
+<div class="container my-5">
+    <h1 class="mb-4"><i data-feather="shopping-cart"></i> Mon Panier</h1>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
             {% if cart is empty %}
-                <h4 class="mt-5">Votre panier est vide.</h4>
+                <div class="alert alert-warning text-center mt-5">
+                    <i data-feather="info"></i> Votre panier est vide.
+                </div>
             {% else %}
-                <h4 class="mt-3 ">Vous avez {{ cart|length }} produit(s) dans votre panier.</h4>
-                <table class="table table-fluid w-75">
-                    <thead>
-                        <tr>
-                            <th>Illustration</th>
-                            <th>Produit</th>
-                            <th>Prix</th>
-                            <th>Quantité</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% set cart_total = 0 %}
-                        {% for item in cart %}
+                <h4 class="mb-4">Vous avez <span class="badge bg-primary">{{ cart|length }}</span> produit(s) dans votre panier.</h4>
+                <div class="table-responsive">
+                    <table class="table align-middle table-hover shadow-sm rounded">
+                        <thead class="table-light">
                             <tr>
-                                <td>
-                                    {% if item.product.illustration %}
-                                        <img src="{{ asset('uploads/products/' ~ item.product.illustration) }}" alt="{{ item.product.name }}" class="img-fluid" style="width: 130px;">
-                                    {% else %}
-                                        <img src="{{ asset('images/default-product.png') }}" alt="Produit par défaut" class="img-fluid" style="width: 100px;">
-                                    {% endif %}
-                                <td>{{ item.product.name }}</td>
-                                <td>{{ item.product.pricewithtax|format_price }}</td>
-                                <td><button class="btn btn-primary position-relative">X {{ item.quantity }}
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                                        <a  href="{{ path('app_cart_add', { id: item.product.id }) }}"><h5>+</h5></a></span>
-                                        <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
-                                        <a  href="{{ path('app_cart_decrease', { id: item.product.id }) }}"><h5>-</h5></a></span>
-                                
-                                </button>
-                                </td>
-                                <td>
-                                    {% set total = item.product.pricewithtax * item.quantity %}
-                                    {{ total|format_price }}
-                                    {% set cart_total = cart_total + total %}
-                                </td>
+                                <th>Illustration</th>
+                                <th>Produit</th>
+                                <th>Prix</th>
+                                <th class="text-center">Quantité</th>
+                                <th>Total</th>
+                                <th></th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-end">Total :</td>
-                            <td>{{ cart_total|format_price }}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="text-end">
-                    <a href="#" class="btn btn-primary">Passer à la caisse</a>
-                    <a href="{{ path('app_cart_remove')}}" class="btn btn-danger">Vider le panier</a>
+                        </thead>
+                        <tbody>
+                            {% set cart_total = 0 %}
+                            {% for item in cart %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}"
+                                             alt="{{ item.product.name }}" class="img-thumbnail" style="width: 90px; height: 90px; object-fit: cover;">
+                                    </td>
+                                    <td>
+                                        <strong>{{ item.product.name }}</strong>
+                                        <div class="text-muted small">{{ item.product.slug }}</div>
+                                    </td>
+                                    <td>{{ item.product.pricewithtax|format_price }}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ path('app_cart_decrease', { id: item.product.id }) }}" class="btn btn-outline-danger btn-sm">-</a>
+                                            <span class="mx-2">{{ item.quantity }}</span>
+                                            <a href="{{ path('app_cart_add', { id: item.product.id }) }}" class="btn btn-outline-success btn-sm">+</a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% set total = item.product.pricewithtax * item.quantity %}
+                                        {{ total|format_price }}
+                                        {% set cart_total = cart_total + total %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('app_cart_remove', { id: item.product.id }) }}" class="btn btn-outline-secondary btn-sm" title="Retirer ce produit">
+                                            <i data-feather="trash-2"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             {% endif %}
         </div>
+        {# Recap colonne à droite #}
+        {% if cart is not empty %}
+        <div class="col-12 col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 90px;">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Récapitulatif</h4>
+                    <ul class="list-group list-group-flush mb-3">
+                        {% for item in cart %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ item.product.name }}
+                                <span class="badge bg-primary rounded-pill">x{{ item.quantity }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total commande :</span>
+                        <span class="fw-bold text-success" style="font-size:1.2em;">{{ cart_total|format_price }}</span>
+                    </div>
+                    <a href="{{ path('app_order') }}" class="btn btn-success w-100 mb-2">
+                        <i data-feather="credit-card"></i> Commander
+                    </a>
+                    <a href="{{ path('app_cart_remove') }}" class="btn btn-outline-danger w-100">
+                        <i data-feather="trash"></i> Vider le panier
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

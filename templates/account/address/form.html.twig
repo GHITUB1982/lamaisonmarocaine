@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ <div class="container my-5 flex-column">
+         <h2>La Maison Marocaine</h2>
+        <div class="row">
+            <!-- Menu de gauche -->
+            <div class="col-md-4" style="flex: 1; display: flex;">
+                {% include "account/_menu.html.twig" %}
+            </div>
+            
+            <!-- Formulaire à droite -->
+            <div class="col-md-8">
+                <h3 class="mb-4 m-5">La forme de Mes Addresses:</h3>
+
+                     {{form_start(addressform)}}
+                     <div class="row"> 
+                            <div class="col-md-6">{{ form_row(addressform.firstname) }}</div>
+                            <div class="col-md-6">{{ form_row(addressform.lastname) }} </div>
+                            
+
+                    </div>
+                    <div >{{ form_row(addressform.address) }}</div>
+                    <div class="row">
+                        
+                        <div class="col-md-6">{{ form_row(addressform.postal) }}</div>
+                        <div class="col-md-6">{{ form_row(addressform.city) }}</div>
+                        <div class="col-md-6">{{ form_row(addressform.country) }}</div>  
+                        <div class="col-md-6">{{ form_row(addressform.phone) }}</div> 
+                    </div>
+
+                        
+                     {{form_end(addressform)}}
+
+                       
+            </div>
+        </div>
+
+{% endblock %}

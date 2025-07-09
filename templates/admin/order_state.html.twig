@@ -1,0 +1,36 @@
+{# /**
+ * Représente l'état de la commande.
+ * 0 = En attente de paiement
+ * 1 = Paiement accepté
+ * 2 = En cours de préparation
+ * 3 = En cours de Livraison
+ * 4 = Livraison effectuée
+ * 5 = Commande annulée
+ * 6 = Commande remboursée
+ * * @var int|null
+ * 
+ */ #}
+
+ {% if field.value == 0  %}
+    <span class="badge badge-info">En attente de paiement</span>
+
+{% elseif field.value == 1 %}
+    <span class="badge badge-success"> Paiement accepté</span>
+
+{% elseif field.value == 2 %}
+    <span class="badge badge-secondary">En cours de préparation</span>
+
+{% elseif field.value == 3 %}
+    <span class="badge badge-light">En cours de Livraison</span>
+
+{% elseif field.value == 4 %}
+    <span class="badge badge-primary">Livraison effectuée</span>
+
+{% elseif field.value == 5 %}
+    <span class="badge text-bg-warning>">Commande annulée</span>
+
+{% elseif field.value == 6 %}
+    <span class="badge badge-dark">Commande remboursée</span>
+
+ {% endif %}
+

@@ -1,0 +1,35 @@
+{# admin/order_show.html.twig #}
+<h4>Détails de la commande</h4>
+<table class="table table-bordered table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Illustration</th>
+            <th>Quantité</th>
+            <th>Prix unitaire</th>
+            <th>TVA (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detail in entity.instance.orderDetails %}
+            <tr>
+                <td><strong>{{ detail.productName }}</strong></td>
+                <td>
+                    <img
+                        src="/uploads/products/{{ detail.productIllustration }}"
+                        alt="{{ detail.productName }}"
+                        class="img-fluid rounded"
+                        style="max-width: 80px; height: auto; border: 1px solid #ddd;"
+                    >
+                </td>
+                <td>{{ detail.productQuantity }}</td>
+                <td>{{ detail.productPrice }}</td>
+                <td>{{ detail.productTva }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">Aucun détail pour cette commande.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

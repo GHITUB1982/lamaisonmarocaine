@@ -3,19 +3,26 @@
 
 {% block body %}
 
- <div class="container my-5 flex-column">
-         <h1>Espace Membre:</h1>
-        <div class="row">
+ <div class="container">
+          <h2>La Maison Marocaine</h2>
+
+            <div class="row">
             <!-- Menu de gauche -->
-            <div class="col-md-4" style="flex: 1; display: flex;">
+            <div class="col-md-4 " style="flex: 1; display: flex;">
                 {% include "account/_menu.html.twig" %}
             </div>
             
             <!-- Formulaire à droite -->
-            <div class="col-md-8">
+            <div class="col-md-8 m-5">
                 <h3 class="">Bienvenu: {{ app.user.lastname }}</h3>
-            </div>
-        </div>      
+                <div>
+                    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Photo de profil" class="profile-pic" />
+                    <h1>{{ app.user.email }}</h1>
+                    <p>Vous êtes maintenant connecté à votre espace personnel.</p>
+                    <a href="" class="btn">Voir mon profil</a>
+                </div>
+            </div> 
+</div>      
 
 {% endblock %}
 

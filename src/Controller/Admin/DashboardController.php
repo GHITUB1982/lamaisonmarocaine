@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\Admin\UserCrudController;
-use App\Entity\Category;
 use App\Entity\User;
+use App\Entity\Order;
+use App\Entity\Carrier;
+use App\Entity\Product;
+use App\Entity\Category;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -17,41 +19,28 @@ class DashboardController extends AbstractDashboardController
 {
     public function index(): Response
     {
-        // return parent::index();
-
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // 1.1) If you have enabled the "pretty URLs" feature:
-        // return $this->redirectToRoute('admin_user_index');
-        //
-        // 1.2) Same example but using the "ugly URLs" that were used in previous EasyAdmin versions:
+        // Redirige vers la liste des utilisateurs à l'arrivée sur le dashboard
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirectToRoute('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        // return $this->render('some/path/my-dashboard.html.twig');
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('La Maison Marocaine');
+            ->setTitle('La Maison Marocaine')
+            ->renderContentMaximized();
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::section('Gestion');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Catégories', 'fas fa-tags', Category::class);
-        yield MenuItem::linkToCrud('Produits', 'fas fa-box', 'App\Entity\Product');
+        yield MenuItem::linkToCrud('Produits', 'fas fa-box', Product::class);
+        yield MenuItem::linkToCrud('Commandes', 'fas fa-shopping-basket', Order::class);
+        yield MenuItem::linkToCrud('Transporteurs', 'fas fa-truck', Carrier::class);
+        yield MenuItem::section();
+        yield MenuItem::linkToRoute('Retour au site', 'fas fa-arrow-left', 'app_home');
     }
-        
 }

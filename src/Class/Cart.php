@@ -41,6 +41,7 @@ class Cart
 
     public function remove(): void
     {
+        
         $this->getSession()->remove('cart');
     }
 
@@ -51,7 +52,7 @@ class Cart
 
     public function decrease($product): void
     {
-        $cart = $this->getSession()->get('cart', []);
+        $cart = $this->getCart();
         $id = $product->getId();
 
         if (isset($cart[$id])) {
@@ -66,7 +67,10 @@ class Cart
 
     public function getFullQuantity(): int
     {
-        $cart = $this->getSession()->get('cart', []);
+        $cart = $this->getCart();
+        if (empty($cart)) {
+            return 0;
+        }
         $quantity = 0;
 
         foreach ($cart as $item) {

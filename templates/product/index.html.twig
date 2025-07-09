@@ -3,39 +3,36 @@
 {% block title %}Produit{% endblock %}
 
 {% block body %}
-
-   <div class="container">
-
-   <h1>Description du Produit Choisi:</h1>
-
-   <br>
-                <div class="row">
-                    <div class="col-6">
-                        <h4>Illustration du Produit:</h4>
-                        {% for prod in product %}
-                            <div> 
-                               <img src="/uploads/products/{{ prod.illustration }}" alt="{{ prod.name }}">
+<div class="container my-5">
+    <h1 class="mb-4">Description du Produit Choisi</h1>
+    <div class="row justify-content-center">
+        {% for prod in product %}
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="card shadow-lg mb-4">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-md-5 text-center p-4">
+                            <img src="/uploads/products/{{ prod.illustration }}" alt="{{ prod.name }}" class="img-fluid rounded" style="max-height: 320px; object-fit: contain;">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body d-flex flex-column h-100">
+                                <h3 class="card-title">{{ prod.name }}</h3>
+                                <h5 class="text-primary mb-3">Prix : {{ prod.pricewithtax|format_price }}</h5>
+                                <p class="card-text mb-2"><strong>Description :</strong> {{ prod.description|raw }}</p>
+                                <p class="card-text mb-2"><strong>Slug :</strong> {{ prod.slug }}</p>
+                                <div class="mb-3">
+                                    <a href="{{ path('show_category', { slug: prod.category.slug }) }}" class="btn btn-outline-info">
+                                        <i data-feather="folder"></i> Catégorie : {{ prod.category.name }}
+                                    </a>
+                                </div>
+                                <a href="{{ path('app_cart_add', { id: prod.id }) }}" class="btn btn-success mt-auto w-100">
+                                    <i data-feather="shopping-cart"></i> Ajouter au Panier
+                                </a>
                             </div>
-                        {% endfor %}
-                    
+                        </div>
                     </div>
-                    <div class="col-6"> <h4>Informations sur le produit: </h4><br>
-                    <br>
-                        {% for prod in product %}
-                            <div>
-                            <h4>{{ prod.name }}</h4>
-                                <span class="d-block"><h5>Prix: {{ prod.pricewithtax|format_price }}</h5> </span>
-
-                                <h5>Description: {{ prod.description|raw }}</h5>
-                                <h5>Slug: {{ prod.slug }}</h5>
-                                {# {{dump(prod.category.slug)}} #}
-                                <div class="btn btn-outline-info"><a href="{{ path('show_category', { slug: prod.category.slug }) }}" ><h5>Catégorie: {{ prod.category.name }}</h5></a></div>
-                                <a  href="{{ path('app_cart_add', { id: prod.id }) }}"class="btn btn-success w-75 mt-4">Ajouter au Panier</a>
-                            </div>
-                        {% endfor %}
-                    
-                    </div>
-                    
                 </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

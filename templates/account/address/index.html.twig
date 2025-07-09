@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ <div class="container my-5 flex-column">
+         <h2>La Maison Marocaine</h2>
+        <div class="row">
+            <!-- Menu de gauche -->
+            <div class="col-md-4" style="flex: 1; display: flex;">
+                {% include "account/_menu.html.twig" %}
+            </div>
+
+            
+            <!-- Formulaire à droite -->
+            <div class="col-md-8 m-5">
+                <h3 class="">Mes Addresses:</h3>
+                {% if app.user.addresses is empty %}
+                    <p class="text-muted">Vous n'avez pas encore d'addresses enregistrées.</p>
+               
+               {% else %}
+                <h3 class="mb-3 mt-3 ">La liste de vos addresses:</h3>
+                {% for address in app.user.addresses %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ address.firstname }} {{ address.lastname }}</h5>        
+                            <p class="card-text">{{ address.address }}</p>
+                            <p class="card-text">{{ address.postal }} {{ address.city }}</p>  
+                            <p class="card-text">{{ address.country }}</p>
+                            <p class="card-text">{{ address.phone }}</p>
+                            <a href="{{ path('app_account_address_form', {'id': address.id })}}" class="btn btn-primary">Modifier</a>
+                            <a href="{{path('app_account_address_delete', {'id': address.id })}}" class="btn btn-danger">Supprimer</a>  
+                        </div>
+                    </div> 
+                {% endfor %}
+{% endif %}
+                 <div>
+                <a href="{{ path('app_account_address_form') }}" class="btn btn-primary mb-3 mt-3 w-100">Ajouter une addresse</a>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+               
+{% endblock %}

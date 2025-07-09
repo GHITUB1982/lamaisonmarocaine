@@ -12,8 +12,13 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class RegisterController extends AbstractController
 {
+    private $entityManager;
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     #[Route('/register', name: 'app_register')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request): Response
     {
 
         $user = new User();
@@ -23,8 +28,8 @@ final class RegisterController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
            
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
             $this->addFlash('success', 'Votre compte a été créé avec succès');
             return $this->redirectToRoute('app_login');
         }
