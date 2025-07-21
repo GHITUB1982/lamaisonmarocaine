@@ -1,37 +1,197 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{category.name}}
-	- Produits
+	{{ category.name }}
+	-
+	{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+	<style>
+		.feather-icon {
+			width: 24px;
+			height: 24px;
+			stroke: currentColor;
+			stroke-width: 2;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			fill: none;
+			vertical-align: middle;
+		}
+		.category-banner {
+			background: linear-gradient(to right, #f8f9fa, #ffffff);
+			transition: all 0.3s ease;
+		}
+		.card {
+			transition: transform 0.2s;
+			border-radius: 0.5rem;
+			overflow: hidden;
+		}
+		.card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+		}
+		.card-img-top {
+			height: 200px;
+			object-fit: cover;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		}
+		.btn-wishlist {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			background: rgba(255, 255, 255, 0.8);
+			border-radius: 50%;
+			width: 36px;
+			height: 36px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 2;
+		}
+		.btn-wishlist:hover {
+			background: white;
+		}
+		.price-badge {
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
+			background: rgba(0, 0, 0, 0.7);
+			color: white;
+			padding: 0.25rem 0.5rem;
+			border-radius: 0.25rem;
+			font-size: 0.9rem;
+		}
+	</style>
 {% endblock %}
 
 {% block body %}
+	<div
+		class="container py-4">
+		{# Bannière de catégorie #}
+		<div class="category-banner mb-4 p-3 rounded" style="height: 80px;">
+			<div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
+				<h2 class="h4 mb-0 text-dark">
+					<i data-feather="grid" class="me-2 text-primary"></i>
+					Collection
+					{{ category.name }}
+				</h2>
+			</div>
+		</div>
 
-	<div class="container ">
-		<h1>Catégorie:
-			<strong>{{ category.name }}</strong>
-		</h1>
-		<p class="text-muted">Slug:
-			<strong>{{ category.slug }}</strong>
-		</p>
+		{# Barre de navigation #}
+		<div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+			<div>
+				<a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+					<i data-feather="home" class="me-2"></i>Accueil
+				</a>
+				<a href="javascript:history.back()" class="btn btn-outline-secondary ms-2">
+					<i data-feather="arrow-left" class="me-2"></i>Retour
+				</a>
+			</div>
+			<h1 class="mb-0 fs-3 fw-bold text-primary">{{ category.name }}</h1>
+			<div class="text-muted small">
+				<i data-feather="tag" class="me-1"></i>
+				{{ category.slug }}
+			</div>
+		</div>
+
+		{# Liste des produits #}
 		{% if category.products is empty %}
-			<h4 class="text-muted mt-5 ">Aucune catégorie trouvée.</h4>
+			<div class="text-center py-5 my-5 bg-light rounded-3">
+				<i data-feather="package" class="text-muted" style="width: 48px; height: 48px;"></i>
+				<h3 class="mt-3 fw-semibold">Aucun produit disponible</h3>
+				<p class="text-muted">Cette catégorie ne contient aucun produit pour le moment.</p>
+			</div>
 		{% else %}
 			<div class="row g-4">
 				{% for product in category.products %}
 					<div class="col-12 col-sm-6 col-md-4 col-lg-3">
-						<div class="card h-100 shadow-sm">
-							<img src="/uploads/products/{{ product.illustration }}" alt="{{ product.name }}" class="card-img-top" style="object-fit:cover; height:200px;">
+						<div
+							class="card h-100 border-0 shadow-sm position-relative">
+							{# Bouton favori #}
+							<div class="mt-4 d-flex gap-2 justify-content-end">
+								<span class="price-badge">
+									<strong>{{ product.pricewithtax|format_price }}</strong>
+								</span>
+								<p class="d-inline-flex gap-1 center">
+
+									{% if app.user and product in app.user.wishlists %}
+                                          <a href="{{ path('app_account_wishlist_remove', { id: product.id }) }}" 
+									class="btn {% if app.user and product in app.user.wishlists %}btn-warning rounded-circle{% else %}btn{% endif %}">
+										<i data-feather="heart" class="{{ app.user and product in app.user.wishlists ? 'text-danger' : 'text-danger' }}"></i>
+									</a>
+                                {% else %}
+                                    <a href="{{ path('app_account_wishlist_add', { id: product.id }) }}" class="btn btn-lg btn-wishlist">
+                                        <i data-feather="heart" class="feather-icon text-danger"></i>
+                                    </a>
+                                {% endif %}
+								
+									<div class="collapse mb-3" id="collapseExample">
+										<div class="">
+                                        {% if app.user %}
+                                            
+                                        {% else %}
+											<div class="collapse" id="collapseExample">
+												<div class="">
+													Pour utiliser les avantages de la wishlist, vous devez être connecté.<br>
+													<a href="{{ path('app_login') }}" class="mt-2">Se connecter</a><br>
+													<a href="{{ path('app_register') }}" class="mt-2">S'inscrire</a>
+												</div>
+											</div>
+                                        {% endif %}
+										
+										</div>
+									</div>
+									<a class="btn btn-lg btn-wishlist"></a>
+								</p>
+								{# Prix #}
+
+							</div>
+							{# Image du produit #}
+							<img
+							src="/uploads/products/{{ product.illustration }}" alt="{{ product.name }}" class="card-img-top">
+
+							{# Corps de la carte #}
 							<div class="card-body d-flex flex-column">
 								<h5 class="card-title">{{ product.name }}</h5>
-								<p class="card-text text-truncate">{{ product.description|striptags|slice(0, 80) ~ '...' }}</p>
-								<a href="{{ path('app_product', {'slug': product.slug}) }}" class="btn btn-primary mt-auto"><i data-feather="eye"></i> Voir le produit</a>
+								<p class="card-text text-muted small flex-grow-1">
+									{{ product.description|striptags|slice(0, 80) ~ '...' }}
+								</p>
+								<div class="d-flex gap-2">
+									<a href="{{ path('app_product', {'slug': product.slug}) }}" class="btn btn-sm btn-outline-primary flex-grow-1">
+										<i data-feather="eye" class="me-1"></i>Voir
+									</a>
+									<a href="{{ path('app_cart_add', { id: product.id }) }}" class="btn btn-sm btn-success">
+										<i data-feather="shopping-cart"></i>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				{% endfor %}
 			</div>
-
 		{% endif %}
 	</div>
+
+	{% block javascripts %}
+		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+feather.replace();
+
+// Animation au survol des cartes
+document.querySelectorAll('.card').forEach(card => {
+card.addEventListener('mouseenter', () => {
+card.querySelector('img').style.transform = 'scale(1.05)';
+});
+card.addEventListener('mouseleave', () => {
+card.querySelector('img').style.transform = 'scale(1)';
+});
+});
+});
+		</script>
+	{% endblock %}
 {% endblock %}

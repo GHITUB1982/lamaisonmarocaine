@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Commandes - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    {# Inclusion de la bannière utilisateur #}
+    {% include "account/_user_header.html.twig" %}
+	
+    {# Barre de navigation cohérente #}
+    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <div>
+            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                <i data-feather="home" class="me-2"></i>Accueil
+            </a>
+            <a href="{{ path('app_account') }}" class="btn btn-outline-secondary ms-2">
+                <i data-feather="user" class="me-2"></i>Mon compte
+            </a>
+        </div>
+        <h1 class="mb-0 fs-3 fw-bold text-primary">
+            <i data-feather="shopping-bag" class="me-2"></i>Mes Commandes
+        </h1>
+    </div>
+
+    <div class="row g-4">
+        {# Menu de gauche #}
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-0">
+                    {% include "account/_menu.html.twig" %}
+                </div>
+            </div>
+        </div>
+        
+        {# Contenu principal #}
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    {# En-tête #}
+                    <div class="d-flex align-items-center mb-4">
+                        <img src="{{ asset('assets/img/check-out.png') }}" 
+                             alt="Commande avec succès" 
+                             style="width: 60px; height: 60px; margin-right: 15px;">
+                        <h2 class="mb-0">Historique des commandes</h2>
+                    </div>
+
+                    {% if orders|length == 0 %}
+                        <div class="alert alert-info text-center py-4">
+                            <i data-feather="info" class="me-2"></i>
+                            Vous n'avez pas encore passé de commande.
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Référence</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Montant</th>
+                                        <th scope="col">Statut</th>
+                                        <th scope="col" class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                        <tr>
+                                            <td>{{order.createdAt|date('Y')}}/{{ order.id }}</td>
+                                            <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                                            <td class="fw-bold">{{ order.getTotalTTC()|format_price }}</td>
+                                            <td>
+                                                {{ include('admin/order_state.html.twig', { field: { 'value': order.state } }) }}
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ path('app_command', {'id': order.id}) }}" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i data-feather="eye" class="me-1"></i>Détails
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+        border-radius: 0.5rem;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.05);
+    }
+</style>
+{% endblock %}

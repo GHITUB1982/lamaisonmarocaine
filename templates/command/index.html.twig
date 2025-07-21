@@ -1,54 +1,149 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CommandController!{% endblock %}
+{% block title %}Commande #{{order.id}} - {{ parent() }}{% endblock %}
 
 {% block body %}
+<div class="container py-4">
+    {# Inclusion de la bannière utilisateur #}
+    {% include "account/_user_header.html.twig" %}
+    
+    {# Barre de navigation cohérente #}
+    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <div>
+            <a href="{{ path('app_account_order') }}" class="btn btn-outline-secondary">
+                <i data-feather="arrow-left" class="me-2"></i>Retour aux commandes
+            </a>
+            <a target="_blank" href="{{ path('app_invoice_user', {id_order: order.id}) }}" class="btn btn-primary">
+            <i class="fas fa-download"> Facture</i>            
+            </a>
+        </div>
+        <h1 class="mb-0 fs-3 fw-bold text-primary">
+            <i data-feather="file-text" class="me-2"></i>Commande {{order.createdAt|date('Y')}}/{{ order.id }}
+        </h1>
+    </div>
 
- <div class="container my-5 flex-column">
-          <h2>La Maison Marocaine</h2>
-
-
- <div class="row">
-            <!-- Menu de gauche -->
-            <div class="col-md-4" style="flex: 1; display: flex;">
-                {% include "account/_menu.html.twig" %}
-            </div>
-    <div class="col-md-8 m-5">
-             <!-- Formulaire à droite -->
-    <h3>Mes dernières commandes ✅</h3>
-
-                    <table class="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        </tr>
-                        <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        </tr>
-                        <tr>
-                        <th scope="row">3</th>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>@social</td>
-                        </tr>
-                    </tbody>
-                    </table>
-                    </div>
+    <div class="row g-4">
+        {# Menu de gauche #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-0">
+                    {% include "account/_menu.html.twig" %}
+                </div>
             </div>
         </div>
-</div>   
+        
+        {# Détails de la commande #}
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    {# En-tête de commande #}
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h2 class="h4 fw-bold mb-2">Commande: {{order.createdAt|date('Y')}}/{{ order.id }}</h2>
+                            <div class="d-flex align-items-center mb-1">
+                                <strong class="me-2">Statut :</strong>
+                                {{ include('admin/order_state.html.twig', { field: { 'value': order.state } }) }}
+                            </div>
+                            <div class="text-muted small">
+                                <i data-feather="calendar" class="me-1"></i>
+                                {{ order.createdAt|date('d/m/Y à H:i') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Informations de livraison #}
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body">
+                                    <h3 class="h6 fw-bold mb-3">
+                                        <i data-feather="truck" class="me-2"></i>Livraison
+                                    </h3>
+                                    <p class="mb-1"><strong>Transporteur :</strong> {{ order.carrierName }}</p>
+                                    <p class="mb-1"><strong>Coût :</strong> {{ order.carrierPrice|format_price }}</p>
+                                    <p class="mb-0"><strong>Adresse :</strong> {{ order.delivery|nl2br }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Détails des produits #}
+                    <h3 class="h5 fw-bold mb-3">
+                        <i data-feather="shopping-cart" class="me-2"></i>Produits commandés
+                    </h3>
+                    
+                    <div class="table-responsive mb-4">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Produit</th>
+                                    <th style="width: 100px;">Image</th>
+                                    <th class="text-center">Qté</th>
+                                    <th class="text-end">Prix unitaire</th>
+                                    <th class="text-end">TVA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in order.orderDetails %}
+                                    <tr>
+                                        <td><strong>{{ detail.productName }}</strong></td>
+                                        <td>
+                                            <img src="/uploads/products/{{ detail.productIllustration }}"
+                                                 alt="{{ detail.productName }}"
+                                                 class="img-fluid rounded border"
+                                                 style="max-width: 80px; height: auto;">
+                                        </td>
+                                        <td class="text-center">{{ detail.productQuantity }}</td>
+                                        <td class="text-end">{{ detail.productPrice|format_price }}</td>
+                                        <td class="text-end">{{ detail.productTva }}%</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">
+                                            <i data-feather="alert-circle" class="me-2"></i>
+                                            Aucun produit dans cette commande
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {# Récapitulatif des prix #}
+                    <div class="row justify-content-end">
+                        <div class="col-md-5">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h4 class="h6 fw-bold mb-3">Récapitulatif</h4>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Total HT :</span>
+                                        <strong>{{ order.getTotalHT()|format_price }}</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>TVA :</span>
+                                        <strong>{{ order.getTotalTVA()|format_price }}</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between border-top pt-2">
+                                        <span class="fw-bold">Total TTC :</span>
+                                        <strong class="text-primary">{{ (order.getTotalHT() + order.getTotalTVA())|format_price }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+        border-radius: 0.5rem;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.05);
+    }
+</style>
 {% endblock %}

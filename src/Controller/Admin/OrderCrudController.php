@@ -48,9 +48,16 @@ class OrderCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-            $show = Action::new('Afficher')->linkToCrudAction(crudActionName: 'show');
-
-            // dd($order);
+             // Action pour générer la facture
+             $generateInvoice = Action::new('generateInvoice', 'Facture', 'fa fa-file-invoice')
+                ->linkToRoute('app_invoice_admin', function (Order $order) {
+                    return ['id_order' => $order->getId()];
+                })
+                  ->displayIf(function (Order $order) {
+                return $order->getState() >= 1; // Seulement si commande payée (state >= 1)
+                 })
+                ->setHtmlAttributes(['target' => '_blank']); // Ouvre dans un nouvel onglet
+                    // dd($order);
 
         return $actions
             ->remove(Crud::PAGE_INDEX, Action::NEW)
@@ -76,8 +83,12 @@ public function show(AdminContext $context): Response
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            // IdField::new('id'),
+             TextField::new('invoice', 'Facture')
+            ->setTemplatePath('admin/order/invoice_button.html.twig')
+            ->onlyOnDetail(),
             DateTimeField::new('createdAt'),
+            TextField::new('stripe_session_id'),
             NumberField::new('state')->setTemplatePath('admin/order_state.html.twig'),
             AssociationField::new('user')->setLabel('Client'),
             TextField::new('carrierName'),

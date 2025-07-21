@@ -3,104 +3,141 @@
 {% block title %}Mon Récapitulatif{% endblock %}
 
 {% block body %}
-	<div class="container my-5">
-		<h1 class="mb-4">
-			<i data-feather="list"></i>
-			Mon Récapitulatif</h1>
+<div class="container my-5">
+    {# Bannière #}
+    <div class="category-banner mb-4 p-3 rounded bg-primary" style="height: 80px;">
+        <div class="h-100 d-flex align-items-center px-3 border-start border-4 border-light">
+            <h1 class="h4 mb-0 text-white">
+                <i data-feather="list" class="me-2"></i>
+                Mon Récapitulatif
+            </h1>
+        </div>
+    </div>
 
-		<div class="row">
-			<!-- Colonne de gauche - Contenu du panier et infos livraison -->
-			<div class="col-12 col-lg-8">
-				<h3 class="mb-4">
-					<i data-feather="shopping-cart"></i>
-					Contenu de mon Panier</h3>
-				<div class="table-responsive">
-					<table class="table align-left table-hover rounded">
-						<thead class="table-light">
-							<tr></tr>
-						</thead>
-						<tbody>
-							{% set cart_total = 0 %}
-							{% for item in cart %}
-								<tr>
-									<td>
-										<img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}" alt="{{ item.product.name }}" class="img-thumbnail" style="width: 90px; height: 90px; object-fit: cover;">
-									</td>
-									<td>
-										<strong>{{ item.product.name }}</strong>
-										<div class="text-muted small">{{ item.product.slug }}</div>
-									</td>
-									<td>
-										<strong>Prix hors taxe:</strong> {{ item.product.price }} <br>
-										{% set total = item.product.pricewithtax * item.quantity %}
-										{{ total|format_price }}
-										{% set cart_total = cart_total + total %}
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
+    {# Barre de navigation #}
+    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <div>
+            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                <i data-feather="home" class="me-2"></i>Accueil
+            </a>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary ms-2">
+                <i data-feather="arrow-left" class="me-2"></i>Retour
+            </a>
+        </div>
+    </div>
 
-				<div class="mt-5">
-					<h2><i data-feather="truck"></i> Informations de Livraison</h2>
-					<div class="mb-3" style="margin-top: 20px; border-bottom: 2px solid #ccc; padding: 20px;">
-						<h3>Adresse de livraison</h3>
-						<strong>{{choices.addresses.firstname}}</strong>
-						<strong>{{choices.addresses.lastname}}</strong>
-						<br>
-						{{choices.addresses.address}}<br>
-						{{choices.addresses.postal}}
-						{{choices.addresses.city}}
-						{{choices.addresses.country}}<br>
-					</div>
-					<div class="mb-3" style="margin-top: 20px; border-bottom: 2px solid #ccc; padding: 20px;">
-						<h2>Transporteur choisi</h3>
-						<strong>{{choices.carrier.name}}</strong><br>
-						{{choices.carrier.description|raw}}<br>
-						Mode de paiement choisi<br>
-					</div>
-				</div>
-			</div>
+    <div class="row">
+        <!-- Colonne de gauche - Contenu du panier -->
+        <div class="col-12 col-lg-8">
+            <h3 class="mb-4">
+                <i data-feather="shopping-cart"></i>
+                Contenu de mon Panier
+            </h3>
+            <div class="table-responsive">
+                <table class="table align-left table-hover rounded">
+                    <thead class="table-light">
+                        <tr></tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart %}
+                            <tr>
+                                <td>
+                                    <img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}" 
+                                         alt="{{ item.product.name }}" 
+                                         class="img-thumbnail" 
+                                         style="width: 90px; height: 90px; object-fit: cover;">
+                                </td>
+                                <td>
+                                    <strong>{{ item.product.name }}</strong>
+                                    <div class="text-muted small">{{ item.product.slug }}</div>
+                                </td>
+                                <td>
+                                    <strong>Prix hors taxe:</strong> {{ item.product.price }} <br>
+                                    {% set item_total = item.product.pricewithtax * item.quantity %}
+                                    {{ item_total|format_price }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-			<!-- Colonne de droite - Récapitulatif -->
-			<div class="col-12 col-lg-4">
-				<div class="card shadow-sm sticky-top" style="top: 90px;">
-					<div class="card-body">
-						<h4 class="card-title mb-3">Récapitulatif</h4>
-						<ul class="list-group list-group-flush mb-3">
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								Total produits
-								<span class="fw-bold">{{ cart_total|format_price }}</span>
-							</li>
-							{% if choices.carrier is not empty %}
-								<li class="list-group-item d-flex justify-content-between align-items-center">
-									Transporteur ({{ choices.carrier.name }})
-									<span class="fw-bold">{{ choices.carrier.price|format_price }}</span>
-								</li>
-							{% endif %}
-						</ul>
-						<div class="d-flex justify-content-between mb-3">
-							<span class="fw-bold">Total commande :</span>
-							<span class="fw-bold text-success" style="font-size:1.2em;">
-								{% if choices.carrier is not empty %}
-									{{ (cart_total + choices.carrier.price)|format_price }}
-								{% else %}
-									{{ cart_total|format_price }}
-								{% endif %}
-							</span>
-						</div>
-						<a href="{{ path('app_payement', {'id_order': order.id })}}" class="btn btn-success w-100 mb-2">
-							<i data-feather="credit-card"></i>
-							Payer ma commande 
-						</a>
-						<a href="{{ path('app_cart_remove') }}" class="btn btn-outline-danger w-100">
-							<i data-feather="trash"></i>
-							Vider le panier
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="mt-5">
+                <h2><i data-feather="truck"></i> Informations de Livraison</h2>
+                <div class="mb-3" style="margin-top: 20px; border-bottom: 2px solid #ccc; padding: 20px;">
+                    <h3>Adresse de livraison</h3>
+                    <strong>{{choices.addresses.firstname}}</strong>
+                    <strong>{{choices.addresses.lastname}}</strong>
+                    <br>
+                    {{choices.addresses.address}}<br>
+                    {{choices.addresses.postal}}
+                    {{choices.addresses.city}}
+                    {{choices.addresses.country}}<br>
+                </div>
+                <div class="mb-3" style="margin-top: 20px; border-bottom: 2px solid #ccc; padding: 20px;">
+                    <h2>Transporteur choisi</h2>
+                    <strong>{{choices.carrier.name}}</strong><br>
+                    {{choices.carrier.description|raw}}<br>
+                    Mode de paiement choisi<br>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne de droite - Récapitulatif (maintenu à droite) -->
+        <div class="col-12 col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 90px;">
+                <div class="card-body">
+                    <h4 class="card-title mb-3"><i data-feather="file-text"></i> Récapitulatif</h4>
+                    <ul class="list-group list-group-flush mb-3">
+                        {% set total = 0 %}
+                        {% for item in cart %}
+                            {% set total = total + (item.product.pricewithtax * item.quantity) %}
+                        {% endfor %}
+                        
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Total produits
+                            <span class="fw-bold">{{ total|format_price }}</span>
+                        </li>
+                        {% if choices.carrier is not empty %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Transporteur ({{ choices.carrier.name }})
+                                <span class="fw-bold">{{ choices.carrier.price|format_price }}</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total commande :</span>
+                        <span class="fw-bold text-success" style="font-size:1.2em;">
+                            {% if choices.carrier is not empty %}
+                                {{ (total + choices.carrier.price)|format_price }}
+                            {% else %}
+                                {{ total|format_price }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <a href="{{ path('app_payement', {'id_order': order.id })}}" class="btn btn-success w-100 mb-2">
+                        <i data-feather="credit-card"></i>
+                        Payer ma commande 
+                    </a>
+                    <a href="{{ path('app_cart_remove') }}" class="btn btn-outline-danger w-100">
+                        <i data-feather="trash"></i>
+                        Vider le panier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .category-banner {
+        background: linear-gradient(to right, #0d6efd, #0b5ed7);
+    }
+    .card {
+        border-radius: 0.5rem;
+    }
+    .img-thumbnail {
+        border-radius: 0.5rem;
+    }
+</style>
 {% endblock %}

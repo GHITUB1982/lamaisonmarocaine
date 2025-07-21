@@ -32,6 +32,10 @@ class Order
     #[ORM\Column]
     private ?int $state = null;
 
+     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $stripe_session_id = null;
+
+
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -183,4 +187,16 @@ class Order
     // {
     //     return number_format($this->getCarrierPrice(), 2, '.', ' ') . ' MAD';
     // }
+
+       public function getStripeSessionId(): ?string
+    {
+        return $this->stripe_session_id;
+    }
+
+    public function setStripeSessionId(?string $stripe_session_id): self
+    {
+        $this->stripe_session_id = $stripe_session_id;
+
+        return $this;
+    }
 }

@@ -1,43 +1,141 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
- <div class="container my-5 flex-column">
-         <h2>La Maison Marocaine</h2>
-        <div class="row">
-            <!-- Menu de gauche -->
-            <div class="col-md-4" style="flex: 1; display: flex;">
-                {% include "account/_menu.html.twig" %}
-            </div>
+{% block title %}Mes Adresses - {{ parent() }}{% endblock %}
 
-            
-            <!-- Formulaire à droite -->
-            <div class="col-md-8 m-5">
-                <h3 class="">Mes Addresses:</h3>
-                {% if app.user.addresses is empty %}
-                    <p class="text-muted">Vous n'avez pas encore d'addresses enregistrées.</p>
-               
-               {% else %}
-                <h3 class="mb-3 mt-3 ">La liste de vos addresses:</h3>
-                {% for address in app.user.addresses %}
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ address.firstname }} {{ address.lastname }}</h5>        
-                            <p class="card-text">{{ address.address }}</p>
-                            <p class="card-text">{{ address.postal }} {{ address.city }}</p>  
-                            <p class="card-text">{{ address.country }}</p>
-                            <p class="card-text">{{ address.phone }}</p>
-                            <a href="{{ path('app_account_address_form', {'id': address.id })}}" class="btn btn-primary">Modifier</a>
-                            <a href="{{path('app_account_address_delete', {'id': address.id })}}" class="btn btn-danger">Supprimer</a>  
-                        </div>
-                    </div> 
-                {% endfor %}
-{% endif %}
-                 <div>
-                <a href="{{ path('app_account_address_form') }}" class="btn btn-primary mb-3 mt-3 w-100">Ajouter une addresse</a>
+{% block body %}
+<div class="container py-4">
+
+    {# Inclusion de la bannière utilisateur #}
+    {% include "account/_user_header.html.twig" %}
+
+    
+    {# Barre de navigation cohérente #}
+    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <div>
+            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                <i data-feather="home" class="me-2"></i>Accueil
+            </a>
+            <a href="{{ path('app_account') }}" class="btn btn-outline-secondary ms-2">
+                <i data-feather="user" class="me-2"></i>Mon compte
+            </a>
+        </div>
+        <h1 class="mb-0 fs-3 fw-bold text-primary">
+            <i data-feather="map-pin" class="me-2"></i>Mes Adresses
+        </h1>
+    </div>
+
+    <div class="row g-4">
+        {# Menu de gauche #}
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-0">
+                    {% include "account/_menu.html.twig" %}
                 </div>
-             
+            </div>
+        </div>
+        
+        {# Contenu principal #}
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    {% if app.user.addresses is empty %}
+                        {# État vide #}
+                        <div class="text-center py-5">
+                            <i data-feather="map" class="text-muted" style="width: 48px; height: 48px;"></i>
+                            <h3 class="h5 mt-3">Aucune adresse enregistrée</h3>
+                            <p class="text-muted">Vous n'avez pas encore d'adresse enregistrée.</p>
+                        </div>
+                    {% else %}
+                        {# Liste des adresses #}
+                        <h3 class="h4 fw-bold mb-4">
+                            <i data-feather="list" class="me-2"></i>Vos adresses
+                        </h3>
+                        
+                        <div class="row g-3">
+                            {% for address in app.user.addresses %}
+                                <div class="col-12">
+                                    <div class="card border-0 shadow-sm h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <h5 class="card-title mb-3">
+                                                    <i data-feather="user" class="me-2 text-primary"></i>
+                                                    {{ address.firstname }} {{ address.lastname }}
+                                                </h5>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                                                            type="button" 
+                                                            data-bs-toggle="dropdown">
+                                                        <i data-feather="more-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item" 
+                                                               href="{{ path('app_account_address_form', {'id': address.id })}}">
+                                                                <i data-feather="edit" class="me-2"></i>Modifier
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-danger" 
+                                                               href="{{ path('app_account_address_delete', {'id': address.id })}}">
+                                                                <i data-feather="trash-2" class="me-2"></i>Supprimer
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="address-details">
+                                                <p class="mb-1">
+                                                    <i data-feather="map" class="me-2 text-muted"></i>
+                                                    {{ address.address }}
+                                                </p>
+                                                <p class="mb-1">
+                                                    <i data-feather="home" class="me-2 text-muted"></i>
+                                                    {{ address.postal }} {{ address.city }}
+                                                </p>
+                                                <p class="mb-1">
+                                                    <i data-feather="globe" class="me-2 text-muted"></i>
+                                                    {{ address.country }}
+                                                </p>
+                                                <p class="mb-0">
+                                                    <i data-feather="phone" class="me-2 text-muted"></i>
+                                                    {{ address.phone }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    {# Bouton Ajouter #}
+                    <div class="mt-4">
+                        <a href="{{ path('app_account_address_form') }}" 
+                           class="btn btn-primary w-100 py-3">
+                            <i data-feather="plus" class="me-2"></i>Ajouter une nouvelle adresse
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-               
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+        border-radius: 0.5rem;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+    }
+    .address-details p {
+        margin-bottom: 0.5rem;
+    }
+    .dropdown-menu {
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+    }
+</style>
 {% endblock %}

@@ -49,6 +49,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
      private Collection $orders;
 
+     #[ORM\Column(length: 255)]
+     private ?string $title = null;
+
+     /**
+      * @var Collection<int, Product>
+      */
+     #[ORM\ManyToMany(targetEntity: Product::class)]
+     private Collection $wishlists;
+
+   
     public function getId(): ?int
     {
         return $this->id;
@@ -159,6 +169,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->addresses = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->wishlists = new ArrayCollection();
     }
 
     public function getAddresses(): Collection
@@ -195,4 +206,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getWishlists(): Collection
+    {
+        return $this->wishlists;
+    }
+
+    public function addWishlist(Product $wishlist): static
+    {
+        if (!$this->wishlists->contains($wishlist)) {
+            $this->wishlists->add($wishlist);
+        }
+
+        return $this;
+    }
+
+    public function removeWishlist(Product $wishlist): static
+    {
+        $this->wishlists->removeElement($wishlist);
+
+        return $this;
+    }
+
+  
 }

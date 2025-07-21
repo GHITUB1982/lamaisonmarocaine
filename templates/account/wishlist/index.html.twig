@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma Wishlist - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    {# Barre de navigation #}
+    {% include "account/_user_header.html.twig" %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <div>
+            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                <i data-feather="home" class="me-2"></i>Accueil
+            </a>
+            <a href="{{ path('app_account') }}" class="btn btn-outline-secondary ms-2">
+                <i data-feather="user" class="me-2"></i>Mon compte
+            </a>
+        </div>
+        <h1 class="mb-0 fs-3 fw-bold text-primary">
+            <i data-feather="heart" class="me-2 text-danger"></i>Ma Wishlist
+        </h1>
+    </div>
+
+    <div class="row g-4">
+        {# Menu de gauche #}
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-80" style="min-height: 400px;">
+                <div class="card-body p-0">
+                    {% include "account/_menu.html.twig" %}
+                </div>
+            </div>
+        </div>
+        
+        {# Contenu principal #}
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm h-80">
+                <div class="card-body p-4">
+                    {# Titre avec trait de séparation #}
+                    <h3 class="h4 fw-bold mb-4 pb-3 border-bottom">
+                        <i data-feather="heart" class="me-2 text-danger"></i>
+                        Mes produits favoris
+                    </h3>
+
+                    {% if wishlistItems is empty %}
+                        <div class="text-center py-5">
+                            <i data-feather="heart" class="text-muted" style="width: 48px; height: 48px;"></i>
+                            <h4 class="mt-3 fw-semibold">Votre wishlist est vide</h4>
+                            <p class="text-muted">Ajoutez des produits à votre wishlist en cliquant sur l'icône cœur</p>
+                            <a href="{{ path('app_home') }}" class="btn btn-primary mt-3">
+                                <i data-feather="shopping-bag" class="me-2"></i>Voir nos produits
+                            </a>
+                            
+                        </div>
+                    {% else %}
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            {% for product in wishlistItems %}
+                                <div class="col">
+                                    <div class="card h-100 border-0 shadow-sm position-relative">
+                                        {# Bouton suppression wishlist #}
+                                        <a href="{{ path('app_account_wishlist_remove', {id: product.id}) }}" 
+                                           class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
+                                           title="Retirer de la wishlist">
+                                            <i data-feather="x"></i>
+                                        </a>
+                                        
+                                        {# Image du produit #}
+                                        <img src="/uploads/products/{{ product.illustration }}" 
+                                             class="card-img-top" 
+                                             alt="{{ product.name }}"
+                                             style="height: 180px; object-fit: cover;">
+                                        
+                                        {# Corps de la carte #}
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ product.name }}</h5>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <span class="fw-bold text-primary">
+                                                    {{ product.pricewithtax|format_price }}
+                                                </span>
+                                                <div class="btn-group">
+                                                    <a href="{{ path('app_product', {slug: product.slug}) }}" 
+                                                       class="btn btn-sm btn-outline-primary">
+                                                        <i data-feather="eye" class="me-1"></i>Voir
+                                                    </a>
+                                                     
+                                                    <a href="{{ path('app_cart_add', {id: product.id}) }}" 
+                                                       class="btn btn-sm btn-success">
+                                                        <i data-feather="shopping-cart">Panier</i>
+                                                    </a>
+                                                    
+                                                     <a href="{{ path('app_account_wishlist_remove', {id: product.id}) }}"
+                                                       class="btn btn-danger btn-sm">
+                                                         <i data-feather="delete" class="me-2">X</i>
+                                                      </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 0.5rem !important;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+    }
+    .border-bottom {
+        border-color: rgba(0,0,0,0.1) !important;
+    }
+    .feather {
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}

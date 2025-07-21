@@ -4,10 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -31,8 +32,18 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+          $rerquired=true;
+        if($pageName='edit'){
+            $rerquired=false;
+        }
         return [
             // IdField::new('id'),
+            ChoiceField::new('title','Titre')->setLabel('Titre')->setHelp('Choisir le titre')->setChoices([
+                    'Monsieur' => 'Monsieur',
+                    'Madame' => 'Madame',
+                    'Mademoiselle' => 'Mademoiselle'
+                    
+                ])->setRequired( $rerquired),
             TextField::new('firstName', 'Prénom'),
             TextField::new('lastName', 'Nom'),
             // TextField::new('email', 'Email')->onlyOnIndex(),

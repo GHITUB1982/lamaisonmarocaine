@@ -42,15 +42,21 @@ final class CartController extends AbstractController
     }
 
 
-    #[Route('/cart/remove ', name: 'app_cart_remove')]
-    public function remove(Cart $cart): Response
-    {
-        $cart->remove();
-
-        return $this->redirectToRoute('app_home');
-    
+  #[Route('/mon-panier/supprimer/{id}', name: 'app_cart_remove')]
+public function remove(Cart $cart, $id = null): Response
+{
+    if ($id) {
+        // Suppression d'un seul produit
+        $cart->remove($id); // Utilisez votre méthode existante pour supprimer un produit spécifique
+        $this->addFlash('success', 'Le produit a été retiré du panier');
+    } else {
+        // Suppression de tout le panier (si aucun ID fourni)
+        $cart->clear(); // Utilisez une méthode clear() pour vider complètement le panier
+        $this->addFlash('warning', 'Votre panier a été vidé');
     }
 
+    return $this->redirectToRoute('app_cart');
+}
     #[Route('/cart/decrease/{id}', name: 'app_cart_decrease')]
     public function delete($id, Cart $cart, Request $request, ProductRepository $productRepository) : Response
     {

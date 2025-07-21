@@ -1,52 +1,167 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bonjour toutes les categories par Slug!{% endblock %}
+{% block title %}Liste des catégories - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+    <style>
+        .feather-icon {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            vertical-align: middle;
+        }
+        .category-banner {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            transition: all 0.3s ease;
+        }
+        .card {
+            transition: transform 0.2s;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .btn-wishlist {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+        .btn-wishlist:hover {
+            background: white;
+        }
+        .price-badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+    </style>
+{% endblock %}
+
 
 {% block body %}
+<div class="container py-4">
+    
+    {# Barre de navigation identique #}
+    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <div>
+            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                <i data-feather="home" class="me-2"></i>Accueil
+            </a>
+        </div>
+        <h1 class="mb-0 fs-3 fw-bold text-primary">Liste des catégories</h1>
+        <div class="text-muted small">
+            <i data-feather="grid" class="me-1"></i>{{ categories|length }} catégories
+        </div>
+    </div>
 
-<div class="container"> 
-    <h2>Bonjour toutes les categories par Slug!</h2>
+    {# Message de bienvenue #}
+    <div class="alert alert-light mb-4 text-left">
+          <div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
+            <h2 class="h4 mb-0 text-dark">
+                <i data-feather="list" class="me-2 text-primary"></i>
+                    <h2>Collections des Produits</h2> 
+        </div>
+    </div>
 
-    <div class="row">
-        <h1>Liste des catégories</h1>
-        <div><h2>{{ categories|length }} catégories trouvées.</h2></div>
-
-        {% if app.user %}
-            <p>Bonjour {{ app.user.firstname }}!</p>
-        {% else %}
-            <p>Bonjour Invité!</p>
-        {% endif %}
-
-        {% if categories is empty %}
-            <p>Aucune catégorie trouvée.</p>
-        {% else %}
-            {% for category in categories %}
-                <div class="col-12">
-                    <h3>{{ category.name }}</h3>
+    {% if categories is empty %}
+        {# État vide #}
+        <div class="text-center py-5 my-5 bg-light rounded-3">
+            <i data-feather="folder" class="text-muted" style="width: 48px; height: 48px;"></i>
+            <h3 class="mt-3 fw-semibold">Aucune catégorie disponible</h3>
+            <p class="text-muted">Aucune catégorie n'a été trouvée dans notre catalogue.</p>
+        </div>
+    {% else %}
+        {# Liste des catégories #}
+        {% for category in categories %}
+            <div class="mb-5">
+                {# En-tête de catégorie #}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">
+                        <a href="{{ path('show_category', {slug: category.slug}) }}" 
+                           class="text-decoration-none text-dark">
+                            {{ category.name }}
+                        </a>
+                    </h2>
+                    <span class="badge bg-primary">
+                        {{ category.products|length }} produits
+                    </span>
                 </div>
+
+                {# Produits de la catégorie #}
                 {% if category.products is not empty %}
-                    {% for product in category.products %}
-                        <div class="col-md-3">
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <h5>{{ product.name }}</h5>
-                                </div>
-                                <img src="uploads/products/{{ product.illustration }}" alt="{{ product.name }}" class="img-fluid">
-                                <div class="card-body">
-                                    <p>Slug : {{ product.slug }}</p>
-                                    <h6>Prix : {{ product.pricewithtax }} €</h6>
-                                    <p>Description : {{ product.description }}</p>
+                    <div class="row g-4">
+                        {% for product in category.products %}
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="/uploads/products/{{ product.illustration }}" 
+                                         alt="{{ product.name }}" 
+                                         class="card-img-top" 
+                                         style="height: 200px; object-fit: cover;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <div class="mb-2">
+                                            <span class="text-primary fw-bold">{{ product.pricewithtax }} Dhs</span>
+                                        </div>
+                                        <p class="card-text text-muted small flex-grow-1">
+                                            {{ product.description|striptags|slice(0, 60) ~ '...' }}
+                                        </p>
+                                        <div class="d-grid gap-2 mt-2">
+                                            <a href="{{ path('app_product', {slug: product.slug}) }}" 
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i data-feather="eye" class="me-1"></i>Voir
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 {% else %}
-                    <div class="col-12">
-                        <p>Aucun produit dans cette catégorie.</p>
+                    {# Catégorie vide #}
+                    <div class="text-center py-4 bg-light rounded-3">
+                        <i data-feather="package" class="text-muted"></i>
+                        <p class="mt-2 mb-0 text-muted">Aucun produit dans cette catégorie</p>
                     </div>
                 {% endif %}
-            {% endfor %}
-        {% endif %}
-    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 </div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+    }
+    h2 a:hover {
+        color: var(--bs-primary) !important;
+    }
+</style>
 {% endblock %}

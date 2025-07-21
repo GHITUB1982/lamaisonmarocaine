@@ -1,0 +1,36 @@
+{# templates/account/_user_header.html.twig #}
+<div class="user-banner bg-light rounded-3 p-4 mb-4 shadow-sm">
+    <div class="d-flex align-items-center">
+        {% if app.user.title == 'Monsieur' %}
+        <div class="user-avatar me-3">
+          <img src="https://www.w3schools.com/howto/img_avatar.png" 
+                             alt="Photo de profil" 
+                             class="rounded-circle shadow-sm"
+                            style="width: 60px; height: 60px; object-fit: cover;">
+        </div>
+        {% else %}
+        <div class="user-avatar me-3">
+          <img src="https://www.w3schools.com/howto/img_avatar2.png" 
+                             alt="Photo de profil" 
+                             class="rounded-circle shadow-sm"
+                            style="width: 60px; height: 60px; object-fit: cover;">
+        </div>
+        {% endif %}
+        <div>
+            <h2 class="h5 mb-1">Espace de {{ app.user.firstname }} {{ app.user.lastname }}</h2>
+            <p class="text-muted mb-0 small">
+                <i data-feather="mail" class="me-1"></i>{{ app.user.email }}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <span class="badge bg-danger ms-2">Administrateur</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .user-banner {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-left: 4px solid var(--bs-primary);
+    }
+</style>

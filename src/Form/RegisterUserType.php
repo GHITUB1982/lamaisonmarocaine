@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -19,6 +20,16 @@ class RegisterUserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('title', ChoiceType::class, [
+                'label' => 'Choisi votre Titre', 
+                
+                'choices' => [
+                    '<-- Choisir ici -->' => null,
+                    'Monsieur' => 'Monsieur',
+                    'Madame' => 'Madame',
+                    'Mademoiselle' => 'Mademoiselle'
+                ]])
+                
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom', 
                 'attr' => [

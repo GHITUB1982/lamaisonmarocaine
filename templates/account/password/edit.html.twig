@@ -1,20 +1,109 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Modifier le mot de passe - {{ parent() }}{% endblock %}
+
 {% block body %}
- <div class="container my-5 flex-column">
-         <h2>La Maison Marocaine</h2>
-        <div class="row">
-            <!-- Menu de gauche -->
-            <div class="col-md-4" style="flex: 1; display: flex;">
-                {% include "account/_menu.html.twig" %}
-            </div>
-            
-            <!-- Formulaire à droite -->
-            <div class="col-md-8 m-5">
-                     <h3 class="">Bienvenu
-                <h3 class="">Modifier le Mot de passe:</h3>
-                {{ form(editform) }}
+<div class="container py-4">
+    {# Inclusion de la bannière utilisateur #}
+    {% include "account/_user_header.html.twig" %}
+    
+    {# Barre de navigation avec bouton Accueil et titre #}
+   <div class="container py-4">
+    {# Barre de navigation cohérente #}
+    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <div>
+            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                <i data-feather="home" class="me-2"></i>Accueil
+            </a>
+            <a href="{{ path('app_account') }}" class="btn btn-outline-secondary ms-2">
+                <i data-feather="user" class="me-2"></i>Mon compte
+            </a>
+        </div>
+        <h1 class="mb-0 fs-3 fw-bold text-primary">
+            <i data-feather="map-pin" class="me-2"></i>Mot de passe
+        </h1>
+    </div>
+    <div class="row g-4">
+        {# Menu de gauche #}
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-0">
+                    {% include "account/_menu.html.twig" %}
+                </div>
             </div>
         </div>
+        
+        {# Formulaire à droite #}
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    {# Titre avec trait de séparation #}
+                    <h3 class="h4 fw-bold mb-4 pb-3 border-bottom">
+                        <i data-feather="edit-2" class="me-2"></i>Changer votre mot de passe
+                    </h3>
 
+                    {{ form_start(editform) }}
+                    
+                    {# Champ Mot de passe actuel #}
+                    <div class="mb-4">
+                        {{ form_row(editform.actual_password, {
+                            'label': 'Mot de passe actuel',
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Entrez votre mot de passe actuel'
+                            }
+                        }) }}
+                    </div>
+                    
+                    {# Champ Nouveau mot de passe #}
+                    <div class="mb-4">
+                        {{ form_row(editform.plainPassword.first, {
+                            'label': 'Nouveau mot de passe',
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Entrez votre nouveau mot de passe'
+                            }
+                        }) }}
+                    </div>
+                    
+                    {# Champ Confirmation #}
+                    <div class="mb-4">
+                        {{ form_row(editform.plainPassword.second, {
+                            'label': 'Confirmez le mot de passe',
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Confirmez votre nouveau mot de passe'
+                            }
+                        }) }}
+                    </div>
+                    
+                    {# Bouton de soumission #}
+                    <div class="d-grid mt-4">
+                        {{ form_widget(editform.submit, {
+                            'attr': {
+                                'class': 'btn btn-primary py-2'
+                            }
+                        }) }}
+                    </div>
+                    
+                    {{ form_end(editform) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+        border-radius: 0.5rem;
+    }
+    .form-control {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+    }
+    .border-bottom {
+        border-color: rgba(0,0,0,0.1) !important;
+    }
+</style>
 {% endblock %}

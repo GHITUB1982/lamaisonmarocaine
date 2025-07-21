@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Merci de votre commande!{% endblock %}
+
+{% block body %}
+
+<div class="container my-5">
+
+    <div class="text-center" style="">
+        <img src="\assets\img\cart.png" alt="Commande avec succes" style="with:100px; height:100px;">
+        <h1>Merci de votre commande </h1>
+
+        <a href="{{path('app_command',{'id': order.id} )}}" class="btn btn-success">Consulter la commande</a>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
