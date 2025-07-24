@@ -14,6 +14,7 @@
 		<!-- CSS -->
 		<link href="{{asset('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
 		<link
+		
 		href="{{asset('/assets/css/carousel.css')}}" rel="stylesheet">
 
 		<!-- Font Awesome -->
@@ -22,7 +23,7 @@
 
 		<!-- Google Fonts -->
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-
+		<link rel="stylesheet" href="chemin/vers/ton-style.css">
 		<style>:root
 		{
 			--primary: #6B8E23; /* Vert olive naturel */
@@ -245,21 +246,21 @@
 					</ul>
 
 					<div class="d-flex align-items-center">
-						<a href="#" class="me-3 text-dark">
-							<i class="fas fa-search"></i>
-						</a>
+						<a href="#" class="me-3 text-dark">  
+							<i data-feather="search" class="feather feather-search fas fa-search"></i>
+						</a>		
 
 						{% if app.user %}
 							<a href="{{ path('app_account') }}" class="me-3 text-dark">
-								<i class="fas fa-user me-1"></i>
+								<i data-feather="user" class="feather feather-user fas fa-user"></i>
 							</a>
 							<a href="{{ path('app_logout') }}" class="me-3 text-dark">
-								<i class="fas fa-sign-out-alt"></i>
+								<i data-feather="log-out" class="feather feather-log-out fas fa-sign-out-alt"></i>
 							</a>
 							<a href="{{ path('app_account_wishlist') }}" class="btn position-relative me-3">
-								<i data-feather="heart" class="feather-icon"></i>
+								<i data-feather="heart" class="feather feather-heart fas fa-heart"></i>
 								{% if app.user and app.user.wishlists|length > 0 %}
-									<span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+									<span class="position-absolute top-10 start translate-left badge rounded-pill bg-danger wishlist-badge">
 										{{ app.user.wishlists|length }}
 										<span class="visually-hidden">produits favoris</span>
 									</span>
@@ -268,17 +269,18 @@
 
 						{% else %}
 							<a href="{{ path('app_login') }}" class="me-3 text-dark">
-								<i class="fas fa-sign-in-alt"></i>
+								<i data-feather="log-in" class="feather feather-log-in fas fa-sign-in-alt"></i>
 							</a>
 							<a href="{{ path('app_register') }}" class="me-3 text-dark">
-								<i class="fas fa-user-plus"></i>
+								<i data-feather="user-plus" class="feather feather-user-plus fas fa-user-plus"></i>
 							</a>
 						{% endif %}
 						<a href="{{ path('app_cart')}}" class="cart-icon">
-							<i class="fas fa-shopping-basket"></i>
+							<i data-feather="shopping-cart" class="feather feather-shopping-cart fas fa-shopping-cart"></i>
 							{% if fullQuantity > 0 %}
-								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">
+									<span class="position-absolute top-10 start translate-left badge rounded-pill bg-warning cart-badge">
 									{{ fullQuantity }}
+									<span class="visually-hidden">produits en panier</span>
 								</span>
 							{% endif %}
 						</a>
@@ -302,40 +304,43 @@
 			{% endfor %}
 		</div>
 	</div>
-	<main class="flex-grow-1" style="padding-top: 80px;"> {% block body %}{% endblock %}
-		</main>
+	<main class="flex-grow-1" style="margin-bottom: 80px;"> 
+	{% block body %}
+	
+	{% endblock %}
+	</main>
 
 		<footer class="cosmetic-footer">
 			<div class="container">
 				<div class="row g-4">
 					<div class="col-lg-4 col-md-6">
 						<div class="footer-about">
-							<a href="{{ path('app_home') }}" class="d-flex align-items-center mb-3 text-decoration-none">
-								<img src="{{asset('/assets/img/logo_bio_cos_coop.jpg')}}" alt="Kech Lotus Cooperative" height="40" class="me-2">
+							<a href="{{ path('app_home') }}" class="d-flex align-items-center mb-1 text-decoration-none">
+								<img src="{{asset('/assets/img/logo_kech_lotus.png')}}" alt="Kech Lotus Cooperative" height="40" class="me-2">
 								<span class="h4 mb-0 text-light">Kech Lotus Cooperative</span>
 							</a>
 							<p class="mb-4">Des cosmétiques 100% naturels inspirés des secrets de beauté marocains, formulés avec des ingrédients biologiques et respectueux de votre peau.</p>
 							<div class="footer-contact">
 								<p class="mb-2">
-									<i class="fas fa-map-marker-alt me-2"></i>
+									<i data-feather="map-pin" class="fas fa-map-marker-alt me-2"></i>
 									Marrakech, Maroc</p>
 								<p class="mb-2">
-									<i class="fas fa-phone me-2"></i>
+									<i data-feather="phone" class="fas fa-phone me-2"></i>
 									+212 6 12 34 56 78</p>
 								<p class="mb-0">
-									<i class="fas fa-envelope me-2"></i>
+									<i data-feather="mail" class="fas fa-envelope me-2"></i>
 									contact@naturamaroc.com</p>
 							</div>
 						</div>
 					</div>
 
 					<div class="col-lg-2 col-md-6">
-						<h5 class="mb-3">Catégories</h5>
+						<h5 class="mb-3" style="color:white">Catégories</h5>
 						<ul class="list-unstyled footer-links">
 							{% for category in categories|slice(0, 4) %}
 								<li>
 									<a href="{{ path('show_category', {'slug': category.slug}) }}">
-										<i class="fas fa-leaf me-1"></i>
+										<i data-feather="leaf" class="fas fa-leaf me-1"></i>
 										{{ category.name }}</a>
 								</li>
 							{% endfor %}
@@ -343,38 +348,38 @@
 					</div>
 
 					<div class="col-lg-2 col-md-6">
-						<h5 class="mb-3">Informations</h5>
+						<h5 class="mb-3" style="color:white">Informations</h5>
 						<ul class="list-unstyled footer-links">
 							<li>
 								<a href="#">
-									<i class="fas fa-file-alt me-1"></i>
+									<i data-feather="file-text" class="fas fa-file-alt me-1"></i>
 									CGV</a>
 							</li>
 							<li>
 								<a href="#">
-									<i class="fas fa-gavel me-1"></i>
+									<i data-feather="gavel" class="fas fa-gavel me-1"></i>
 									Mentions légales</a>
 							</li>
 							<li>
 								<a href="#">
-									<i class="fas fa-lock me-1"></i>
+									<i data-feather="lock" class="fas fa-lock me-1"></i>
 									Confidentialité</a>
 							</li>
 							<li>
 								<a href="#">
-									<i class="fas fa-question-circle me-1"></i>
+									<i data-feather="help-circle" class="fas fa-question-circle me-1"></i>
 									FAQ</a>
 							</li>
 							<li>
 								<a href="#">
-									<i class="fas fa-phone me-1"></i>
+									<i data-feather="phone" class="fas fa-phone me-1"></i>
 									Contact</a>
 							</li>
 						</ul>
 					</div>
 
 					<div class="col-lg-4 col-md-6">
-						<h5 class="mb-3">Newsletter</h5>
+						<h5 class="mb-3" style="color:white">Newsletter</h5>
 						<p>Abonnez-vous pour recevoir nos conseils beauté et offres exclusives.</p>
 						<form class="mb-4">
 							<div class="input-group">
@@ -383,24 +388,26 @@
 							</div>
 						</form>
 
-						<h5 class="mb-3">Suivez-nous</h5>
+						<h5 class="mb-3" style="color:white">Suivez-nous</h5>
 						<div class="d-flex">
 							<a href="#" class="social-icon me-2">
-								<i class="fab fa-instagram"></i>
+								<i data-feather="instagram" class="fab fa-instagram"></i>
 							</a>
 							<a href="#" class="social-icon me-2">
-								<i class="fab fa-facebook-f"></i>
+								<i data-feather="facebook" class="fab fa-facebook-f"></i>
 							</a>
 							<a href="#" class="social-icon me-2">
-								<i class="fab fa-pinterest-p"></i>
+								<i data-feather="pinterest" class="fab fa-pinterest-p"></i>
 							</a>
 							<a href="#" class="social-icon">
-								<i class="fab fa-youtube"></i>
+								<i data-feather="youtube" class="fab fa-youtube"></i>
 							</a>
 						</div>
 
-						<div class="mt-4 pt-2">
-							<img src="https://via.placeholder.com/250x80?text=Paiements+Securisés" alt="Moyens de paiement" class="img-fluid">
+						<div class="mt-4 pt-2" style="z-index: 10;">
+							<div class="d-flex flex-wrap">
+								<img src="/assets/img/payment-methods.webp" style="max-width: 30%;" alt="Moyens de paiement" class="img-fluid">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -412,7 +419,7 @@
 						</div>
 						<div class="col-md-6 text-center text-md-end">
 							<p class="mb-0">Fait avec
-								<i class="fas fa-heart text-danger"></i>
+								<i data-feather="heart" class="fas fa-heart text-danger"></i>
 								au Maroc</p>
 						</div>
 					</div>
@@ -420,12 +427,18 @@
 			</div>
 
 			<a href="#" class="back-to-top">
-				<i class="fas fa-arrow-up"></i>
+				<i data-feather="arrow-up" class="fas fa-arrow-up"></i>
 			</a>
 		</footer>
 
 		<!-- JavaScript -->
 		<script src="{{asset('/assets/js/bootstrap.bundle.min.js')}}"></script>
+		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+        });
+    </script>
 		<script>
 			// Navbar scroll effect
 window.addEventListener('scroll', function () {

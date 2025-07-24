@@ -9,53 +9,35 @@
         {# Menu de navigation #}
         <div class="nav flex-column nav-pills gap-2">
             <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('app_account') }}">
-                <i data-feather="user" class="me-2" style="width: 18px; height: 18px;"></i>
+                <i data-feather="user" class="feather feather-user fas fa-user" style="width: 18px; height: 18px;"></i>
                 <span>Mon compte</span>
             </a>
             
             <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('app_account_order') }}">
-                <i data-feather="shopping-bag" class="me-2" style="width: 18px; height: 18px;"></i>
+                <i data-feather="shopping-bag" class="feather feather-shopping-bag fas fa-shopping-bag" style="width: 18px; height: 18px;"></i>
                 <span>Mes commandes</span>
             </a>
-            
-             <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('app_account_wishlist') }}">
-                <i data-feather="shopping-bag" class="me-2" style="width: 18px; height: 18px;"></i>
-                <span>Ma Wishlist</span>
+
+            <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('app_account_wishlist') }}">
+                <i data-feather="shopping-bag" class="feather feather-heart fas fa-heart" style="width: 18px; height: 18px;"></i>
+                <span>Mes Favoris</span>
             </a>
             <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('app_address') }}">
-                <i data-feather="map-pin" class="me-2" style="width: 18px; height: 18px;"></i>
-                <span>Mes adresses</span>
+                <i data-feather="map-pin" class="feather feather-map-pin fas fa-map-pin" style="width: 18px; height: 18px;"></i>
+                <span> Mes adresses</span>
             </a>
             
             <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('app_account_edit') }}">
-                <i data-feather="key" class="me-2" style="width: 18px; height: 18px;"></i>
+                <i data-feather="key" class="feather feather-key fas fa-key" style="width: 18px; height: 18px;"></i>
                 <span>Mot de passe</span>
             </a>
             
             <div class="border-top my-2"></div>
             
             <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3 text-danger" href="{{ path('app_logout') }}">
-                <i data-feather="log-out" class="me-2" style="width: 18px; height: 18px;"></i>
+                <i data-feather="log-out" class="feather feather-log-out fas fa-sign-out-alt" style="width: 18px; height: 18px;"></i>
                 <span>Déconnexion</span>
             </a>
         </div>
     </div>
 </div>
-
-<style>
-    .nav-link {
-        transition: all 0.2s ease;
-        color: var(--bs-gray-700);
-    }
-    .nav-link:hover {
-        background-color: var(--bs-primary-bg-subtle);
-        color: var(--bs-primary);
-    }
-    .nav-link.active {
-        background-color: var(--bs-primary);
-        color: white;
-    }
-    .rounded-3 {
-        border-radius: 0.5rem !important;
-    }
-</style>

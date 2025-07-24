@@ -13,11 +13,14 @@ final class OrderController extends AbstractController
     public function index(OrderRepository $orderRepository): Response
     {
 
-        $orders = $orderRepository->findBy([
-
-            'user' => $this->getUser(), 
-                'state' => [1,2,3,4]
-        ]);
+        $orders = $orderRepository->findBy(
+            [
+                'user' => $this->getUser(),
+                'state' => [1, 2, 3, 4]
+            ],
+            ['createdAt' => 'DESC'],
+            10 // Limit to 10 orders
+        );
 
         // dd($orders);
 

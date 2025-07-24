@@ -37,28 +37,32 @@ class ProductCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
-        $rerquired=true;
-        if($pageName='edit'){
-            $rerquired=false;
+        $required = true;
+        if ($pageName === 'edit') {
+            $required = false;
         }
         return [
             TextField::new('name', 'Nom'),
             BooleanField::new('isHomepage')->setLabel('A la une')->setHelp('Produit affiché sur la page d\'accueil'),
             SlugField::new('slug', 'Slug')->setLabel('Slug ou URL')->setTargetFieldName('name')->setHelp('Genéré automatiquement à partir du nom de la catégorie'),
             NumberField::new('price', 'Prix'),
-            ChoiceField::new('tva','TVA')->setLabel('TVA')->setHelp('Choisir le taux de TVA')->setChoices([
-                    '20%' => 20,
-                    '10%' => 10,
-                    '5,5%' => 5,5,
-                    '2,1%' => 2,1,
-                ])->setRequired( $rerquired),
+           ChoiceField::new('tva', 'TVA')
+    ->setLabel('TVA')
+    ->setHelp('Choisir le taux de TVA')
+    ->setChoices([
+        '20%' => '20',
+        '10%' => '10',
+        '5,5%' => '5.5',  // Store as strings
+        '2,1%' => '2.1'   // Store as strings
+    ])
+    ->setRequired($required),
             ImageField::new('illustration', 'Illustration')
                             ->setLabel('Image du produit')
                             ->setUploadedFileNamePattern('[day]-[month]-[year]-[slug]-[contenthash].[extension]')
                             ->setHelp('Image du produit')
                             ->setBasePath('uploads\products')
                             ->setUploadDir('public\uploads\products')
-                            ->setRequired( $rerquired),
+                            ->setRequired( $required),
             TextEditorField::new('description', 'Description'),
             AssociationField::new('category', 'Catégorie Associé'),
         ];

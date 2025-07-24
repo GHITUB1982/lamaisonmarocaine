@@ -10,7 +10,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use Symfony\Component\Validator\Constraints\Choice;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
@@ -87,17 +89,24 @@ public function show(AdminContext $context): Response
              TextField::new('invoice', 'Facture')
             ->setTemplatePath('admin/order/invoice_button.html.twig')
             ->onlyOnDetail(),
-            DateTimeField::new('createdAt'),
-            TextField::new('stripe_session_id'),
-            NumberField::new('state')->setTemplatePath('admin/order_state.html.twig'),
-            AssociationField::new('user')->setLabel('Client'),
-            TextField::new('carrierName'),
-            TextField::new('delivery'),
+            DateTimeField::new('createdAt')->setDisabled(true),
+            TextField::new('stripe_session_id')->setDisabled(true),
+            ChoiceField::new('state')->setTemplatePath('admin/order_state.html.twig')->setChoices([
+                'En attente de paiement' => 0,
+                'Paiement Effectué' => 1,
+                'Préparation en cours' => 2,
+                'Livraison en cours' => 3,
+                'Livrée' => 4,
+                'Annulée' => 5,
+            ])->setDisabled('state' === 0), // Disable the field if state is '0'
+            AssociationField::new('user')->setLabel('Client')->setDisabled(true),
+            TextField::new('carrierName')->setDisabled(true),
+            TextField::new('delivery')->setDisabled(true),
             NumberField::new('totalHT')
                     ->setLabel('Total HT (MAD)')
                     ->formatValue(function ($value, $entity) {
                         return $entity->getFormattedTotals()['ht'] . ' MAD';
-                    }),
+                    })->setDisabled(true),
           
             TextField::new('customBlock')
                     ->setLabel('Informations complémentaires')
@@ -107,17 +116,17 @@ public function show(AdminContext $context): Response
                     ->setLabel('TVA (MAD)')
                     ->formatValue(function ($value, $entity) {
                         return $entity->getFormattedTotals()['tva'] . ' MAD';
-                    }),
+                    })->setDisabled(true),
             NumberField::new('carrierPrice')
                     ->setLabel('Frais de livraison (MAD)')
                     ->formatValue(function ($value, $entity) {
                         return $entity->getFormattedTotals()['carrier'] . ' MAD';
-                    }),
+                    })->setDisabled(true),
             NumberField::new('totalTTC')
                     ->setLabel('Total TTC (MAD)')
                     ->formatValue(function ($value, $entity) {
                         return $entity->getFormattedTotals()['ttc'] . ' MAD';
-                    }),
+                    })->setDisabled(true),
 
             //     ];
             // }

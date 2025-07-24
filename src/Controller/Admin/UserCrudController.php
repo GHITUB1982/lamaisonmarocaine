@@ -49,6 +49,7 @@ class UserCrudController extends AbstractCrudController
             // TextField::new('email', 'Email')->onlyOnIndex(),
             TextField::new('email', 'Email')->setDisabled(true),
             // TextEditorField::new('description'),
+            
         ];
     }
 

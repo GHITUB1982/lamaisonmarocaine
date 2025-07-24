@@ -19,7 +19,7 @@
         <div>
             <h2 class="h5 mb-1">Espace de {{ app.user.firstname }} {{ app.user.lastname }}</h2>
             <p class="text-muted mb-0 small">
-                <i data-feather="mail" class="me-1"></i>{{ app.user.email }}
+                <i data-feather="mail" class="feather feather-mail fas fa-envelope"></i>{{ app.user.email }}
                 {% if is_granted('ROLE_ADMIN') %}
                     <span class="badge bg-danger ms-2">Administrateur</span>
                 {% endif %}

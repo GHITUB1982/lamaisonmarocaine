@@ -49,11 +49,11 @@
 {% block body %}
 <div class="container my-1">
     {# Bannière conservée identique mais stylisée #}
-    <div class="category-banner mb-4 p-3 rounded bg-light" style="height: 80px;">
+    <div class="category-banner mb-4 p-3 rounded bg-light shadow-sm d-flex align-items-center mt-5">
         <div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
             <h2 class="h4 mb-0 text-dark">
                 <i data-feather="shopping-cart" class="me-2 text-primary"></i>
-                Mon Panier 
+                Mon Panier
             </h2>
         </div>
     </div>
@@ -193,12 +193,4 @@
     </div>
 </div>
 
-{% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            feather.replace();
-        });
-    </script>
-{% endblock %}
 {% endblock %}

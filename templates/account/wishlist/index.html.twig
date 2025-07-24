@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ma Wishlist - {{ parent() }}{% endblock %}
+{% block title %}Mes Favoris - {{ parent() }}{% endblock %}
 
 {% block body %}
 <div class="container py-4">
@@ -10,21 +10,21 @@
     <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
         <div>
             <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-                <i data-feather="home" class="me-2"></i>Accueil
+                <i data-feather="home" class="feather feather-home fas fa-home me-2"></i>Accueil
             </a>
             <a href="{{ path('app_account') }}" class="btn btn-outline-secondary ms-2">
-                <i data-feather="user" class="me-2"></i>Mon compte
+                <i data-feather="user" class="feather feather-user fas fa-user me-2"></i>Mon compte
             </a>
         </div>
         <h1 class="mb-0 fs-3 fw-bold text-primary">
-            <i data-feather="heart" class="me-2 text-danger"></i>Ma Wishlist
+            <i data-feather="heart" class="feather feather-heart fas fa-heart me-2 text-danger"></i>Mes Favoris
         </h1>
     </div>
 
     <div class="row g-4">
         {# Menu de gauche #}
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-80" style="min-height: 400px;">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body p-0">
                     {% include "account/_menu.html.twig" %}
                 </div>

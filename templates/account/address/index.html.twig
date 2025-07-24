@@ -13,14 +13,14 @@
     <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
         <div>
             <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-                <i data-feather="home" class="me-2"></i>Accueil
+                <i data-feather="home" class="feather feather-home fas fa-home"></i>Accueil
             </a>
             <a href="{{ path('app_account') }}" class="btn btn-outline-secondary ms-2">
-                <i data-feather="user" class="me-2"></i>Mon compte
+                <i data-feather="user" class="feather feather-user fas fa-user"></i>Mon compte
             </a>
         </div>
         <h1 class="mb-0 fs-3 fw-bold text-primary">
-            <i data-feather="map-pin" class="me-2"></i>Mes Adresses
+            <i data-feather="map-pin" class="feather feather-map-pin fas fa-map-pin"></i> Mes Adresses
         </h1>
     </div>
 
@@ -41,14 +41,14 @@
                     {% if app.user.addresses is empty %}
                         {# État vide #}
                         <div class="text-center py-5">
-                            <i data-feather="map" class="text-muted" style="width: 48px; height: 48px;"></i>
+                            <i data-feather="map" class="feather feather-map fas fa-map"></i>
                             <h3 class="h5 mt-3">Aucune adresse enregistrée</h3>
                             <p class="text-muted">Vous n'avez pas encore d'adresse enregistrée.</p>
                         </div>
                     {% else %}
                         {# Liste des adresses #}
                         <h3 class="h4 fw-bold mb-4">
-                            <i data-feather="list" class="me-2"></i>Vos adresses
+                            <i data-feather="list" class="feather feather-list fas fa-list"></i>Vos adresses
                         </h3>
                         
                         <div class="row g-3">
@@ -58,7 +58,7 @@
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <h5 class="card-title mb-3">
-                                                    <i data-feather="user" class="me-2 text-primary"></i>
+                                                    <i data-feather="user" class="feather feather-user fas fa-user me-2 text-primary"></i>
                                                     {{ address.firstname }} {{ address.lastname }}
                                                 </h5>
                                                 <div class="dropdown">

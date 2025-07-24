@@ -31,8 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
-    private ?string $password = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $password;
+
 
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
@@ -58,7 +59,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      #[ORM\ManyToMany(targetEntity: Product::class)]
      private Collection $wishlists;
 
-   
+     #[ORM\Column(length: 255)]
+     private ?string $resetToken = null;
+
+     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+     private ?\DateTimeImmutable $resetTokenExpiresAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -160,7 +166,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->firstname . ' ' . $this->lastname;
+        return "{$this->firstname} {$this->lastname}";
 
     }
    
@@ -243,5 +249,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Get the value of resetToken
+     */
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+    /**
+     * Get the value of resetTokenExpiresAt
+     */
+    public function getResetTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->resetTokenExpiresAt;
+    }
+    public function setResetTokenExpiresAt(?\DateTimeImmutable $resetTokenExpiresAt): static
+    {
+        $this->resetTokenExpiresAt = $resetTokenExpiresAt;
+
+        return $this;
+    }
   
 }
