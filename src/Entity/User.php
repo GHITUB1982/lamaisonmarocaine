@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +15,27 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[ORM\OneToMany(targetEntity: BlogPosts::class, mappedBy: 'author')]
+    /**
+     * @var Collection<int, BlogPosts>
+     */
+    private Collection $blogPosts;
+
+     public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+        $this->wishlists = new ArrayCollection();
+        $this->blogPosts = new ArrayCollection();
+
+    }
+
+
+    public function getBlogPosts(): Collection
+    {
+        return $this->blogPosts;
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -41,7 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
+     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, cascade: ['persist', 'remove'])]
     private Collection $addresses;
 
      /**
@@ -64,6 +86,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
      #[ORM\Column(type: 'datetime_immutable', nullable: true)]
      private ?\DateTimeImmutable $resetTokenExpiresAt = null;
+
+     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+     private ?\DateTimeInterface $lastLoginAt = null;
 
     public function getId(): ?int
     {
@@ -171,12 +196,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
    
 
-    public function __construct()
-    {
-        $this->addresses = new ArrayCollection();
-        $this->orders = new ArrayCollection();
-        $this->wishlists = new ArrayCollection();
-    }
+   
 
     public function getAddresses(): Collection
     {
@@ -272,6 +292,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetTokenExpiresAt(?\DateTimeImmutable $resetTokenExpiresAt): static
     {
         $this->resetTokenExpiresAt = $resetTokenExpiresAt;
+
+        return $this;
+    }
+
+    public function getLastLoginAt(): ?\DateTimeInterface
+    {
+        return $this->lastLoginAt;
+    }
+
+    public function setLastLoginAt(?\DateTimeInterface $lastLoginAt): static
+    {
+        $this->lastLoginAt = $lastLoginAt;
 
         return $this;
     }

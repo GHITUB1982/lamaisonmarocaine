@@ -26,6 +26,12 @@
                 <i data-feather="map-pin" class="feather feather-map-pin fas fa-map-pin" style="width: 18px; height: 18px;"></i>
                 <span> Mes adresses</span>
             </a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('admin') }}">
+                <i data-feather="vicard" class="feather feather-vicard fas fa-vcard" style="width: 18px; height: 18px;"> </i>
+                <span>  Mon Administration</span>
+            </a>
+        {% endif %}
             
             <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3" href="{{ path('app_account_edit') }}">
                 <i data-feather="key" class="feather feather-key fas fa-key" style="width: 18px; height: 18px;"></i>

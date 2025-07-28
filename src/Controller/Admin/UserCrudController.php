@@ -2,19 +2,31 @@
 
 namespace App\Controller\Admin;
 
+use DateTime;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+
 
 class UserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return User::class;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable('delete'); // Désactive uniquement l'action delete
+            
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -26,7 +38,9 @@ class UserCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Utilisateurs')
             ->setEntityLabelInSingular('Utilisateur')
             ->setSearchFields(['username', 'email'])
-            ->setDefaultSort(['id' => 'DESC']);
+            ->setDefaultSort(['id' => 'DESC'])
+            
+            ;
     }
 
 
@@ -35,6 +49,7 @@ class UserCrudController extends AbstractCrudController
           $rerquired=true;
         if($pageName='edit'){
             $rerquired=false;
+
         }
         return [
             // IdField::new('id'),
@@ -47,10 +62,16 @@ class UserCrudController extends AbstractCrudController
             TextField::new('firstName', 'Prénom'),
             TextField::new('lastName', 'Nom'),
             // TextField::new('email', 'Email')->onlyOnIndex(),
-            TextField::new('email', 'Email')->setDisabled(true),
+            TextField::new('email', 'Email')->setRequired( $rerquired),
             // TextEditorField::new('description'),
+             ChoiceField::new('roles')->setChoices([
+                'ROLE_USER' => 'ROLE_USER',
+                'ROLE_ADMIN' => 'ROLE_ADMIN',
+             ])->allowMultipleChoices()->setHelp('Choisir le role de l\'utilisateur')->setRequired( $rerquired),
+             DateTimeField::new('lastLoginAt')->setLabel('Dernière connexion')->onlyOnIndex(),
             
         ];
     }
 
 }
+ 

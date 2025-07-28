@@ -27,11 +27,27 @@ class Category
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
     private Collection $products;
 
+     #[ORM\OneToMany(targetEntity: BlogPosts::class, mappedBy: 'category')]
+    private Collection $blogPosts;
+
+   
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+                $this->blogPosts = new ArrayCollection();
+
+    } 
+    public function getBlogPosts(): Collection
+    {
+        return $this->blogPosts;
     }
 
+    /**
+     * Returns the identifier of the category.
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -95,4 +111,5 @@ class Category
 
         return $this;
     }
+
 }

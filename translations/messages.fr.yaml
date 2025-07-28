@@ -1,0 +1,91 @@
+# Entités générales
+Entity: "Entité"
+Title: "Titre"
+Content: "Contenu"
+Slug: "Slug"
+URL: "URL"
+Image: "Image"
+Published At: "Date de publication"
+Category: "Catégorie"
+Author: "Auteur"
+Delivery: "Livraison"
+Carrier: "Transporteur"
+Name: "Nom"
+Description: "Description"
+Price: "Prix"
+Quantity: "Quantité"
+Order: "Commande"
+Order Date: "Date de la commande"
+Order Status: "Statut de la commande"
+Created At: "Date de création"
+Carrier Name: "Nom du transporteur"
+Header: "En-tête"
+
+
+
+
+# Actions CRUD
+action.new: "Créer"
+action.edit: "Modifier"
+action.show: "Voir"
+action.delete: "Supprimer"
+action.save: "Enregistrer"
+action.save_and_continue: "Enregistrer et continuer"
+action.back_to_list: "Retour à la liste"
+action.search: "Rechercher"
+action.reset: "Réinitialiser"
+
+# Templates CRUD
+Edit: "Modifier %entity%"
+Show: "Détails de %entity%"
+New: "Créer %entity%"
+List: "Liste des %entity%"
+
+# Messages système
+Are you sure you want to delete this item?: "Confirmez-vous la suppression ?"
+No records found: "Aucun résultat trouvé"
+Deleted successfully: "Suppression réussie"
+Updated successfully: "Mise à jour réussie"
+Created successfully: "Création réussie"
+
+# Pagination
+Previous: "Précédent"
+Next: "Suivant"
+First: "Premier"
+Last: "Dernier"
+
+# Validation
+This value should not be blank.: "Ce champ ne peut pas être vide"
+This value is too short.: "Ce texte est trop court"
+This value is not valid.: "Valeur invalide"
+
+# Blog spécifique
+BlogPost: "Article"
+Edit BlogPost: "Modifier l'article"
+New BlogPost: "Nouvel article"
+Show BlogPost: "Détails de l'article"
+List BlogPosts: "Liste des articles"
+
+# Pages statiques
+StaticPage: "Page statique"
+CGV: "Conditions Générales de Vente"
+Mentions légales: "Mentions légales"
+Privacy Policy: "Politique de confidentialité"
+FAQ: "FAQ"
+Contact: "Contact"
+
+# Formulaires
+form.label.title: "Titre"
+form.label.content: "Contenu"
+form.label.slug: "Slug (URL)"
+form.label.image: "Image"
+form.label.published: "Publié"
+form.label.categories: "Catégories"
+
+# Boutons
+button.edit: "Éditer"
+button.delete: "Supprimer"
+button.add: "Ajouter"
+button.save: "Sauvegarder"
+button.cancel: "Annuler"
+

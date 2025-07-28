@@ -65,7 +65,17 @@
 
 {% block body %}
 <div class="container py-4">
-    
+      {# Message de bienvenue #}
+
+		<class="container py-4">
+		<div class="category-banner mb-4 p-3 rounded bg-light shadow-sm d-flex align-items-center mt-5">
+			<div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
+				<h2 class="h4 mb-0 text-dark">
+					<i data-feather="grid" class="me-2 text-primary"></i>
+                    <h2>Collections des Produits</h2> 
+   			</h2>
+			</div>
+		</div>
     {# Barre de navigation identique #}
     <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
         <div>
@@ -73,20 +83,13 @@
                 <i data-feather="home" class="me-2"></i>Accueil
             </a>
         </div>
-        <h1 class="mb-0 fs-3 fw-bold text-primary">Liste des catégories</h1>
+        <h1 class="mb-0 fs-3 fw-bold text-primary">Liste de nos Catégories de Produits</h1>
         <div class="text-muted small">
             <i data-feather="grid" class="me-1"></i>{{ categories|length }} catégories
         </div>
     </div>
 
-    {# Message de bienvenue #}
-    <div class="alert alert-light mb-4 text-left">
-          <div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
-            <h2 class="h4 mb-0 text-dark">
-                <i data-feather="list" class="me-2 text-primary"></i>
-                    <h2>Collections des Produits</h2> 
-        </div>
-    </div>
+  
 
     {% if categories is empty %}
         {# État vide #}
@@ -153,15 +156,4 @@
     {% endif %}
 </div>
 
-<style>
-    .card {
-        transition: transform 0.2s;
-    }
-    .card:hover {
-        transform: translateY(-3px);
-    }
-    h2 a:hover {
-        color: var(--bs-primary) !important;
-    }
-</style>
 {% endblock %}

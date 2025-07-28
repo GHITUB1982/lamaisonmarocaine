@@ -12,8 +12,8 @@ class EmailService
     public function sendTestEmail(): void
     {
         $email = (new Email())
-            ->from('zougarhi.adil@gmail.com')
-            ->to('adil.zougarhi@gmail.com')
+            ->from('no-reply@kechlotus.com')
+            ->to('no-reply@kechlotus.com')
             ->subject('Test Service Email')
             ->text('Sent via EmailService');
 

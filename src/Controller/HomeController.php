@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Repository\BlogPostsRepository;
 use App\Repository\HeaderRepository;
 use App\Repository\ProductRepository;
 use Mailjet\Client as MailjetClient;
@@ -13,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(HeaderRepository $headers, ProductRepository $productRepository): Response
+    public function index(HeaderRepository $headers, ProductRepository $productRepository, BlogPostsRepository $posts): Response
     {
 
         // $smj = new MailjetClient( $_ENV['MJ_APIKEY_PUBLIC'], $_ENV['MJ_APIKEY_PRIVATE'], true, ['version' => 'v3.1'] );
@@ -22,6 +23,7 @@ final class HomeController extends AbstractController
 
             'headers' => $headers->findAll(), 
             'homeproducts' => $productRepository->findByIsHomepage(true),
+            'blogposts' => $posts->findAll(),
         ]);
     }
 }

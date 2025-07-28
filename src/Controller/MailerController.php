@@ -26,8 +26,8 @@ public function sendEmail(
         'token' => $user->getResetToken(),
     ], UrlGeneratorInterface::ABSOLUTE_URL);
         $email = (new TemplatedEmail())
-            ->from('no-reply@mailtrap.io')
-            ->to('adil.zougarhi@gmail.com')
+            ->from('no-reply@kechlotus.com')
+            ->to('no-reply@kechlotus.com')
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')

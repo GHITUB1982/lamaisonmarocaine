@@ -39,7 +39,7 @@ class OrderCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle(Crud::PAGE_INDEX, 'Commandes')
+            ->setPageTitle(Crud::PAGE_INDEX, 'Liste des Commandes')->setDefaultSort(['id' => 'DESC'])  
             ->setPageTitle(Crud::PAGE_NEW, 'Ajouter une commande')
             ->setPageTitle(Crud::PAGE_EDIT, 'Modifier une commande')
             ->setEntityLabelInPlural('Commandes')
@@ -62,7 +62,7 @@ class OrderCrudController extends AbstractCrudController
                     // dd($order);
 
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::NEW)
+            ->remove(Crud::PAGE_INDEX, Action::NEW )
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)

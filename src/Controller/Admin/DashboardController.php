@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\BlogPosts;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Header;
@@ -41,6 +42,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Produits', 'fas fa-box', Product::class);
         yield MenuItem::linkToCrud('Commandes', 'fas fa-shopping-basket', Order::class);
         yield MenuItem::linkToCrud('Transporteurs', 'fas fa-truck', Carrier::class);
+        yield MenuItem::linkToCrud('Postes du Blog', 'fas fa-newspaper', BlogPosts::class);
         yield MenuItem::linkToCrud('Header', 'fas fa-image', Header::class);
 
         yield MenuItem::section();

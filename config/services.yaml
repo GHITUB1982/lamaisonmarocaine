@@ -24,3 +24,7 @@ services:
             $params: '@parameter_bag'
         tags:
             - { name: 'monolog.logger', channel: 'mailer' }
+
+
+    Src\EventSubscriber\LoginSubscriber:
+        tags: [kernel.event_subscriber]
