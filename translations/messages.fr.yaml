@@ -19,8 +19,8 @@ Order Date: "Date de la commande"
 Order Status: "Statut de la commande"
 Created At: "Date de création"
 Carrier Name: "Nom du transporteur"
-Header: "En-tête"
-
+# Header: "En-tête"
+# BlogPosts: "Postes du Blog"
 
 
 
@@ -60,7 +60,7 @@ This value is too short.: "Ce texte est trop court"
 This value is not valid.: "Valeur invalide"
 
 # Blog spécifique
-BlogPost: "Article"
+# BlogPost: "Article"
 Edit BlogPost: "Modifier l'article"
 New BlogPost: "Nouvel article"
 Show BlogPost: "Détails de l'article"

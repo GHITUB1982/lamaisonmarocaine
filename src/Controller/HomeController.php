@@ -19,11 +19,15 @@ final class HomeController extends AbstractController
 
         // $smj = new MailjetClient( $_ENV['MJ_APIKEY_PUBLIC'], $_ENV['MJ_APIKEY_PRIVATE'], true, ['version' => 'v3.1'] );
 
+         $headers = $headers->findAll();
+            $homeproducts = $productRepository->findByIsHomepage(true);
+            $blogposts = $posts->findByIsHomepage(true);
+
         return $this->render('home/index.html.twig', [
 
-            'headers' => $headers->findAll(), 
-            'homeproducts' => $productRepository->findByIsHomepage(true),
-            'blogposts' => $posts->findAll(),
+            'headers' => $headers,
+            'homeproducts' => $homeproducts,
+            'blogposts' => $blogposts,
         ]);
     }
 }

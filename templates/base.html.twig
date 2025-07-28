@@ -1,535 +1,569 @@
 <!doctype html>
 <html lang="fr" data-bs-theme="light">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kech Lotus Cooperative - Cooperative Naturels du Maroc</title>
-    <meta name="description" content="Découvrez nos cosmétiques 100% naturels inspirés des secrets de beauté marocains">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Kech Lotus Cooperative - Cooperative Naturels du Maroc</title>
+		<meta
+		name="description" content="Découvrez nos cosmétiques 100% naturels inspirés des secrets de beauté marocains">
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{asset('/assets/images/favicon.ico')}}">
+		<!-- Favicon -->
+		<link
+		rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
-    <!-- CSS -->
-    <link href="{{asset('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('/assets/css/carousel.css')}}" rel="stylesheet">
+		<!-- CSS -->
+		<link href="{{asset('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
+		<link
+		href="{{asset('/assets/css/carousel.css')}}" rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<!-- Font Awesome -->
+		<link
+		rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #6B8E23;
-            --secondary: #C9A66B;
-            --light: #F8F5F0;
-            --dark: #3E3D29;
-            --accent: #A78A7F;
-        }
+		<!-- Google Fonts -->
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
-        }
+		<style>:root
+		{
+			--primary: #6B8E23;
+			--secondary: #C9A66B;
+			--light: #F8F5F0;
+			--dark: #3E3D29;
+			--accent: #A78A7F;
+		}
 
-        h1, h2, h3, h4, h5 {
-            font-family: 'Playfair Display', serif;
-            color: var(--dark);
-        }
+		img {
+			border-radius: 10px;
+		}
+		body {
+			font-family: 'Montserrat', sans-serif;
+			background-color: var(--light);
+			color: var(--dark);
+		}
 
-        /* Navbar Style */
-        .cosmetic-navbar {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.4s ease;
-        }
+		h1,
+		h2,
+		h3,
+		h4,
+		h5 {
+			font-family: 'Playfair Display', serif;
+			color: var(--dark);
+		}
 
-        .cosmetic-navbar.scrolled {
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
+		/* Navbar Style */
+		.cosmetic-navbar {
+			background: rgba(255, 255, 255, 0.95) !important;
+			backdrop-filter: blur(8px);
+			box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+			transition: all 0.4s ease;
+		}
 
-        .navbar-brand {
-            font-weight: 600;
-            color: var(--primary) !important;
-            font-size: 1.6rem;
-        }
+		.cosmetic-navbar.scrolled {
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+		}
 
-        .nav-link {
-            color: var(--dark) !important;
-            font-weight: 500;
-            margin: 0 8px;
-            position: relative;
-            padding-bottom: 5px;
-        }
+		.navbar-brand {
+			font-weight: 600;
+			color: var(--primary) !important;
+			font-size: 1.6rem;
+		}
 
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--primary);
-            transition: width 0.3s;
-        }
+		.nav-link {
+			color: var(--dark) !important;
+			font-weight: 500;
+			margin: 0 8px;
+			position: relative;
+			padding-bottom: 5px;
+		}
 
-        .nav-link:hover:after,
-        .nav-link.active:after {
-            width: 100%;
-        }
+		.nav-link:after {
+			content: '';
+			position: absolute;
+			width: 0;
+			height: 2px;
+			bottom: 0;
+			left: 0;
+			background-color: var(--primary);
+			transition: width 0.3s;
+		}
 
-        .btn-beauty {
-            background-color: var(--primary);
-            color: white;
-            border-radius: 30px;
-            padding: 8px 20px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-        }
+		.nav-link:hover:after,
+		.nav-link.active:after {
+			width: 100%;
+		}
 
-        .btn-beauty:hover {
-            background-color: var(--dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
-        }
+		.btn-beauty {
+			background-color: var(--primary);
+			color: white;
+			border-radius: 30px;
+			padding: 8px 20px;
+			font-weight: 600;
+			transition: all 0.3s;
+			border: none;
+		}
 
-        /* Cart Icon */
-        .cart-icon {
-            position: relative;
-            color: var(--dark) !important;
-        }
+		.btn-beauty:hover {
+			background-color: var(--dark);
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
+		}
 
-        .cart-badge {
-            background-color: var(--primary);
-        }
+		/* Cart Icon */
+		.cart-icon {
+			position: relative;
+			color: var(--dark) !important;
+		}
 
-        /* Footer */
-        .cosmetic-footer {
-            margin-top:3rem;
-            margin-bottom: 0rem;
-            background: linear-gradient(135deg, var(--dark) 0%, #2a2a1e 100%);
-            color: var(--light);
-            padding: 60px 0 30px;
-            position: relative;
-            border-top: 3px solid var(--primary);
-        }
+		.cart-badge {
+			background-color: var(--primary);
+		}
 
-        .footer-links a {
-            color: #d1d1d1;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
+		/* Footer */
+		.cosmetic-footer {
+			margin-top: 3rem;
+			margin-bottom: 0;
+			background: linear-gradient(135deg, var(--dark) 0%, #2a2a1e 100%);
+			color: var(--light);
+			padding: 60px 0 30px;
+			position: relative;
+			border-top: 3px solid var(--primary);
+		}
 
-        .footer-links a:hover {
-            color: var(--secondary);
-            transform: translateX(5px);
-        }
+		.footer-links a {
+			color: #d1d1d1;
+			text-decoration: none;
+			transition: all 0.3s;
+			display: inline-block;
+			margin-bottom: 8px;
+		}
 
-        .social-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            margin-right: 10px;
-            color: var(--light);
-            transition: all 0.3s;
-        }
+		.footer-links a:hover {
+			color: var(--secondary);
+			transform: translateX(5px);
+		}
 
-        .social-icon:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
-        }
+		.social-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			background: rgba(255, 255, 255, 0.1);
+			border-radius: 50%;
+			margin-right: 10px;
+			color: var(--light);
+			transition: all 0.3s;
+		}
 
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--primary);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
-            z-index: 99;
-        }
+		.social-icon:hover {
+			background: var(--primary);
+			transform: translateY(-3px);
+		}
 
-        .back-to-top:hover {
-            background: var(--dark);
-            transform: translateY(-5px);
-        }
+		.back-to-top {
+			position: fixed;
+			bottom: 30px;
+			right: 30px;
+			background: var(--primary);
+			color: white;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+			transition: all 0.3s;
+			z-index: 99;
+		}
 
-        .whatsapp-float {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 1000;
-        }
+		.back-to-top:hover {
+			background: var(--dark);
+			transform: translateY(-5px);
+		}
 
-        .whatsapp-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            background: #25D366;
-            color: white;
-            border-radius: 50%;
-            font-size: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
+		.whatsapp-float {
+			position: fixed;
+			bottom: 25px;
+			right: 25px;
+			z-index: 1000;
+		}
 
-        .whatsapp-btn:hover {
-            background: #128C7E;
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-        }
+		.whatsapp-btn {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 60px;
+			height: 60px;
+			background: #25D366;
+			color: white;
+			border-radius: 50%;
+			font-size: 30px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+			transition: all 0.3s;
+		}
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+		.whatsapp-btn:hover {
+			background: #128C7E;
+			transform: scale(1.1);
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+		}
 
-        .whatsapp-float:hover .whatsapp-btn {
-            animation: pulse 1.5s infinite;
-        }
-    </style>
+		@keyframes pulse {
+			0% {
+				transform: scale(1);
+			}
+			50% {
+				transform: scale(1.1);
+			}
+			100% {
+				transform: scale(1);
+			}
+		}
+
+		.whatsapp-float:hover .whatsapp-btn {
+			animation: pulse 1.5s infinite;
+		}
+	</style>
 </head>
 
 <body class="d-flex flex-column min-vh-100 bg-herbal">
-    <header>
-        <nav class="navbar navbar-expand-lg cosmetic-navbar fixed-top py-1">
-            <div class="container">
-                <a class="navbar-brand" href="{{ path('app_home') }}">
-                    <img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" alt="Kech Lotus Cooperative" height="70" class="me-2">
-                    Kech Lotus Cooperative
-                </a>
+	<header>
+		<nav class="navbar navbar-expand-lg cosmetic-navbar fixed-top py-1">
+			<div class="container">
+				<a class="navbar-brand" href="{{ path('app_home') }}">
+					<img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" alt="Kech Lotus Cooperative" height="70" class="me-2">
+					Kech Lotus Cooperative
+				</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ path('app_home') }}">Accueil</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Nos Produits
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
-                                {% for category in categories %}
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="{{ path('show_category', {'slug': category.slug}) }}">
-                                            {% if category.products|length > 0 %}
-                                                <img src="/uploads/products/{{ category.products[0].illustration }}" 
-                                                     alt="{{ category.name }}" 
-                                                     class="me-3" 
-                                                     style="width: 140px; height: 140px; object-fit: cover; border-radius: 4px;">
-                                            {% endif %}
-                                            <span>{{ category.name }}</span>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Notre Philosophie</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Recettes Naturelles</a>
-                        </li>
-                    </ul>
+				<div class="collapse navbar-collapse" id="navbarCollapse">
+					<ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link active" href="{{ path('app_home') }}">Accueil</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Nos Produits
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="productsDropdown">
+								{% for category in categories %}
+									<li>
+										<a class="dropdown-item d-flex align-items-center" href="{{ path('show_category', {'slug': category.slug}) }}">
+											{% if category.products|length > 0 %}
+												<img src="/uploads/products/{{ category.products[0].illustration }}" alt="{{ category.name }}" class="me-3" style="width: 140px; height: 140px; object-fit: cover; border-radius: 4px;">
+											{% endif %}
+											<span>{{ category.name }}</span>
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								A Propos de nous
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="productsDropdown">
+								<li>
+									<a class="dropdown-item d-flex align-items-center mb-3" href="#">
+										<i class="fas fa-file-alt me-1"></i>
+										Conditions Général
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center mb-3" href="#">
+										<i class="fas fa-gavel me-1"></i>
+										Mentions légales</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center mb-3" href="#">
+										<i class="fas fa-lock me-1"></i>
+										Confidentialité</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center mb-3" href="#">
+										<i class="fas fa-question-circle me-1"></i>
+										FAQ</a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Contactez-nous</a>
+						</li>
+					</ul>
 
-                    <div class="d-flex align-items-center">
-                        <a href="#" class="me-3 text-dark">  
-                            <i class="fas fa-search"></i>
-                        </a>        
+					<div class="d-flex align-items-center">
+						<a href="#" class="me-3 text-dark">
+							<i class="fas fa-search"></i>
+						</a>
 
-                        {% if app.user %}
-                            <a href="{{ path('app_account') }}" class="me-3 text-dark">
-                                <i data-feather="user"  class="fas fa-user"></i>
-                            </a>
-                            <a href="{{ path('app_logout') }}" class="me-3 text-dark">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </a>
-                            <a href="{{ path('app_account_wishlist') }}" class="btn position-relative me-3">
-                                <i class="fas fa-heart"></i>
-                                {% if app.user and app.user.wishlists|length > 0 %}
-                                    <span class="position-absolute top-10 start translate-left badge rounded-pill bg-danger wishlist-badge">
-                                        {{ app.user.wishlists|length }}
-                                        <span class="visually-hidden">produits favoris</span>
-                                    </span>
-                                {% endif %}
-                            </a>
-                        {% else %}
-                            <a href="{{ path('app_login') }}" class="me-3 text-dark">
-                                <i class="fas fa-sign-in-alt"></i>
-                            </a>
-                            <a href="{{ path('app_register') }}" class="me-3 text-dark">
-                                <i class="fas fa-user-plus"></i>
-                            </a>
-                        {% endif %}
-                        <a href="{{ path('app_cart')}}" class="cart-icon">
-                            <i class="fas fa-shopping-cart"></i>
-                            {% if fullQuantity > 0 %}
-                                <span class="position-absolute top-10 start translate-left badge rounded-pill bg-warning cart-badge">
-                                    {{ fullQuantity }}
-                                    <span class="visually-hidden">produits en panier</span>
-                                </span>
-                            {% endif %}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+						{% if app.user %}
+							<a href="{{ path('app_account') }}" class="me-3 text-dark">
+								<i data-feather="user" class="fas fa-user"></i>
+							</a>
+							<a href="{{ path('app_logout') }}" class="me-3 text-dark">
+								<i class="fas fa-sign-out-alt"></i>
+							</a>
+							<a href="{{ path('app_account_wishlist') }}" class="btn position-relative me-3">
+								<i class="fas fa-heart"></i>
+								{% if app.user and app.user.wishlists|length > 0 %}
+									<span class="position-absolute top-10 start translate-left badge rounded-pill bg-danger wishlist-badge">
+										{{ app.user.wishlists|length }}
+										<span class="visually-hidden">produits favoris</span>
+									</span>
+								{% endif %}
+							</a>
+						{% else %}
+							<a href="{{ path('app_login') }}" class="me-3 text-dark">
+								<i class="fas fa-sign-in-alt"></i>
+							</a>
+							<a href="{{ path('app_register') }}" class="me-3 text-dark">
+								<i class="fas fa-user-plus"></i>
+							</a>
+						{% endif %}
+						<a href="{{ path('app_cart')}}" class="cart-icon">
+							<i class="fas fa-shopping-cart"></i>
+							{% if fullQuantity > 0 %}
+								<span class="position-absolute top-10 start translate-left badge rounded-pill bg-warning cart-badge">
+									{{ fullQuantity }}
+									<span class="visually-hidden">produits en panier</span>
+								</span>
+							{% endif %}
+						</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
 
-    <div id="flash-messages" class="position-fixed top-0 start-0 end-0" style="z-index: 1060;">
-        <div class="container">
-            {% for type, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ type }} alert-dismissible fade show mt-3 shadow-lg">
-                        <div class="d-flex align-items-center">
-                            <span class="flex-grow-1">{{ message }}</span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
-    </div>
+	<div id="flash-messages" class="position-fixed top-0 start-0 end-0" style="z-index: 1060;">
+		<div class="container">
+			{% for type, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="alert alert-{{ type }} alert-dismissible fade show mt-3 shadow-lg">
+						<div class="d-flex align-items-center">
+							<span class="flex-grow-1">{{ message }}</span>
+							<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+						</div>
+					</div>
+				{% endfor %}
+			{% endfor %}
+		</div>
+	</div>
 
-    <div class="whatsapp-float m-5 p-5">
-        <a href="javascript:void(0);" 
-           onclick="openWhatsApp()"
-           class="whatsapp-btn"
-           aria-label="Contact WhatsApp"
-           title="Envoyer un message">
-           <i class="fab fa-whatsapp"></i>
-        </a>
-    </div>
+	<div class="whatsapp-float m-5 p-5">
+		<a href="javascript:void(0);" onclick="openWhatsApp()" class="whatsapp-btn" aria-label="Contact WhatsApp" title="Envoyer un message">
+			<i class="fab fa-whatsapp"></i>
+		</a>
+	</div>
 
-    <main class="flex-grow-1" style="margin-bottom: 80px;"> 
-        {% block body %}{% endblock %}
-    </main>
+	<main class="flex-grow-1" style="margin-bottom: 80px;"> {% block body %}{% endblock %}
+		</main>
 
-    <footer class="cosmetic-footer">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-about">
-                        <a href="{{ path('app_home') }}" class="d-flex align-items-center mb-1 text-decoration-none">
-                            <img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" alt="Kech Lotus Cooperative" height="70" class="me-2">
-                            <span class="h4 mb-0 text-light">Kech Lotus Cooperative</span>
-                        </a>
-                        <p class="mb-4">Des cosmétiques 100% naturels inspirés des secrets de beauté marocains, formulés avec des ingrédients biologiques et respectueux de votre peau.</p>
-                        <div class="footer-contact">
-                            <p class="mb-2">
-                                <i class="fas fa-map-marker-alt me-2"></i>
-                                Marrakech, Maroc</p>
-                            <p class="mb-2">
-                                <i class="fas fa-phone me-2"></i>
-                                +212 6 74 81 90 89</p>
-                            <p class="mb-0">
-                                <i class="fas fa-envelope me-2"></i>
-                                contact@kechlotus.com</p>
-                        </div>
-                    </div>
-                </div>
+		<footer class="cosmetic-footer">
+			<div class="container">
+				<div class="row g-4">
+					<div class="col-lg-4 col-md-6">
+						<div class="footer-about">
+							<a href="{{ path('app_home') }}" class="d-flex align-items-center mb-1 text-decoration-none">
+								<img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" alt="Kech Lotus Cooperative" height="70" class="me-2">
+								<span class="h4 mb-0 text-light">Kech Lotus Cooperative</span>
+							</a>
+							<p class="mb-4">Des cosmétiques 100% naturels inspirés des secrets de beauté marocains, formulés avec des ingrédients biologiques et respectueux de votre peau.</p>
+							<div class="footer-contact">
+								<p class="mb-2">
+									<i class="fas fa-map-marker-alt me-2"></i>
+									Marrakech, Maroc</p>
+								<p class="mb-2">
+									<i class="fas fa-phone me-2"></i>
+									+212 6 74 81 90 89</p>
+								<p class="mb-0">
+									<i class="fas fa-envelope me-2"></i>
+									contact@kechlotus.com</p>
+							</div>
+						</div>
+					</div>
 
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="mb-3" style="color:white">Catégories</h5>
-                    <ul class="list-unstyled footer-links">
-                        {% for category in categories|slice(0, 4) %}
-                            <li>
-                                <a href="{{ path('show_category', {'slug': category.slug}) }}">
-                                    <i class="fas fa-leaf me-1"></i>
-                                    {{ category.name }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+					<div class="col-lg-2 col-md-6">
+						<h5 class="mb-3" style="color:white">Catégories</h5>
+						<ul class="list-unstyled footer-links">
+							{% for category in categories|slice(0, 4) %}
+								<li>
+									<a href="{{ path('show_category', {'slug': category.slug}) }}">
+										<i class="fas fa-leaf me-1"></i>
+										{{ category.name }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
 
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="mb-3" style="color:white">Informations</h5>
-                    <ul class="list-unstyled footer-links">
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-file-alt me-1"></i>
-                                CGV</a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-gavel me-1"></i>
-                                Mentions légales</a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-lock me-1"></i>
-                                Confidentialité</a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-question-circle me-1"></i>
-                                FAQ</a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-phone me-1"></i>
-                                Contact</a>
-                        </li>
-                    </ul>
-                </div>
+					<div class="col-lg-2 col-md-6">
+						<h5 class="mb-3" style="color:white">Informations</h5>
+						<ul class="list-unstyled footer-links">
+							<li>
+								<a href="#">
+									<i class="fas fa-file-alt me-1"></i>
+									CGV</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fas fa-gavel me-1"></i>
+									Mentions légales</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fas fa-lock me-1"></i>
+									Confidentialité</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fas fa-question-circle me-1"></i>
+									FAQ</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="fas fa-phone me-1"></i>
+									Contact</a>
+							</li>
+						</ul>
+					</div>
 
-                <div class="col-lg-4 col-md-6">
-                    <h5 class="mb-3" style="color:white">Newsletter</h5>
-                    <p>Abonnez-vous pour recevoir nos conseils beauté et offres exclusives.</p>
-                    <form class="mb-4">
-                        <div class="input-group">
-                            <input type="email" class="form-control" placeholder="Votre email" required>
-                            <button class="btn btn-beauty" type="submit">Ok</button>
-                        </div>
-                    </form>
+					<div class="col-lg-4 col-md-6">
+						<h5 class="mb-3" style="color:white">Newsletter</h5>
+						<p>Abonnez-vous pour recevoir nos conseils beauté et offres exclusives.</p>
+						<form class="mb-4">
+							<div class="input-group">
+								<input type="email" class="form-control" placeholder="Votre email" required>
+								<button class="btn btn-beauty" type="submit">Ok</button>
+							</div>
+						</form>
 
-                    <h5 class="mb-3" style="color:white">Suivez-nous</h5>
-                    <div class="d-flex">
-                        <a href="https://www.instagram.com/cooperativekechlotus/" target="_blank" class="social-icon me-2" >
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="social-icon me-2">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="social-icon me-2">
-                            <i class="fab fa-pinterest-p"></i>
-                        </a>
-                        <a href="#" class="social-icon">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                    </div>
+						<h5 class="mb-3" style="color:white">Suivez-nous</h5>
+						<div class="d-flex">
+							<a href="https://www.instagram.com/cooperativekechlotus/" target="_blank" class="social-icon me-2">
+								<i class="fab fa-instagram"></i>
+							</a>
+							<a href="#" class="social-icon me-2">
+								<i class="fab fa-facebook-f"></i>
+							</a>
+							<a href="#" class="social-icon me-2">
+								<i class="fab fa-pinterest-p"></i>
+							</a>
+							<a href="#" class="social-icon">
+								<i class="fab fa-youtube"></i>
+							</a>
+						</div>
 
-                    <div class="mt-4 pt-2" style="z-index: 10;">
-                        <div class="d-flex flex-wrap">
-                            <img src="/assets/img/payment-methods.webp" style="max-width: 30%;" alt="Moyens de paiement" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-            </div>
+						<div class="mt-4 pt-2" style="z-index: 10;">
+							<div class="d-flex flex-wrap">
+								<img src="/assets/img/payment-methods.webp" style="max-width: 30%;" alt="Moyens de paiement" class="img-fluid">
+							</div>
+						</div>
+					</div>
+				</div>
 
-            <div class="footer-bottom mt-5 pt-4 border-top border-secondary">
-                <div class="row align-items-center">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        <p class="mb-0">&copy; 2023 Kech Lotus Cooperative. Tous droits réservés.</p>
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <p class="mb-0">Fait avec
-                            <i class="fas fa-heart text-danger"></i>
-                            au Maroc</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+				<div class="footer-bottom mt-5 pt-4 border-top border-secondary">
+					<div class="row align-items-center">
+						<div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+							<p class="mb-0">&copy; 2023 Kech Lotus Cooperative. Tous droits réservés.</p>
+						</div>
+						<div class="col-md-6 text-center text-md-end">
+							<p class="mb-0">Fait avec
+								<i class="fas fa-heart text-danger"></i>
+								au Maroc</p>
+						</div>
+					</div>
+				</div>
+			</div>
 
-        <a href="#" class="back-to-top">
-            <i class="fas fa-arrow-up"></i>
-        </a>
-    </footer>
+			<a href="#" class="back-to-top">
+				<i class="fas fa-arrow-up"></i>
+			</a>
+		</footer>
 
-    <!-- JavaScript -->
-    <script src="{{asset('/assets/js/bootstrap.bundle.min.js')}}"></script>
-    <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', function () {
-            const navbar = document.querySelector('.cosmetic-navbar');
-            if (window.scrollY > 30) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
+		<!-- JavaScript -->
+		<script src="{{asset('/assets/js/bootstrap.bundle.min.js')}}"></script>
+		<script>
+			// Navbar scroll effect
+window.addEventListener('scroll', function () {
+const navbar = document.querySelector('.cosmetic-navbar');
+if (window.scrollY > 30) {
+navbar.classList.add('scrolled');
+} else {
+navbar.classList.remove('scrolled');
+}
+});
 
-        // Back to top button
-        document.querySelector('.back-to-top').addEventListener('click', function (e) {
-            e.preventDefault();
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        });
+// Back to top button
+document.querySelector('.back-to-top').addEventListener('click', function (e) {
+e.preventDefault();
+window.scrollTo({top: 0, behavior: 'smooth'});
+});
 
-        // Gestion des animations
-        document.addEventListener('DOMContentLoaded', () => {
-            const alerts = document.querySelectorAll('.alert');
+// Gestion des animations
+document.addEventListener('DOMContentLoaded', () => {
+const alerts = document.querySelectorAll('.alert');
 
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    alert.style.transform = 'translateY(70px)';
-                    alert.style.transition = 'transform 0.3s ease-out';
-                }, 50);
+alerts.forEach(alert => {
+setTimeout(() => {
+alert.style.transform = 'translateY(70px)';
+alert.style.transition = 'transform 0.3s ease-out';
+}, 50);
 
-                setTimeout(() => {
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 300);
-                }, 5000);
+setTimeout(() => {
+alert.style.opacity = '0';
+setTimeout(() => alert.remove(), 300);
+}, 5000);
 
-                alert.querySelector('.btn-close').addEventListener('click', () => {
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 300);
-                });
-            });
-        });
+alert.querySelector('.btn-close').addEventListener('click', () => {
+alert.style.opacity = '0';
+setTimeout(() => alert.remove(), 300);
+});
+});
+});
 
-        function openWhatsApp() {
-            const number = '212674819089';
-            const defaultMessage = 'Bonjour, je vous contacte depuis le site';
-            const encodedMessage = encodeURIComponent(defaultMessage);
-            
-            // Essayer d'ouvrir l'app mobile
-            window.location.href = `whatsapp://send?phone=${number}&text=${encodedMessage}`;
-            
-            // Fallback pour desktop ou si l'app n'est pas installée
-            setTimeout(() => {
-                window.open(`https://wa.me/${number}?text=${encodedMessage}`, '_blank');
-            }, 200);
-        }
+function openWhatsApp() {
+const number = '212674819089';
+const defaultMessage = 'Bonjour, je vous contacte depuis le site';
+const encodedMessage = encodeURIComponent(defaultMessage);
 
-		// Activation du menu déroulant au survol (desktop seulement)
+// Essayer d'ouvrir l'app mobile
+window.location.href = `whatsapp://send?phone=${number}&text=${encodedMessage}`;
+
+// Fallback pour desktop ou si l'app n'est pas installée
+setTimeout(() => {
+window.open(`https://wa.me/${number}?text=${encodedMessage}`, '_blank');
+}, 200);
+}
+
+// Activation du menu déroulant au survol (desktop seulement)
 const dropdownElements = document.querySelectorAll('.dropdown');
 
 function setupHoverForDropdowns() {
-    if (window.innerWidth > 992) { // Desktop
-        dropdownElements.forEach(function(dropdown) {
-            const toggle = dropdown.querySelector('.dropdown-toggle');
-            
-            dropdown.addEventListener('mouseenter', function() {
-                const bsDropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
-                bsDropdown.show();
-            });
-            
-            dropdown.addEventListener('mouseleave', function() {
-                const bsDropdown = bootstrap.Dropdown.getInstance(toggle);
-                bsDropdown.hide();
-            });
-        });
-    } else { // Mobile
-        dropdownElements.forEach(function(dropdown) {
-            const toggle = dropdown.querySelector('.dropdown-toggle');
-            bootstrap.Dropdown.getOrCreateInstance(toggle).dispose();
-        });
-    }
+if (window.innerWidth > 992) { // Desktop
+dropdownElements.forEach(function (dropdown) {
+const toggle = dropdown.querySelector('.dropdown-toggle');
+
+dropdown.addEventListener('mouseenter', function () {
+const bsDropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
+bsDropdown.show();
+});
+
+dropdown.addEventListener('mouseleave', function () {
+const bsDropdown = bootstrap.Dropdown.getInstance(toggle);
+bsDropdown.hide();
+});
+});
+} else { // Mobile
+dropdownElements.forEach(function (dropdown) {
+const toggle = dropdown.querySelector('.dropdown-toggle');
+bootstrap.Dropdown.getOrCreateInstance(toggle).dispose();
+});
+}
 }
 
 // Initial setup
@@ -537,6 +571,6 @@ setupHoverForDropdowns();
 
 // Re-setup on window resize
 window.addEventListener('resize', setupHoverForDropdowns);
-    </script>
-</body>
+		</script>
+	</body>
 </html>

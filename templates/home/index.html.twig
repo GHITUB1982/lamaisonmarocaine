@@ -1,118 +1,115 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-<main>
-    <!-- Carousel -->
-    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-        {% if headers|length > 1 %}
-        <div class="carousel-indicators">
-            {% for key, header in headers %}
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ key }}" {% if key == 0 %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ key + 1 }}"></button>
-            {% endfor %}
-        </div>
-        {% endif %}
-        
-        <div class="carousel-inner">
-            {% for key, header in headers %}
-            <div class="carousel-item {% if key == 0 %}active{% endif %}" style="height: 80vh;">
-                <img src="/uploads/products/{{ header.illustration }}" class="d-block w-100 h-100 object-fit-cover" alt="{{ header.title }}">
-                <div class="container">
-                    <div class="carousel-caption text-start">
-                        <h1 class="title" style="color:white;">{{ header.title }}</h1>
-                        <p class="opacity-75">{{ header.content }}</p>
-                        <p><a class="btn btn-lg btn-primary" href="{{ header.buttonLink }}">{{ header.buttonTitle }}</a></p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        {% if headers|length > 1 %}
-        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        {% endif %}
-    </div>
+	<main>
+		<!-- Carousel -->
+		<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+			{% if headers|length > 1 %}
+				<div class="carousel-indicators">
+					{% for key, header in headers %}
+						<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ key }}" {% if key == 0 %} class="active" aria-current="true" {% endif %} aria-label="Slide {{ key + 1 }}"></button>
+					{% endfor %}
+				</div>
+			{% endif %}
 
-    <!-- Marketing messaging and featurettes -->
-    <div class="container-fluid" style="max-width: 80%;">
-        <!-- Three columns of text below the carousel -->
-        <div class="row">
-            <div class="title col-lg-12 text-center mb-4">
-                <h1 class="featurette-heading fw-normal lh-2 mt-1">Nos Meilleurs Produits</h1>
-                <p class="lead">"Découvrez nos produits les plus vendus pour améliorer votre expérience d'achat."</p>
-            </div>
-            {% for product in homeproducts %}
-            <div class="col-lg-4">
-                <img src="/uploads/products/{{ product.illustration }}" class="bd-placeholder-img" width="90%" height="70%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <title>{{product.slug}}</title>
-                    {# <rect width="100%" height="100%" fill="var(--bs-secondary-color)"/> #}
-                </svg>
-                <h2 class="fw-normal">{{product.name}}</h2>
-                <p class="product-description">
-                    {{ product.description|striptags|slice(0, 200)|raw }}{{ product.description|length > 200 ? '...' : '' }}
-                </p>                
-                <div class="" style="float: right;">
-                <p><a class="btn btn-success" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a></p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+			<div class="carousel-inner">
+				{% for key, header in headers %}
+					<div class="carousel-item {% if key == 0 %}active{% endif %}" style="height: 80vh;">
+						<img src="/uploads/products/{{ header.illustration }}" class="d-block w-100 h-100 object-fit-cover" alt="{{ header.title }}">
+						<div class="container">
+							<div class="carousel-caption text-start">
+								<h1 class="title" style="color:white;">{{ header.title }}</h1>
+								<p class="opacity-75">{{ header.content }}</p>
+								<p>
+									<a class="btn btn-lg btn-primary" href="{{ header.buttonLink }}">{{ header.buttonTitle }}</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
 
-<!-- Featurettes -->
-{% for blog in blogposts %}
-<hr class="featurette-divider">
+			{% if headers|length > 1 %}
+				<button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+			{% endif %}
+		</div>
 
-<div class="row featurette">
-    <div class="col-md-7 {% if loop.index is even %}order-md-2{% endif %}">
-        <h2 class="featurette-heading fw-normal lh-1">
-            {{ blog.title }}
-            <span class="text-body-secondary">{{ blog.category.name ?? 'Général' }}</span>
-        </h2>
-        <p class="lead">{{ blog.excerpt|default(blog.content|striptags|slice(0, 200)) }}</p>
-        <p class="text-muted">
-            <small>
-                Publié le {{ blog.createdAt|date('d/m/Y') }} 
-                par {{ blog.author.username ?? 'Admin' }}
-            </small>
-        </p>
-        <a href="{{ path('app_home', {slug: blog.slug}) }}" class="btn btn-outline-primary">
-            Lire la suite <i class="fas fa-arrow-right ms-2"></i>
-        </a>
-    </div>
-    
-    <div class="col-md-5 {% if loop.index is even %}order-md-1{% endif %}">
-        {% if blog.featuredImage %}
-        <img src="{{ asset('uploads/products/blog/img/' ~ blog.featuredImage) }}" 
-             alt="{{ blog.title }}" 
-             class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-             width="400 " 
-             height="200"
-             style="object-fit: cover;">
-        {% else %}
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" 
-             width="500" 
-             height="500" 
-             xmlns="http://www.w3.org/2000/svg" 
-             role="img" 
-             aria-label="Placeholder: 500x500" 
-             preserveAspectRatio="xMidYMid slice" 
-             focusable="false">
-            <title>Placeholder</title>
-            <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"/>
-            <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
-        </svg>
-        {% endif %}
-    </div>
-</div>
-{% endfor %}
-        
-        <hr class="featurette-divider">
-    </div>
-</main>
-{% endblock %}
+		<!-- Marketing messaging and featurettes -->
+		<div
+			class="container-fluid mb-4" style="max-width: 80%;">
+			<!-- Three columns of text below the carousel -->
+			<div class="row ">
+				<div class="title col-lg-12 text-center mb-4">
+					<h1 class="featurette-heading fw-normal lh-2 mt-1">Nos Meilleurs Produits</h1>
+					<p class="lead">"Découvrez nos produits les plus vendus pour améliorer votre expérience d'achat."</p>
+				</div>
+				{% for product in homeproducts %}
+					<div class="col-lg-4">
+						<img src="/uploads/products/{{ product.illustration }}" class="bd-placeholder-img" width="90%" height="70%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveaspectratio="xMidYMid slice" focusable="false">
+						<title>{{product.slug}}</title>
+						{# <rect width="100%" height="100%" fill="var(--bs-secondary-color)"/> #}
+					</svg>
+					<h2 class="fw-normal">{{product.name}}</h2>
+					<p class="product-description">
+						{{ product.description|striptags|slice(0, 200)|raw }}{{ product.description|length > 200 ? '...' : '' }}
+					</p>
+					<div class="" style="float: right;">
+						<p>
+							<a class="btn btn-success mb-5" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
+						</p>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<!-- Featurettes -->
+		{% for blog in blogposts %}
+            {% if blog.status == 'published' %}
+			<hr class="featurette-divider">
+
+			<div class="row featurette">
+				<div class="col-md-7 {% if loop.index is even %}order-md-2{% endif %}">
+					<h2 class="featurette-heading fw-normal lh-1">
+						{{ blog.title }}
+						<span class="text-body-secondary">{{ blog.category.name ?? 'Général' }}</span>
+					</h2>
+					<p class="lead">{{ blog.excerpt|default(blog.content|striptags|slice(0, 200)) }}</p>
+					<p class="text-muted">
+						<small>
+							Publié le
+							{{ blog.createdAt|date('d/m/Y') }}
+							par
+							{{ blog.author.username ?? 'Admin' }}
+						</small>
+					</p>
+					<a href="{{ path('app_blog_show', {slug: blog.slug}) }}" class="btn btn-outline-primary">
+						Lire la suite
+						<i class="fas fa-arrow-right ms-2"></i>
+					</a>
+				</div>
+
+				<div class="col-md-5 {% if loop.index is even %}order-md-1{% endif %}">
+					{% if blog.featuredImage %}
+						<img src="{{ asset('uploads/products/blog/img/' ~ blog.featuredImage) }}" alt="{{ blog.title }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="400 " height="200" style="object-fit: cover;">
+					{% else %}
+						<svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" focusable="false">
+							<title>Placeholder</title>
+							<rect width="100%" height="100%" fill="var(--bs-secondary-bg)"/>
+							<text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+						</svg>
+					{% endif %}
+				</div>
+			</div>
+            {% endif %}
+		{% endfor %}
+
+		<hr class="featurette-divider">
+	</div>
+</main>{% endblock %}
