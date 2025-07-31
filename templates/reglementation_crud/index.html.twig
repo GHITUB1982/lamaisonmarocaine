@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reglementation index{% endblock %}
+
+{% block body %}
+    <h1>Reglementation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Route</th>
+                <th>Content</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAT</th>
+                <th>IsView</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reglementation in reglementations %}
+            <tr>
+                <td>{{ reglementation.id }}</td>
+                <td>{{ reglementation.title }}</td>
+                <td>{{ reglementation.route }}</td>
+                <td>{{ reglementation.content }}</td>
+                <td>{{ reglementation.createdAt ? reglementation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reglementation.updatedAT ? reglementation.updatedAT|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reglementation.isView ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_reglementation_crud_show', {'id': reglementation.id}) }}">show</a>
+                    <a href="{{ path('app_reglementation_crud_edit', {'id': reglementation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reglementation_crud_new') }}">Create new</a>
+{% endblock %}

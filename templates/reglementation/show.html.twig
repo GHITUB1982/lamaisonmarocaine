@@ -1,0 +1,84 @@
+{# templates/reglementation/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ reglementation.title }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            
+            {# Breadcrumb #}
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+    {% if currentKey > 0 %}
+                    <li class="breadcrumb-item"> <a href="{{ path('app_reglementation_show', {'route': reglementations[currentKey - 1].route}) }}"
+           class="">
+        {{ reglementations[currentKey - 1].title|u.truncate(25, '...') }}
+        </a></li>
+            {% endif %}
+
+                    <li class="breadcrumb-item active" aria-current="page">{{ reglementation.title }}</li>
+                </ol>
+            </nav>
+
+            {# Titre de la page #}
+            <h1 class="display-5 mb-4">{{ reglementation.title }}</h1>
+            <hr>
+
+            {# Date de mise à jour #}
+            <div class="text-muted mb-4">
+                <i class="fas fa-calendar-alt me-2"></i>
+                Mis à jour le {{ reglementation.updatedAt|date('d/m/Y à H:i') }}
+            </div>
+
+            {# Contenu principal #}
+            <div class="card shadow-sm mb-5">
+                <div class="card-body regulation-content">
+                    {{ reglementation.content|raw }}
+                </div>
+            </div>
+
+            {# Navigation entre les réglementations #}
+         <div class="navigation-links">
+    {# Précédent #}
+    {% if currentKey > 0 %}
+        <a href="{{ path('app_reglementation_show', {'route': reglementations[currentKey - 1].route}) }}"
+           class="btn btn-outline-primary">
+            ← {{ reglementations[currentKey - 1].title|u.truncate(25, '...') }}
+        </a>
+    {% endif %}
+
+    {# Suivant #}
+    {% if currentKey < (reglementations|length - 1) %}
+        <a href="{{ path('app_reglementation_show', {'route': reglementations[currentKey + 1].route}) }}"
+           class="btn btn-outline-primary float-end">
+            {{ reglementations[currentKey + 1].title|u.truncate(25, '...') }} →
+        </a>
+    {% endif %}
+</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .regulation-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+    .regulation-content h2 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #2c3e50;
+    }
+    .regulation-content ul {
+        padding-left: 2rem;
+    }
+    .regulation-content li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}

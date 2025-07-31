@@ -1,154 +1,127 @@
+{# templates/order/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Ma Commande - {{ parent() }}{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        /* Thème moderne */
-        .category-banner {
-            background: linear-gradient(135deg, #28a745, #218838);
-            color: white;
-        }
-        .form-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 25px rgba(0,0,0,0.08);
-            padding: 30px;
-            margin-top: 20px;
-        }
-        .section-title {
-            color: #2c3e50;
-            border-bottom: 2px solid #f8f9fa;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        .address-section {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 25px;
-        }
-        .carrier-option {
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-        .carrier-option:hover {
-            border-color: #28a745;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .carrier-option .form-check-input:checked ~ .form-check-label {
-            color: #28a745;
-        }
-        .btn-new-address {
-            color: #28a745;
-            font-weight: 500;
-        }
-        .btn-new-address:hover {
-            text-decoration: underline;
-        }
-        .btn-validate {
-            background: #28a745;
-            border: none;
-            padding: 12px 25px;
-            font-weight: 500;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
-<div class="container my-5">
-    {# Bannière #}
-     <div class="category-banner mb-4 p-3 rounded bg-light shadow-sm d-flex align-items-center mt-5">
-        <div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
-            <h2 class="h4 mb-0 text-dark">
-                <i data-feather="shopping-cart" class="me-2 text-primary"></i>
-                Ma Commande
-            </h2>
-        </div>
-    </div>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            
+            {# Breadcrumb identique à la page réglementation #}
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_cart') }}">Panier</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Commande</li>
+                </ol>
+            </nav>
 
-    {# Barre de navigation #}
-    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
-        <div>
-            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-                <i data-feather="home" class="me-2"></i> Accueil
-            </a>
-            <a href="{{ path('app_cart') }}" class="btn btn-outline-secondary ms-2">
-                <i data-feather="arrow-left" class="me-2"></i> Retour au panier
-            </a>
-        </div>
-    </div>
+            {# Titre de la page #}
+            <div class="d-flex" style="justify-content: space-between;"><h1 class="display-5 mb-4">Ma Commande</h1> <h3>Date aujourd'hui: {{ "now"|date("m/d/Y") }} </h3></div>
+<hr>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm mb-5">
+                        <div class="card-body">
+                            {{ form_start(deliveryForm) }}
+                            
+                            {# Section Adresse #}
+                            <div class="mb-5">
+                                <h2 class="h4 mb-4 pb-3 border-bottom">
+                                    <i class="fas fa-truck me-2 text-primary"></i>
+                                    Informations de Livraison
+                                </h2>
+                                
+                                <div class="mb-4">
+                                    {{ form_row(deliveryForm.addresses, {
+                                        'label': 'Adresse de livraison',
+                                        'attr': {'class': 'form-select mb-3'}
+                                    }) }}
+                                    
+                                    <a href="{{ path('app_account_address_form') }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-plus-circle me-1"></i> Ajouter une nouvelle adresse
+                                    </a>
+                                </div>
+                            </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="form-container">
-                {{ form_start(deliveryForm) }}
-                
-                <h2 class="section-title">
-                    <i data-feather="truck" class="me-2"></i>
-                    Informations de Livraison
-                </h2>
-                
-                <div class="address-section">
-                    {{ form_row(deliveryForm.addresses, {
-                        'label': 'Adresse de livraison',
-                        'attr': {'class': 'form-select-lg mb-3'}
-                    }) }}
-                    
-                    <a href="{{ path('app_account_address_form') }}" class="btn-new-address">
-                        <i data-feather="plus-circle" class="me-1"></i> Ajouter une nouvelle adresse
-                    </a>
+                            {# Section Transporteur #}
+                            <div class="mb-5">
+                                <h2 class="h4 mb-4 pb-3 border-bottom">
+                                    <i class="fas fa-shipping-fast me-2 text-primary"></i>
+                                    Options de Livraison
+                                </h2>
+                                
+                                <div class="form-group">
+                                    {{ form_row(deliveryForm.carrier, {
+                                        'label': false,
+                                        'attr': {'class': 'list-unstyled'}
+                                    }) }}
+                                </div>
+                            </div>
+
+                            {# Bouton de validation
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-check-circle me-2"></i> Valider la commande
+                                </button>
+                            </div> #}
+
+                            {{ form_end(deliveryForm) }}
+                        </div>
+                    </div>
                 </div>
-
-                <div class="carrier-section">
-                    <h3 class="section-title">
-                        <i data-feather="package" class="me-2"></i>
-                        Options de Livraison
-                    </h3>
-                    
-                    {{ form_row(deliveryForm.carrier, {
-                        'label': false,
-                        'attr': {'class': 'carrier-options'}
-                    }) }}
-                </div>
-
-                <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-validate btn-lg">
-                        <i data-feather="check-circle" class="me-2"></i> Valider la commande
-                    </button>
-                </div>
-
-                {{ form_end(deliveryForm) }}
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .card {
+        border-radius: 0.5rem;
+    }
+    .form-select {
+        padding: 0.5rem 1rem;
+    }
+    .form-check {
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+    }
+    .form-check:hover {
+        border-color: #0d6efd;
+    }
+    .form-check-input:checked + .form-check-label {
+        font-weight: 500;
+    }
+    .form-check-label {
+        width: 100%;
+    }
+</style>
+{% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            feather.replace();
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Formatage des options de transporteur
+        document.querySelectorAll('.form-check-input').forEach(radio => {
+            const parent = radio.closest('.form-check');
+            const label = parent.querySelector('.form-check-label');
+            const priceMatch = label.textContent.match(/(\d+\.\d+) Dhs/);
             
-            // Améliore l'affichage des options de transporteur
-            document.querySelectorAll('.carrier-options .form-check').forEach(option => {
-                option.classList.add('carrier-option');
-                const label = option.querySelector('.form-check-label');
-                const price = document.createElement('span');
-                price.className = 'float-end text-success fw-bold';
-                // Extrait le prix du texte du label (adaptez selon votre format)
-                const priceText = label.textContent.match(/(\d+\.\d+) Dhs/);
-                if (priceText) {
-                    price.textContent = priceText[0];
-                    label.textContent = label.textContent.replace(priceText[0], '').trim();
-                }
-                label.appendChild(price);
-            });
+            if (priceMatch) {
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'float-end text-success fw-bold';
+                priceSpan.textContent = priceMatch[0];
+                label.textContent = label.textContent.replace(priceMatch[0], '').trim();
+                label.appendChild(priceSpan);
+            }
         });
-    </script>
-{% endblock %}
+    });
+</script>
 {% endblock %}

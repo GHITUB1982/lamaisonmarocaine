@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reglementation{% endblock %}
+
+{% block body %}
+    <h1>Reglementation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reglementation.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ reglementation.title }}</td>
+            </tr>
+            <tr>
+                <th>Route</th>
+                <td>{{ reglementation.route }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ reglementation.content }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ reglementation.createdAt ? reglementation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAT</th>
+                <td>{{ reglementation.updatedAT ? reglementation.updatedAT|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>IsView</th>
+                <td>{{ reglementation.isView ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reglementation_crud_index') }}">back to list</a>
+
+    <a href="{{ path('app_reglementation_crud_edit', {'id': reglementation.id}) }}">edit</a>
+
+    {{ include('reglementation_crud/_delete_form.html.twig') }}
+{% endblock %}

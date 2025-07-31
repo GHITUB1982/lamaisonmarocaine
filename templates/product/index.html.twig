@@ -1,168 +1,122 @@
+{# templates/product/show.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{% for prod in product %}
-		{{ prod.name }}
-	{% endfor %}
-	-
-	{{ parent() }}
-{% endblock %}
-
-{% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
-	<style>
-		.feather-icon {
-			width: 24px;
-			height: 24px;
-			stroke: currentColor;
-			stroke-width: 2;
-			stroke-linecap: round;
-			stroke-linejoin: round;
-			fill: none;
-			vertical-align: middle;
-		}
-		.btn-wishlist {
-			background-color: #f8f9fa;
-			border: 1px solid #dee2e6;
-		}
-		.btn-wishlist:hover {
-			background-color: #fff0f0;
-			border-color: #ffcccc;
-		}
-	</style>
+    {% for prod in product %}
+        {{ prod.name }} - {{ parent() }}
+    {% endfor %}
 {% endblock %}
 
 {% block body %}
-	<div
-		class="container py-4">
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            
+            {# Breadcrumb #}
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+                    {% for prod in product %}
+                        <li class="breadcrumb-item"><a href="{{ path('show_category', {slug: prod.category.slug}) }}">{{ prod.category.name }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ prod.name }}</li>
+                    {% endfor %}
+                </ol>
+            </nav>
 
-		{# Nouvelle bannière ajoutée sans rien modifier d'autre #}
-		<div class="category-banner mb-4 p-3 rounded bg-light shadow-sm d-flex align-items-center mt-5">
-			{# Icône et titre de la bannière #}
-			<div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
-				<h2 class="h4 mb-0 text-dark">
-					<i data-feather="grid" class="me-2 text-primary"></i>
-					Ajouter le produit au Panier
-				</h2>
-			</div>
-		</div>
+            {# Titre et référence #}
+            {% for prod in product %}
+                <h1 class="display-5 mb-4">{{ prod.name }}</h1>
+				<hr>
 
-		{# Barre de navigation identique à la page catégorie #}
-		<div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
-			<div>
-				<a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-					<i data-feather="home" class="me-2"></i>Accueil
-				</a>
-				<a href="javascript:history.back()" class="btn btn-outline-secondary ms-2">
-					<i data-feather="arrow-left" class="me-2"></i>Retour
-				</a>
-			</div>
-			<h1 class="mb-0 fs-3 fw-bold text-primary">
-				{% for prod in product %}
-					{{ prod.name }}
-				{% endfor %}
-			</h1>
-			<div class="text-muted small">
-				<i data-feather="tag" class="me-1"></i>
-				{% for prod in product %}
-					{{ prod.slug }}
-				{% endfor %}
-			</div>
-		</div>
+                <div class="text-muted mb-4">
+                    <i class="fas fa-tag me-2"></i>
+                    Référence : {{ prod.slug }}
+                </div>
+            {% endfor %}
 
-		{% for prod in product %}
-			<div class="row justify-content-center">
-				<div class="col-12 col-lg-10">
-					<div class="card border-0 shadow-sm">
-						<div
-							class="row g-0">
-							{# Colonne image #}
-							<div class="col-md-5 p-3 bg-transparent">
-								<img src="/uploads/products/{{ prod.illustration }}" alt="{{ prod.name }}" class="img-fluid rounded-3 w-100" style="max-height: 400px; object-fit: contain;">
-							</div>
+            {# Contenu principal #}
+            {% for prod in product %}
+            <div class="row">
+                {# Colonne image - Sans cadre #}
+                <div class="col-md-3 mb-4 mt-3">
+                    <img src="/uploads/products/{{ prod.illustration }}" alt="{{ prod.name }}" 
+                         class="img-fluid rounded" style="object-fit: contain; max-height: 400px; background: transparent;">
+                </div>
 
-							{# Colonne détails #}
-							<div class="col-md-7">
-								<div
-									class="card-body h-100 d-flex flex-column">
-									{# En-tête #}
-									<div class="d-flex justify-content-between align-items-start mb-3">
-										<div>
-											<h2 class="card-title mb-1">{{ prod.name }}</h2>
-											<a href="{{ path('show_category', { slug: prod.category.slug }) }}" class="btn btn-sm btn-outline-primary mt-1">
-												<i data-feather="folder" class="me-1"></i>
-												{{ prod.category.name }}
-											</a>
-										</div>
-										<span class="badge bg-primary fs-5 p-2">
-											{{ prod.pricewithtax|format_price }}
-										</span>
-									</div>
-
-									{# Description #}
-									<div class="card-text flex-grow-1 py-3 border-top border-bottom">
-										{{ prod.description|raw }}
-									</div>
-
-									{# Actions #}
-									<div class="mt-4 d-flex gap-2">
-										<a href="{{ path('app_cart_add', { id: prod.id }) }}" class="btn btn-lg btn-success flex-grow-1">
-											<i data-feather="shopping-cart" class="me-2"></i>Ajouter au panier
-										</a>
-										<p class="d-inline-flex gap-1">
-								{% if app.user and prod in app.user.wishlists %}
-                                          <a href="{{ path('app_account_wishlist_remove', { id: prod.id }) }}" 
-									class="btn {% if app.user and prod in app.user.wishlists %}btn-warning rounded-circle{% else %}btn{% endif %}">
-										<i data-feather="heart" class="{{ app.user and prod in app.user.wishlists ? 'text-danger' : 'text-danger' }}"></i>
-									</a>
+                {# Colonne détails #}
+                <div class="col-md-7">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            {# Prix et wishlist #}
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="badge bg-primary fs-4 p-2">
+                                    {{ prod.pricewithtax|format_price }}
+                                </span>
+                                
+                                {% if app.user and prod in app.user.wishlists %}
+                                    <a href="{{ path('app_account_wishlist_remove', { id: prod.id }) }}" 
+                                       class="btn btn-sm btn-warning">
+                                        <i class="fas fa-heart text-danger me-2"></i>Retirer de la liste
+                                    </a>
                                 {% else %}
-                                    <a href="{{ path('app_account_wishlist_add', { id: prod.id }) }}" class="btn btn-lg btn-wishlist">
-                                        <i data-feather="heart" class="feather-icon text-danger"></i>
+                                    <a href="{{ path('app_account_wishlist_add', { id: prod.id }) }}" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="far fa-heart text-danger me-2"></i>Liste de souhaits
                                     </a>
                                 {% endif %}
-                                        {% if app.user %}
-                                            
-                                        {% else %}
-											<div class="collapse" id="collapseExample">
-												<div class="">
-													Pour utiliser les avantages de la wishlist, vous devez être connecté.<br>
-													<a href="{{ path('app_login') }}" class="mt-2">Se connecter</a><br>
-													<a href="{{ path('app_register') }}" class="mt-2">S'inscrire</a>
-												</div>
-											</div>
-                                        {% endif %}
-											<button class="btn btn-lg btn-wishlist"></button>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-	</div>
+                            </div>
 
-	{% block javascripts %}
-		<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-		<script>
-			document.addEventListener('DOMContentLoaded', function () {
-feather.replace();
-});
-		</script>
-	{% endblock %}
+                            {# Description #}
+                            <div class="product-content mb-4">
+                                {{ prod.description|raw }}
+                            </div>
 
-	<style>
-		.card {
-			transition: transform 0.2s;
-		}
-		.card:hover {
-			transform: translateY(-3px);
-		}
-		.card-text img {
-			max-width: 100%;
-			height: auto;
-		}
-	</style>
+                            {# Bouton ajouter au panier #}
+                            <div class="d-grid gap-2">
+                                <a href="{{ path('app_cart_add', { id: prod.id }) }}" 
+                                   class="btn btn-success btn-lg">
+                                    <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .product-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+    .product-content h2 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #2c3e50;
+    }
+    .product-content ul {
+        padding-left: 2rem;
+    }
+    .product-content li {
+        margin-bottom: 0.5rem;
+    }
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+    }
+    /* Style pour l'image sans fond */
+    .img-fluid.rounded {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+</style>
 {% endblock %}

@@ -1,196 +1,245 @@
+{# templates/cart/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Mon panier{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        /* Thème moderne appliqué uniquement aux styles */
-        .category-banner {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            border-left: 4px solid var(--primary);
-        }
-        .table {
-            --bs-table-bg: transparent;
-            border-color: #eee;
-        }
-        .table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-        }
-        .img-thumbnail {
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
-        .img-thumbnail:hover {
-            transform: scale(1.05);
-        }
-        .btn-group .btn {
-            padding: 0.25rem 0.5rem;
-        }
-        .card {
-            border: none;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-            border-radius: 12px;
-        }
-        .badge {
-            font-weight: 500;
-            padding: 0.35em 0.65em;
-        }
-        .sticky-top {
-            top: 20px;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
-<div class="container my-1">
-    {# Bannière conservée identique mais stylisée #}
-    <div class="category-banner mb-4 p-3 rounded bg-light shadow-sm d-flex align-items-center mt-5">
-        <div class="h-100 d-flex align-items-center px-3 border-start border-4 border-primary">
-            <h2 class="h4 mb-0 text-dark">
-                <i data-feather="shopping-cart" class="me-2 text-primary"></i>
-                Mon Panier
-            </h2>
-        </div>
-    </div>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            
+            {# Breadcrumb identique à la page réglementation #}
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Mon panier</li>
+                </ol>
+            </nav>
 
-    {# Barre de navigation identique mais stylisée #}
-    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
-        <div>
-            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-                <i data-feather="home" class="me-2"></i>Accueil
-            </a>
-            <a href="javascript:history.back()" class="btn btn-outline-secondary ms-2">
-                <i data-feather="arrow-left" class="me-2"></i>Retour
-            </a>
-        </div>
-    </div>
+            {# Titre de la page #}
+            <h1 class="display-5 mb-4">Mon panier</h1>
+<hr>
+            {# Nombre d'articles #}
+            <div class="text-muted mb-4">
+                <i class="fas fa-shopping-cart me-2"></i>
+                {{ cart|length }} article(s) dans votre panier
+            </div>
 
-    {# Contenu principal inchangé mais avec styles modernes #}
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-8">
             {% if cart is empty %}
-                <div class="alert alert-warning text-center mt-5 py-4 rounded-3">
-                    <i data-feather="shopping-cart" class="feather-24 mb-3"></i>
-                    <h5 class="fw-semibold">Votre panier est vide</h5>
-                    <p class="mb-0">Commencez votre shopping dès maintenant !</p>
+                {# Panier vide - version carte comme réglementation #}
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-shopping-cart text-muted mb-3" style="font-size: 2rem;"></i>
+                        <h3 class="text-muted">Votre panier est vide</h3>
+                        <p class="text-muted">Commencez votre shopping dès maintenant !</p>
+                        <a href="{{ path('app_home') }}" class="btn btn-primary mt-3">
+                            <i class="fas fa-store me-2"></i>Voir nos produits
+                        </a>
+                    </div>
                 </div>
             {% else %}
-                <h4 class="mb-4 d-flex align-items-center">
-                    <span class="me-2">Votre sélection</span>
-                    <span class="badge bg-primary rounded-pill">{{ cart|length }}</span>
-                </h4>
-                
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Illustration</th>
-                                <th>Produit</th>
-                                <th>Prix</th>
-                                <th class="text-center">Quantité</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% set cart_total = 0 %}
-                            {% for item in cart %}
-                                <tr class="hover-shadow">
-                                    <td>
-                                        <img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}"
-                                             alt="{{ item.product.name }}" 
-                                             class="img-thumbnail" style="width: 90px; height: 90px;">
-                                    </td>
-                                    <td>
-                                        <strong>{{ item.product.name }}</strong>
-                                        <div class="text-muted small mt-1">
-                                            <i data-feather="tag" class="feather-12 me-1"></i> {{ item.product.category.name }}
-                                        </div>
-                                    </td>
-                                    <td>{{ item.product.pricewithtax|format_price }}</td>
-                                    <td class="text-center">
-                                        <div class="btn-group shadow-sm" role="group">
-                                            <a href="{{ path('app_cart_decrease', { id: item.product.id }) }}" 
-                                               class="btn btn-sm btn-outline-primary">
-                                                <i data-feather="minus"></i>
-                                            </a>
-                                            <span class="px-3 py-1 bg-light">{{ item.quantity }}</span>
-                                            <a href="{{ path('app_cart_add', { id: item.product.id }) }}" 
-                                               class="btn btn-sm btn-outline-primary">
-                                                <i data-feather="plus"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="fw-bold">
-                                        {% set total = item.product.pricewithtax * item.quantity %}
-                                        {{ total|format_price }}
-                                    </td>
-                                                                <td>
-                                    <a href="{{ path('app_cart_remove', { id: item.product.id }) }}" 
-                                    class="btn btn-sm btn-outline-danger"
-                                    title="Supprimer ce produit">
-                                        <i data-feather="trash-2"></i>
+                <div class="row">
+                    {# Colonne principale - Liste des produits #}
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm mb-5">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Produit</th>
+                                                <th>Prix</th>
+                                                <th class="text-center">Quantité</th>
+                                                <th>Total</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% set cart_total = 0 %}
+                                            {% for item in cart %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}" 
+                                                                 alt="{{ item.product.name }}" 
+                                                                 class="img-fluid rounded me-3" 
+                                                                 style="width: 80px; height: 80px; object-fit: cover; background: transparent;">
+                                                            <div>
+                                                                <strong>{{ item.product.name }}</strong>
+                                                                <div class="text-muted small">
+                                                                    {{ item.product.category.name }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ item.product.pricewithtax|format_price }}</td>
+                                                    <td class="text-center">
+                                                        <div class="btn-group" role="group">
+                                                            <a href="{{ path('app_cart_decrease', { id: item.product.id }) }}" 
+                                                               class="btn btn-sm btn-outline-primary">
+                                                                <i class="fas fa-minus"></i>
+                                                            </a>
+                                                            <span class="px-3 py-1">{{ item.quantity }}</span>
+                                                            <a href="{{ path('app_cart_add', { id: item.product.id }) }}" 
+                                                               class="btn btn-sm btn-outline-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td class="fw-bold">
+                                                        {% set total = item.product.pricewithtax * item.quantity %}
+                                                        {{ total|format_price }}
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ path('app_cart_remove', { id: item.product.id }) }}" 
+                                                           class="btn btn-sm btn-outline-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                {% set cart_total = cart_total + total %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Colonne récapitulative #}
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h3 class="h4 mb-4 pb-3 border-bottom">
+                                    <i class="fas fa-file-alt me-2 text-primary"></i>
+                                    Récapitulatif
+                                </h3>
+
+                                <ul class="list-group list-group-flush mb-3">
+                                    {% for item in cart %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                                            <span class="text-truncate" style="max-width: 70%;">{{ item.product.name }}</span>
+                                            <span class="badge bg-primary rounded-pill">x{{ item.quantity }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Total HT :</span>
+                                    <span>{{ (cart_total / 1.2)|format_price }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-3 text-success">
+                                    <span>TVA (20%) :</span>
+                                    <span>{{ (cart_total - (cart_total / 1.2))|format_price }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-3 py-2 border-top border-bottom">
+                                    <span class="fw-bold">Total TTC :</span>
+                                    <span class="fw-bold text-primary">{{ cart_total|format_price }}</span>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <a href="{{ path('app_order') }}" class="btn btn-primary">
+                                        <i class="fas fa-credit-card me-2"></i>
+                                        Commander
                                     </a>
-                                </td>
-                                </tr>
-                                {% set cart_total = cart_total + total %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                    <a href="{{ path('app_cart_clear') }}" class="btn btn-outline-danger">
+                                        <i class="fas fa-trash me-2"></i>
+                                        Vider le panier
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Section Wishlist #}
+                <div class="card shadow-sm mt-5">
+                    <div class="card-body">
+                        <h3 class="h4 mb-4 pb-3 border-bottom">
+                            <i class="fas fa-heart text-danger me-2"></i>
+                            Mes Produits Favoris
+                        </h3>
+
+                        {% if wishlistItems is empty %}
+                            <div class="text-center py-5">
+                                <i class="fas fa-heart text-muted mb-3" style="font-size: 2rem;"></i>
+                                <h4 class="text-muted">Votre wishlist est vide</h4>
+                                <p class="text-muted">Ajoutez des produits à votre wishlist en cliquant sur l'icône cœur</p>
+                                <a href="{{ path('app_home') }}" class="btn btn-primary mt-3">
+                                    <i class="fas fa-store me-2"></i>Voir nos produits
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="row g-4">
+                                {% for product in wishlistItems %}
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="card h-100 border-0">
+                                            {# Image sans cadre #}
+                                            <img src="/uploads/products/{{ product.illustration }}" 
+                                                 alt="{{ product.name }}"
+                                                 class="img-fluid rounded-top"
+                                                 style="height: 180px; object-fit: cover; background: transparent;">
+
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h5 class="card-title">{{ product.name }}</h5>
+                                                    <a href="{{ path('app_account_wishlist_remove', {id: product.id}) }}" 
+                                                       class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-times"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                                    <span class="fw-bold text-primary">
+                                                        {{ product.pricewithtax|format_price }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-footer bg-transparent border-top-0">
+                                                <div class="d-grid gap-2">
+                                                    <a href="{{ path('app_product', {slug: product.slug}) }}" 
+                                                       class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye me-1"></i>Voir
+                                                    </a>
+                                                    <a href="{{ path('app_cart_add', {id: product.id}) }}" 
+                                                       class="btn btn-sm btn-success">
+                                                        <i class="fas fa-shopping-cart me-1"></i>Panier
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             {% endif %}
         </div>
-
-        {# Colonne récap inchangée mais stylisée #}
-        {% if cart is not empty %}
-        <div class="col-12 col-lg-4">
-            <div class="card shadow-sm sticky-top">
-                <div class="card-body">
-                    <h5 class="card-title mb-3 d-flex align-items-center">
-                        <i data-feather="file-text" class="me-2 text-primary"></i>
-                        <span>Récapitulatif</span>
-                    </h5>
-                    
-                    <ul class="list-group list-group-flush mb-3">
-                        {% for item in cart %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
-                                <span class="text-truncate" style="max-width: 70%;">{{ item.product.name }}</span>
-                                <span class="badge bg-primary rounded-pill">x{{ item.quantity }}</span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Total HT :</span>
-                        <span>{{ (cart_total / 1.2)|format_price }}</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between mb-3 text-success">
-                        <span>TVA (20%) :</span>
-                        <span>{{ (cart_total - (cart_total / 1.2))|format_price }}</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-3 py-2 border-top border-bottom">
-                        <span class="fw-bold">Total TTC :</span>
-                        <span class="fw-bold text-primary">{{ cart_total|format_price }}</span>
-                    </div>
-
-                    <a href="{{ path('app_order') }}" class="btn btn-primary w-100 mb-2 py-2">
-                        <i data-feather="credit-card" class="me-2"></i> Commander
-                    </a>
-                    <a href="{{ path('app_cart_remove') }}" class="btn btn-outline-danger w-100 py-2">
-                        <i data-feather="trash" class="me-2"></i> Vider le panier
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
     </div>
 </div>
+{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .table {
+        background: #fff;
+        border-radius: 0.5rem;
+    }
+    .table th {
+        background-color: #f8f9fa;
+    }
+    .img-fluid.rounded-top {
+        border-radius: 0.5rem 0.5rem 0 0 !important;
+    }
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+    }
+</style>
 {% endblock %}

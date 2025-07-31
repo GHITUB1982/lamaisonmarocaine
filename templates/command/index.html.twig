@@ -13,9 +13,11 @@
             <a href="{{ path('app_account_order') }}" class="btn btn-outline-secondary">
                 <i data-feather="arrow-left" class="me-2"></i>Retour aux commandes
             </a>
+            {% if order.state >0 %}
             <a target="_blank" href="{{ path('app_invoice_user', {id_order: order.id}) }}" class="btn btn-primary">
             <i class="fas fa-download"> Facture</i>            
             </a>
+            {% endif %}
         </div>
         <h1 class="mb-0 fs-3 fw-bold text-primary">
             <i data-feather="file-text" class="me-2"></i>Commande {{order.createdAt|date('Y')}}/{{ order.id }}
@@ -114,7 +116,7 @@
                         <div class="col-md-5">
                             <div class="card border-0 bg-light">
                                 <div class="card-body">
-                                    <h4 class="h6 fw-bold mb-3">Récapitulatif</h4>
+                                    <h4 class="h6 fw-bold mb-3">Récapitulatif</h4>e
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Total HT :</span>
                                         <strong>{{ order.getTotalHT()|format_price }}</strong>

@@ -1,143 +1,191 @@
+{# templates/order/recap.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Récapitulatif{% endblock %}
+{% block title %}Mon Récapitulatif - {{ parent() }}{% endblock %}
 
 {% block body %}
-<div class="container my-5">
-    {# Bannière #}
-    <div class="category-banner mb-4 p-3 rounded bg-primary shadow-sm d-flex align-items-center mt-5">
-        <div class="h-100 d-flex align-items-center px-3 border-start border-4 border-light">
-            <h1 class="h4 mb-0 text-white">
-                <i data-feather="list" class="me-2"></i>
-                Mon Récapitulatif
-            </h1>
-        </div>
-    </div>
-
-    {# Barre de navigation #}
-    <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
-        <div>
-            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-                <i data-feather="home" class="me-2"></i>Accueil
-            </a>
-            <a href="javascript:history.back()" class="btn btn-outline-secondary ms-2">
-                <i data-feather="arrow-left" class="me-2"></i>Retour
-            </a>
-        </div>
-    </div>
-
+<div class="container py-5">
     <div class="row">
-        <!-- Colonne de gauche - Contenu du panier -->
-        <div class="col-12 col-lg-8">
-            <h3 class="mb-4">
-                <i data-feather="shopping-cart"></i>
-                Contenu de mon Panier
-            </h3>
-            <div class="table-responsive">
-                <table class="table align-left table-hover rounded">
-                    <thead class="table-light">
-                        <tr></tr>
-                    </thead>
-                    <tbody>
-                        {% for item in cart %}
-                            <tr>
-                                <td>
-                                    <img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}" 
-                                         alt="{{ item.product.name }}" 
-                                         class="img-thumbnail" 
-                                         style="width: 90px; height: 90px; object-fit: cover;">
-                                </td>
-                                <td>
-                                    <strong>{{ item.product.name }}</strong>
-                                    <div class="text-muted small">{{ item.product.slug }}</div>
-                                </td>
-                                <td>
-                                    <strong>Prix hors taxe:</strong> {{ item.product.price }} <br>
-                                    {% set item_total = item.product.pricewithtax * item.quantity %}
-                                    {{ item_total|format_price }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="col-lg-12 mx-auto">
+            
+            {# Breadcrumb identique à la page réglementation #}
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_cart') }}">Panier</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Récapitulatif</li>
+                </ol>
+            </nav>
 
-            <div class="mt-5">
-                <h2><i data-feather="truck"></i> Informations de Livraison</h2>
-                <div class="mb-3" style="margin-top: 20px; border-bottom: 2px solid #ccc; padding: 20px;">
-                    <h3>Adresse de livraison</h3>
-                    <strong>{{choices.addresses.firstname}}</strong>
-                    <strong>{{choices.addresses.lastname}}</strong>
-                    <br>
-                    {{choices.addresses.address}}<br>
-                    {{choices.addresses.postal}}
-                    {{choices.addresses.city}}
-                    {{choices.addresses.country}}<br>
-                </div>
-                <div class="mb-3" style="margin-top: 20px; border-bottom: 2px solid #ccc; padding: 20px;">
-                    <h2>Transporteur choisi</h2>
-                    <strong>{{choices.carrier.name}}</strong><br>
-                    {{choices.carrier.description|raw}}<br>
-                    Mode de paiement choisi<br>
-                </div>
-            </div>
-        </div>
+            {# Titre de la page #}
+            <h1 class="display-5 mb-4">Mon Récapitulatif</h1>
+<hr>
+            <div class="row">
+                {# Colonne principale - Contenu du panier #}
+                <div class="col-lg-8">
+                    <div class="card shadow-sm mb-5">
+                        <div class="card-body">
+                            <h2 class="h4 mb-4 pb-3 border-bottom">
+                                <i class="fas fa-shopping-cart me-2 text-primary"></i>
+                                Contenu de mon Panier
+                            </h2>
 
-        <!-- Colonne de droite - Récapitulatif (maintenu à droite) -->
-        <div class="col-12 col-lg-4">
-            <div class="card shadow-sm sticky-top" style="top: 90px;">
-                <div class="card-body">
-                    <h4 class="card-title mb-3"><i data-feather="file-text"></i> Récapitulatif</h4>
-                    <ul class="list-group list-group-flush mb-3">
-                        {% set total = 0 %}
-                        {% for item in cart %}
-                            {% set total = total + (item.product.pricewithtax * item.quantity) %}
-                        {% endfor %}
-                        
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Total produits
-                            <span class="fw-bold">{{ total|format_price }}</span>
-                        </li>
-                        {% if choices.carrier is not empty %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Transporteur ({{ choices.carrier.name }})
-                                <span class="fw-bold">{{ choices.carrier.price|format_price }}</span>
-                            </li>
-                        {% endif %}
-                    </ul>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="fw-bold">Total commande :</span>
-                        <span class="fw-bold text-success" style="font-size:1.2em;">
-                            {% if choices.carrier is not empty %}
-                                {{ (total + choices.carrier.price)|format_price }}
-                            {% else %}
-                                {{ total|format_price }}
-                            {% endif %}
-                        </span>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Produit</th>
+                                            <th>Détails</th>
+                                            <th>Prix</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in cart %}
+                                            <tr>
+                                                <td>
+                                                    <img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}" 
+                                                         alt="{{ item.product.name }}" 
+                                                         class="img-fluid rounded"
+                                                         style="width: 90px; height: 90px; object-fit: cover; background: transparent;">
+                                                </td>
+                                                <td>
+                                                    <strong>{{ item.product.name }}</strong>
+                                                    <div class="text-muted small">{{ item.product.slug }}</div>
+                                                </td>
+                                                <td>
+                                                    <div>HT: {{ item.product.price|format_price }}</div>
+                                                    <div class="fw-bold">TTC: {{ (item.product.pricewithtax * item.quantity)|format_price }}</div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <a href="{{ path('app_payement', {'id_order': order.id })}}" class="btn btn-success w-100 mb-2">
-                        <i data-feather="credit-card"></i>
-                        Payer ma commande 
-                    </a>
-                    <a href="{{ path('app_cart_remove') }}" class="btn btn-outline-danger w-100">
-                        <i data-feather="trash"></i>
-                        Vider le panier
-                    </a>
+
+                    {# Section Livraison #}
+                    <div class="card shadow-sm mb-5">
+                        <div class="card-body">
+                            <h2 class="h4 mb-4 pb-3 border-bottom">
+                                <i class="fas fa-truck me-2 text-primary"></i>
+                                Informations de Livraison
+                            </h2>
+
+                            <div class="mb-4 pb-3 border-bottom">
+                                <h3 class="h5">Adresse de livraison</h3>
+                                <p class="mb-0">
+                                    <strong>{{ choices.addresses.firstname }} {{ choices.addresses.lastname }}</strong><br>
+                                    {{ choices.addresses.address }}<br>
+                                    {{ choices.addresses.postal }} {{ choices.addresses.city }}<br>
+                                    {{ choices.addresses.country }}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 class="h5">Transporteur choisi</h3>
+                                <p class="mb-0">
+                                    <strong>{{ choices.carrier.name }}</strong><br>
+                                    {{ choices.carrier.description|raw }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Colonne récapitulative #}
+                <div class="col-lg-4">
+                    <div class="card shadow-sm sticky-top" style="top: 20px;">
+                        <div class="card-body">
+                            <h2 class="h4 mb-4 pb-3 border-bottom">
+                                <i class="fas fa-file-invoice me-2 text-primary"></i>
+                                Récapitulatif
+                            </h2>
+
+                            <ul class="list-group list-group-flush mb-3">
+                                {% set total = 0 %}
+                                {% for item in cart %}
+                                    {% set total = total + (item.product.pricewithtax * item.quantity) %}
+                                {% endfor %}
+                                
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Total produits
+                                    <span class="fw-bold">{{ total|format_price }}</span>
+                                </li>
+                                {% if choices.carrier is not empty %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Transporteur
+                                        <span class="fw-bold">{{ choices.carrier.price|format_price }}</span>
+                                    </li>
+                                {% endif %}
+                            </ul>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4 py-2 border-top border-bottom">
+                                <span class="fw-bold">Total commande :</span>
+                                <span class="fw-bold text-success fs-5">
+                                    {% if choices.carrier is not empty %}
+                                        {{ (total + choices.carrier.price)|format_price }}
+                                    {% else %}
+                                        {{ total|format_price }}
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            {# Acceptation CGV #}
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" required id="acceptCGV">
+                                        <label class="form-check-label small" for="acceptCGV">
+                                            Je reconnais avoir pris connaissance et accepte :
+                                            <ul class="mt-2 ps-3">
+                                               <li>Les <a href="{{ path('app_reglementation_show', {'route': 'conditions-generales'}) }}" target="_blank">Conditions Générales de Vente</a></li>
+                                               <li>La <a href="{{ path('app_reglementation_show', {'route': 'confidentialite'}) }}" target="_blank">Politique de confidentialité</a></li>
+                                                <li>Les délais de livraison indiqués</li>
+                                                <li>Les conditions de retour (7 jours)</li>
+                                            </ul>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <a href="{{ path('app_payement', {'id_order': order.id })}}" 
+                                   class="btn btn-success btn-lg"
+                                   id="payButton"
+                                   onclick="if(!document.getElementById('acceptCGV').checked){alert('Veuillez accepter les conditions générales');return false;}">
+                                    <i class="fas fa-credit-card me-2"></i>
+                                    Payer ma commande
+                                </a>
+                                <a href="{{ path('app_cart_clear') }}" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash me-2"></i>
+                                    Vider le panier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
 <style>
-    .category-banner {
-        background: linear-gradient(to right, #0d6efd, #0b5ed7);
-    }
     .card {
         border-radius: 0.5rem;
     }
-    .img-thumbnail {
+    .img-fluid.rounded {
+        border-radius: 0.5rem !important;
+    }
+    .table {
+        background: #fff;
         border-radius: 0.5rem;
+    }
+    .table th {
+        background-color: #f8f9fa;
     }
 </style>
 {% endblock %}

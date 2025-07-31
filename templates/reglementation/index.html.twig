@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réglementations | {{ parent() }}{% endblock %}
+
+{% block body %}
+<section class="container my-5">
+    <h1 class="text-center mb-5">Réglementations</h1>
+    
+    <div class="row">
+        {% for reglementation in reglementations %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="card-title h5">{{ reglementation.titre }}</h2>
+                        <p class="card-text text-muted small">
+                            Mis à jour le {{ reglementation.date_modification|date('d/m/Y') }}
+                        </p>
+                        <a href="{{ path('app_reglementation_' ~ reglementation.route) }}" class="btn btn-sm btn-beauty">
+                            Voir les détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

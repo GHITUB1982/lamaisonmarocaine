@@ -1,5 +1,12 @@
+{% if entity.instance.state >0 %}
+
 <a href="{{ path('app_invoice_admin', {id_order: entity.instance.id}) }}" 
    target="_blank"
    class="btn btn-primary">
     <i class="fas fa-file-invoice"></i> Télécharger la facture
 </a>
+{% else %}
+
+        <span class="btn btn-warning white">Commande non Valider pour générer la Fature</span>
+
+{% endif %}

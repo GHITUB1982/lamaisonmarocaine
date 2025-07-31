@@ -5,3 +5,4 @@ twig:
     globals:
         charset: 'UTF-8'
     strict_variables: '%kernel.debug%'  # Active strict_variables seulement en dev/test
+       
