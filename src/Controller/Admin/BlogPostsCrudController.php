@@ -96,11 +96,11 @@ class BlogPostsCrudController extends AbstractCrudController
 
             DateTimeField::new('created_at', 'Créé le')
                 ->setFormat('dd/MM/Y HH:mm')
-                ->onlyOnDetail(),
+                ->hideOnForm(),
 
             DateTimeField::new('updated_at', 'Modifié le')
                 ->setFormat('dd/MM/Y HH:mm')
-                ->onlyOnDetail(),
+                ->hideOnForm(),
 
             // TextField::new('short_content', 'Aperçu')
             //     ->onlyOnIndex()

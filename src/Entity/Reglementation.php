@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReglementationRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Reglementation
 {
     #[ORM\Id]
@@ -23,14 +24,15 @@ class Reglementation
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updatedAT = null;
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => true])]
     private bool $isView = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,7 +46,6 @@ class Reglementation
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -56,7 +57,6 @@ class Reglementation
     public function setRoute(string $route): static
     {
         $this->route = $route;
-
         return $this;
     }
 
@@ -68,35 +68,33 @@ class Reglementation
     public function setContent(string $content): static
     {
         $this->content = $content;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        return $this->updatedAt;
     }
 
-    public function getUpdatedAT(): ?\DateTimeInterface
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
     {
-        return $this->updatedAT;
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
-    public function setUpdatedAT(\DateTimeInterface $updatedAT): static
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
     {
-        $this->updatedAT = $updatedAT;
-
-        return $this;
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
- public function isIsView(): bool
+    public function isIsView(): bool
     {
         return $this->isView;
     }

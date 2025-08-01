@@ -20,15 +20,18 @@ class ReglementationCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
-        return [
-            // IdField::new('id'),
+       return [
+            IdField::new('id')->onlyOnIndex(),
             TextField::new('title', 'Titre'),
             TextField::new('route', 'Route'),
             TextEditorField::new('content', 'Contenu'),
             BooleanField::new('isView', 'Visible'),
-            DateTimeField::new('createdAt', 'Créé le')->hideOnForm(),
-            DateTimeField::new('updatedAt', 'Mis à jour')->hideOnForm(),
-
+            DateTimeField::new('createdAt', 'Créé le')
+                ->setFormat('dd/MM/Y HH:mm')
+                ->hideOnForm(),
+            DateTimeField::new('updatedAt', 'Mis à jour')
+                ->setFormat('dd/MM/Y HH:mm')
+                ->hideOnForm(),
         ];
     }
     

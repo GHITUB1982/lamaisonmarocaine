@@ -16,6 +16,24 @@ class BlogPostsRepository extends ServiceEntityRepository
         parent::__construct($registry, BlogPosts::class);
     }
 
+    // src/Repository/BlogPostsRepository.php
+public function getPaginatedPosts(int $page, int $limit): array
+{
+    $query = $this->createQueryBuilder('p')
+        ->orderBy('p.createdAt', 'DESC')
+        ->setFirstResult(($page - 1) * $limit)
+        ->setMaxResults($limit)
+        ->getQuery();
+
+    return [
+        'items' => $query->getResult(),
+        'total' => $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+    ];
+}
+
 //    /**
 //     * @return BlogPosts[] Returns an array of BlogPosts objects
 //     */

@@ -63,7 +63,12 @@ class ProductCrudController extends AbstractCrudController
                             ->setBasePath('uploads\products')
                             ->setUploadDir('public\uploads\products')
                             ->setRequired( $required),
-            TextEditorField::new('description', 'Description'),
+            TextEditorField::new('description', 'Description')
+                    ->onlyOnIndex()
+                    ->setVirtual(true)
+                    ->formatValue(function ($value, $entity) {
+                        return substr(strip_tags($entity->getContent()), 0, 50).'...';
+                    }),
             AssociationField::new('category', 'Catégorie Associé'),
         ];
     }

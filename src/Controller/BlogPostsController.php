@@ -12,22 +12,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class BlogPostsController extends AbstractController
 {
-    #[Route('/blog/posts', name: 'app_blog_posts')]
-    public function index(HeaderRepository $headers,BlogPostsRepository $posts): Response
-    {
-        $posts = $posts->findByIsHomepage(True);
+  #[Route('/blog/posts/{page}', name: 'app_blog_posts', requirements: ['page' => '\d+'], defaults: ['page' => 1])]
+public function index(BlogPostsRepository $postsRepository, int $page = 1): Response
+{
+    $limit = 9; // Articles par page
+    $paginatedData = $postsRepository->getPaginatedPosts($page, $limit);
+    
+    $totalPages = ceil($paginatedData['total'] / $limit);
 
-        
-    if (!$posts) {
-        throw $this->createNotFoundException("Article non trouvé.");
-    }
-
-        return $this->render('blog/index.html.twig', [
-            'posts' => $posts,
-            'blog' => $posts,
-            'headers' => $headers->findAll(), 
-        ]);
-    }
+    return $this->render('blog/index.html.twig', [
+        'posts' => $paginatedData['items'],
+        'current_page' => $page,
+        'total_pages' => $totalPages
+    ]);
+}
 
 
    #[Route('/blog/{slug}', name: 'app_blog_show')]

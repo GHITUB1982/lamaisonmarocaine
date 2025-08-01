@@ -66,11 +66,9 @@
                                 {% endif %}
                             </div>
 
-                            {# Description #}
-                            <div class="product-content mb-4">
-                                {{ prod.description|raw }}
-                            </div>
-
+                           <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 8px;">
+    {{ prod.description|raw }}
+</div>
                             {# Bouton ajouter au panier #}
                             <div class="d-grid gap-2">
                                 <a href="{{ path('app_cart_add', { id: prod.id }) }}" 
