@@ -76,7 +76,9 @@
                                     <div class="mt-auto">
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <span class="fw-bold text-primary">
-                                                {{ product.pricewithtax|format_price }}
+                                                {# {{ product.pricewithtax|format_price }} #}
+                                                {{ (product.pricewithtax * rate)|number_format(2, '.', ' ') ~ ' ' ~ symbol }}
+
                                             </span>
                                         </div>
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
@@ -107,20 +109,4 @@
     </div>
 </div>
 
-<style>
-    .card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        border-radius: 0.5rem !important;
-    }
-    .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
-    }
-    .border-bottom {
-        border-color: rgba(0,0,0,0.1) !important;
-    }
-    .feather {
-        vertical-align: middle;
-    }
-</style>
 {% endblock %}

@@ -62,7 +62,7 @@
 					</p>
 					<div class="" style="float: right;">
 						<p>
-							<a class="btn btn-success mb-5" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
+							<a class="btn btn-outline-success mb-5" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
 						</p>
 					</div>
 				</div>
@@ -70,6 +70,13 @@
 		</div>
 
 		<!-- Featurettes -->
+		<div class="title col-lg-12 text-center mb-4">
+    <h2 class="featurette-heading fw-normal lh-2 mt-1">Notre Blog</h2>
+    <p class="lead">💬 Inspirez-vous avec nos derniers articles autour de la beauté naturelle, des rituels marocains et des conseils bien-être du quotidien.</p>
+    <p class="text-muted">Nous partageons avec vous des astuces, des traditions et des histoires qui font la richesse de notre univers naturel. 🌸</p>
+    <a href="{{path('app_blog_posts')}}" class="btn btn-outline-success mt-3">Lire le blog</a>
+</div>
+
 		{% for blog in blogposts %}
             {% if blog.status == 'published' %}
 			<hr class="featurette-divider">
@@ -110,6 +117,15 @@
             {% endif %}
 		{% endfor %}
 
-		<hr class="featurette-divider">
+				<hr class="featurette-divider">
+
+<section class="newsletter-promo py-5 ">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Restez informé(e) !</h2>
+        <p class="lead mb-4">Recevez nos conseils beauté, recettes naturelles et offres exclusives directement par email.</p>
+        <a href="{{ path('app_newsletter_subscriber') }}" class="btn btn-outline-success outline btn-lg">Je m’abonne à la newsletter</a>
+    </div>
+</section>
+
 	</div>
 </main>{% endblock %}

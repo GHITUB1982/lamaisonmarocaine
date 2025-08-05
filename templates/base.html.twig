@@ -6,6 +6,30 @@
 		<title>Kech Lotus Cooperative - Cooperative Naturels du Maroc</title>
 		<meta
 		name="description" content="Découvrez nos cosmétiques 100% naturels inspirés des secrets de beauté marocains">
+		<!--barre des cookies-->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+		<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+		<script>
+			window.addEventListener("load", function () {
+window.cookieconsent.initialise({
+palette: {
+popup: {
+background: "#000"
+},
+button: {
+background: "#f1d600"
+}
+},
+theme: "classic",
+content: {
+message: "Ce site utilise des cookies pour vous garantir la meilleure expérience.",
+dismiss: "J'accepte",
+link: "En savoir plus",
+href: "{{ path('app_reglementation_show', {'route': 'confidentialite'}) }}"
+}
+});
+});
+		</script>
 
 		<!-- Favicon -->
 		<link
@@ -15,6 +39,9 @@
 		<link href="{{asset('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
 		<link
 		href="{{asset('/assets/css/carousel.css')}}" rel="stylesheet">
+		<!-- CSS Fichier principale -->
+		<link
+		rel="stylesheet" href="{{ asset('css/app.css') }}">
 
 		<!-- Font Awesome -->
 		<link
@@ -22,537 +49,309 @@
 
 		<!-- Google Fonts -->
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-
-		<style>:root
-		{
-			--primary: #6B8E23;
-			--secondary: #C9A66B;
-			--light: #F8F5F0;
-			--dark: #3E3D29;
-			--accent: #A78A7F;
-			--navbar-height: 60px;
-			--dropdown-img-size: 80px;
-		}
-
-		{
-			# img {
-				border-radius: 10px;
-			} #
-		}
-
-		body {
-			font-family: 'Montserrat', sans-serif;
-			background-color: var(--light);
-			color: var(--dark);
-			padding-top: var(--navbar-height);
-			display: flex;
-			flex-direction: column;
-			min-height: 100vh;
-		}
-
-		h1,
-		h2,
-		h3,
-		h4,
-		h5 {
-			font-family: 'Playfair Display', serif;
-			color: var(--dark);
-		}
-
-		/* Navbar Style */
-		.cosmetic-navbar {
-			background: rgba(255, 255, 255, 0.95) !important;
-			backdrop-filter: blur(8px);
-			box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-			border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-			transition: all 0.4s ease;
-			min-height: var(--navbar-height);
-		}
-
-		.cosmetic-navbar.scrolled {
-			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-		}
-
-		.navbar-brand {
-			font-weight: 600;
-			color: var(--primary) !important;
-			font-size: 1.6rem;
-		}
-
-		.nav-link {
-			color: var(--dark) !important;
-			font-weight: 500;
-			margin: 0 8px;
-			position: relative;
-			padding-bottom: 5px;
-			text-transform: uppercase;
-			letter-spacing: 1px;
-			font-size: 0.85rem;
-		}
-
-		.nav-link:after {
-			content: '';
-			position: absolute;
-			width: 0;
-			height: 2px;
-			bottom: 0;
-			left: 0;
-			background-color: var(--primary);
-			transition: width 0.3s;
-		}
-
-		.nav-link:hover:after,
-		.nav-link.active:after {
-			width: 100%;
-		}
-
-		.btn-beauty {
-			background-color: var(--primary);
-			color: white;
-			border-radius: 30px;
-			padding: 8px 20px;
-			font-weight: 600;
-			transition: all 0.3s;
-			border: none;
-		}
-
-		.btn-beauty:hover {
-			background-color: var(--dark);
-			transform: translateY(-2px);
-			box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
-		}
-
-		/* Cart Icon */
-		.cart-icon {
-			position: relative;
-			color: var(--dark) !important;
-		}
-
-		.cart-badge {
-			background-color: var(--primary);
-		}
-
-		/* Footer */
-		.cosmetic-footer {
-			background: linear-gradient(135deg, var(--dark) 0%, #2a2a1e 100%);
-			color: var(--light);
-			padding: 60px 0 0;
-			position: relative;
-			border-top: 3px solid var(--primary);
-			margin-top: auto;
-		}
-
-		.footer-links a {
-			color: #d1d1d1;
-			text-decoration: none;
-			transition: all 0.3s;
-			display: inline-block;
-			margin-bottom: 8px;
-		}
-
-		.footer-links a:hover {
-			color: var(--secondary);
-			transform: translateX(5px);
-		}
-
-		.social-icon {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			width: 40px;
-			height: 40px;
-			background: rgba(255, 255, 255, 0.1);
-			border-radius: 50%;
-			margin-right: 10px;
-			color: var(--light);
-			transition: all 0.3s;
-		}
-
-		.social-icon:hover {
-			background: var(--primary);
-			transform: translateY(-3px);
-		}
-
-		.back-to-top {
-			position: fixed;
-			bottom: 30px;
-			right: 30px;
-			background: var(--primary);
-			color: white;
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-			transition: all 0.3s;
-			z-index: 99;
-		}
-
-		.back-to-top:hover {
-			background: var(--dark);
-			transform: translateY(-5px);
-		}
-
-		.whatsapp-float {
-			position: fixed;
-			bottom: 90px;
-			right: 25px;
-			z-index: 1000;
-		}
-
-		.whatsapp-btn {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 60px;
-			height: 60px;
-			background: #25D366;
-			color: white;
-			border-radius: 50%;
-			font-size: 30px;
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-			transition: all 0.3s;
-		}
-
-		.whatsapp-btn:hover {
-			background: #128C7E;
-			transform: scale(1.1);
-			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-		}
-
-		@keyframes pulse {
-			0% {
-				transform: scale(1);
-			}
-			50% {
-				transform: scale(1.1);
-			}
-			100% {
-				transform: scale(1);
-			}
-		}
-
-		.whatsapp-float:hover .whatsapp-btn {
-			animation: pulse 1.5s infinite;
-		}
-
-		/* Flash messages */
-		#flash-messages {
-			position: fixed;
-			top: calc(var(--navbar-height) + 10px);
-			left: 50%;
-			transform: translateX(-50%);
-			z-index: 1060;
-			width: 100%;
-			max-width: 600px;
-		}
-
-		/* Main content */
-		main {
-			flex: 1;
-			padding-top: 0;
-			margin-top: 0;
-		}
-
-		/* Responsive adjustments */
-		@media(min-width: 768px){:root {
-			--navbar-height: 70px;
-			--dropdown-img-size: 110px;
-		}
-
-		.nav-link {
-			font-size: 0.9rem;
-		}
-	}
-
-	@media(min-width: 992px){:root {
-		--navbar-height: 80px;
-		--dropdown-img-size: 140px;
-	}
-}
-/* assets/styles/app.css */
-.dropdown-menu {
-	min-width: 250px;
-}
-
-.dropdown-item {
-	padding: 0.5rem 1.5rem;
-	transition: all 0.2s;
-}
-
-.dropdown-item:hover {
-	background-color: #f8f9fa;
-	padding-left: 1.75rem;
-}
-
-.dropdown-item .fa {
-	width: 20px;
-	text-align: center;
-}
-	</style>
-</head>
-
-<body class="d-flex flex-column min-vh-100">
-	<header>
-        <nav class="navbar navbar-expand-lg cosmetic-navbar fixed-top">
-            <div class="container">
-                <div class="d-flex align-items-center gap-3">
-                    <a class="navbar-brand" href="{{ path('app_home') }}" aria-label="Retour à l'accueil" style="display:inline-flex;">
-                        <img src="{{ asset('assets/img/logo_kech_lotus_complet.png') }}" class="img-fluid" loading="lazy" alt="Logo Kech Lotus Cooperative" width="auto" height="auto" style="max-height: 70px;">
-                        <h1 class="h2 m-2 d-none d-md-block text-success font-weight-bold">
-                            Kech Lotus Cooperative
-                        </h1>
-                    </a>
-                </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link {{ app.request.attributes.get('_route') == 'app_home' ? 'active' : '' }}" 
-                               href="{{ path('app_home') }}">Accueil</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link {{ app.request.attributes.get('_route') starts with 'show_category' ? 'active' : '' }}" 
-                               href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Produits
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
-                                {% for category in categories %}
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="{{ path('show_category', {'slug': category.slug}) }}">
-                                            {% if category.products|slice(0, 4) %}
-                                                <img src="/uploads/products/{{ category.products[0].illustration }}" loading="lazy" alt="{{ category.name }}" class="me-3" style="width: var(--dropdown-img-size); height: var(--dropdown-img-size); object-fit: cover; border-radius: 4px;">
-                                            {% endif %}
-                                            <span>{{ category.name }}</span>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ app.request.attributes.get('_route') starts with 'app_blog' ? 'active' : '' }}" 
-                               href="{{ path('app_blog_posts')}}">Blog</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link {{ app.request.attributes.get('_route') starts with 'app_reglementation' ? 'active' : '' }}" 
-                               href="#" id="legalDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                À Propos
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="legalDropdown">
-                                {% for reglement in reglementations %}
-                                    {% if reglement.isView %}
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center" href="{{ path('app_reglementation_show', {'route': reglement.route}) }}">
-                                                <i class="
-                                                    {% if 'Conditions Générales' in reglement.title %}fas fa-file-alt
-                                                    {% elseif 'Mentions Légales' in reglement.title %}fas fa-gavel
-                                                    {% elseif 'Confidentialité' in reglement.title %}fas fa-lock
-                                                    {% else %}fas fa-question-circle
-                                                    {% endif %} me-2"></i>
-                                                {{ reglement.title }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% else %}
-                                    <li>
-                                        <span class="dropdown-item text-muted">Aucun contenu disponible</span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ app.request.attributes.get('_route') == 'app_contact' ? 'active' : '' }}" 
-                               href="#">Contact</a>
-                        </li>
-                    </ul>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<link rel="preload" href="police.woff2" as="font" type="font/woff2" crossorigin>
 
 
-				{# <div class="d-flex align-items-center">
-					<a href="#" class="me-3 text-dark">
-						<i class="fas fa-search"></i>
-					</a> #}
+		<style></style>
+	</head>
 
-					{% if app.user %}
-						<a href="{{ path('app_account') }}" class="me-3 text-dark">
-							<i class="fas fa-user"></i>
+	<body class="d-flex flex-column min-vh-100">
+		<header>
+			<nav class="navbar navbar-expand-lg cosmetic-navbar fixed-top">
+				<div class="container">
+					<div class="d-flex align-items-center gap-3">
+						<a class="navbar-brand" href="{{ path('app_home') }}" aria-label="Retour à l'accueil" style="display:inline-flex;">
+							<img src="{{ asset('assets/img/logo_kech_lotus_complet.png') }}" class="img-fluid" loading="lazy" alt="Logo Kech Lotus Cooperative" width="auto" height="auto" style="max-height: 70px;">
+							<h1 class="h2 m-2 d-none d-md-block text-success font-weight-bold">
+								Kech Lotus Cooperative
+							</h1>
 						</a>
-						<a href="{{ path('app_logout') }}" class="me-3 text-dark">
-							<i class="fas fa-sign-out-alt"></i>
-						</a>
-						<a href="{{ path('app_account_wishlist') }}" class="btn position-relative me-3">
-							<i class="fas fa-heart"></i>
-							{% if app.user and app.user.wishlists|length > 0 %}
-								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger wishlist-badge">
-									{{ app.user.wishlists|length }}
-									<span class="visually-hidden">produits favoris</span>
+					</div>
+
+
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarCollapse">
+						<ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+							<li class="nav-item">
+								<a class="nav-link {{ app.request.attributes.get('_route') == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">Accueil</a>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link {{ app.request.attributes.get('_route') starts with 'show_category' ? 'active' : '' }}" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									Produits
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="productsDropdown">
+									{% for category in categories %}
+										<li>
+											<a class="dropdown-item d-flex align-items-center" href="{{ path('show_category', {'slug': category.slug}) }}">
+												{% if category.products|slice(0, 4) %}
+													<img src="/uploads/products/{{ category.products[0].illustration }}" loading="lazy" alt="{{ category.name }}" class="me-3" style="width: var(--dropdown-img-size); height: var(--dropdown-img-size); object-fit: cover; border-radius: 4px;">
+												{% endif %}
+												<span>{{ category.name }}</span>
+											</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link {{ app.request.attributes.get('_route') starts with 'app_blog' ? 'active' : '' }}" href="{{ path('app_blog_posts')}}">Blog</a>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link {{ app.request.attributes.get('_route') starts with 'app_reglementation' ? 'active' : '' }}" href="#" id="legalDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									À Propos
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="legalDropdown">
+									{% for reglement in reglementations %}
+										{% if reglement.isView %}
+											<li>
+												<a class="dropdown-item d-flex align-items-center" href="{{ path('app_reglementation_show', {'route': reglement.route}) }}">
+													<i class="
+													        {% if 'Conditions Générales' in reglement.title %}fas fa-file-alt
+									                        {% elseif 'Mentions Légales' in reglement.title %}fas fa-gavel
+									                        {% elseif 'Confidentialité' in reglement.title %}fas fa-lock
+									                        {% else %}fas fa-question-circle
+									                        {% endif %} me-2"></i>
+													{{ reglement.title }}
+												</a>
+											</li>
+										{% endif %}
+
+									{% else %}
+										<li>
+											<span class="dropdown-item text-muted">Aucun contenu disponible</span>
+										</li>
+									{% endfor %}
+								</ul>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link {{ app.request.attributes.get('_route') == 'app_contact' ? 'active' : '' }}" href="{{ path('app_contact')}}">Contact</a>
+							</li>
+						</ul>
+						{# <div class="d-flex align-items-center">
+							<a href="#" class="me-3 text-dark">
+								<i class="fas fa-search"></i>
+						</a> #}
+
+						{% if app.user %}
+							<a href="{{ path('app_account') }}" class="btn me text-secondary">
+								<i class="fas fa-user"></i>
+							</a>
+							<a href="{{ path('app_logout') }}" class="btn me text-secondary">
+								<i class="fas fa-sign-out-alt"></i>
+							</a>
+							<a href="{{ path('app_account_wishlist') }}" class="btn position-relative me-3 text-secondary">
+								<i class="fas fa-heart"></i>
+								{% if app.user and app.user.wishlists|length > 0 %}
+									<span class="position-absolute top-0 start-10 translate-middle badge rounded-pill bg-danger wishlist-badge">
+										{{ app.user.wishlists|length }}
+										<span class="visually-hidden">produits favoris</span>
+									</span>
+								{% endif %}
+							</a>
+						{% else %}
+							<a href="{{ path('app_login') }}" class="btn me text-secondary">
+								<i class="fas fa-sign-in-alt"></i>
+							</a>
+							<a href="{{ path('app_register') }}" class="btn me text-secondary">
+								<i class="fas fa-user-plus"></i>
+							</a>
+						{% endif %}
+						<a href="{{ path('app_cart')}}" class="btn position-relative me-3 text-secondary">
+							<i class="fas fa-shopping-cart"></i>
+							{% if fullQuantity > 0 %}
+								<span class="position-absolute top-0 start-10 translate-middle badge rounded-pill bg-warning cart-badge">
+									{{ fullQuantity }}
+									<span class="visually-hidden">produits en panier</span>
 								</span>
 							{% endif %}
 						</a>
-					{% else %}
-						<a href="{{ path('app_login') }}" class="me-3 text-dark">
-							<i class="fas fa-sign-in-alt"></i>
-						</a>
-						<a href="{{ path('app_register') }}" class="me-3 text-dark">
-							<i class="fas fa-user-plus"></i>
-						</a>
-					{% endif %}
-					<a href="{{ path('app_cart')}}" class="cart-icon position-relative">
-						<i class="fas fa-shopping-cart"></i>
-						{% if fullQuantity > 0 %}
-							<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning cart-badge">
-								{{ fullQuantity }}
-								<span class="visually-hidden">produits en panier</span>
-							</span>
-						{% endif %}
-					</a>
+<form method="POST" action="{{ path('app_change_currency') }}" class="currency-switcher-form ms">
+    <select name="currency" onchange="this.form.submit()" class="form-select form-select-sm w-auto p-2">
+        <option value="MAD" {% if app.session.get('currency') == 'MAD' %}selected{% endif %}>
+            🇲🇦 &nbsp; MAD
+        </option>
+        <option value="EUR" {% if app.session.get('currency') == 'EUR' %}selected{% endif %}>
+            🇪🇺 &nbsp; EUR
+        </option>
+    </select>
+</form>
+
+					</div>
+				</div>
+			</div>
+		</nav>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+			{% set rate = app.session.get('currency') == 'EUR' ? 0.1 : 1 %}
+            {% set symbol = app.session.get('currency') == 'EUR' ? '€' : 'Dhs' %}
+	</body>
+</html></header><div id="flash-messages">
+<div class="container">
+	{% for type, messages in app.flashes %}
+		{% for message in messages %}
+			<div class="alert alert-{{ type }} alert-dismissible fade show mt-3 shadow-lg">
+				<div class="d-flex align-items-center">
+					<span class="flex-grow-1">{{ message }}</span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+			</div>
+		{% endfor %}
+	{% endfor %}
+</div></div><div class="whatsapp-float">
+<a href="javascript:void(0);" onclick="openWhatsApp()" class="whatsapp-btn" aria-label="Contact WhatsApp" title="Envoyer un message">
+	<i class="fab fa-whatsapp"></i>
+</a></div><main>
+{% block body %}{% endblock %}</main><footer class="cosmetic-footer">
+<div class="container">
+	<div class="row g-4">
+		<div class="col-lg-4 col-md-6">
+			<div class="footer-about">
+				<a href="{{ path('app_home') }}" class="d-flex align-items-center mb-1 text-decoration-none">
+					<img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" loading="lazy" alt="Kech Lotus Cooperative" height="70" class="me-2">
+					<span class="h4 mb-0 text-light">Kech Lotus Cooperative</span>
+				</a>
+				<p class="mb-4">Des cosmétiques 100% naturels inspirés des secrets de beauté marocains, formulés avec des ingrédients biologiques et respectueux de votre peau.</p>
+				<div class="footer-contact">
+					<p class="mb-2">
+						<i class="fas fa-map-marker-alt me-2"></i>
+						Marrakech, Maroc</p>
+					<p class="mb-2">
+						<i class="fas fa-phone me-2"></i>
+						+212 6 74 81 90 89</p>
+					<p class="mb-0">
+						<i class="fas fa-envelope me-2"></i>
+						contact@kechlotus.com</p>
 				</div>
 			</div>
 		</div>
-	</nav>
-</body></html></header><div id="flash-messages"><div class="container">
-{% for type, messages in app.flashes %}
-	{% for message in messages %}
-		<div class="alert alert-{{ type }} alert-dismissible fade show mt-3 shadow-lg">
-			<div class="d-flex align-items-center">
-				<span class="flex-grow-1">{{ message }}</span>
-				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-			</div>
-		</div>
-	{% endfor %}
-{% endfor %}</div></div><div class="whatsapp-float"><a href="javascript:void(0);" onclick="openWhatsApp()" class="whatsapp-btn" aria-label="Contact WhatsApp" title="Envoyer un message">
-<i class="fab fa-whatsapp"></i></a></div><main>{% block body %}{% endblock %}</main><footer class="cosmetic-footer"><div class="container">
-<div class="row g-4">
-	<div class="col-lg-4 col-md-6">
-		<div class="footer-about">
-			<a href="{{ path('app_home') }}" class="d-flex align-items-center mb-1 text-decoration-none">
-				<img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" loading="lazy" alt="Kech Lotus Cooperative" height="70" class="me-2">
-				<span class="h4 mb-0 text-light">Kech Lotus Cooperative</span>
-			</a>
-			<p class="mb-4">Des cosmétiques 100% naturels inspirés des secrets de beauté marocains, formulés avec des ingrédients biologiques et respectueux de votre peau.</p>
-			<div class="footer-contact">
-				<p class="mb-2">
-					<i class="fas fa-map-marker-alt me-2"></i>
-					Marrakech, Maroc</p>
-				<p class="mb-2">
-					<i class="fas fa-phone me-2"></i>
-					+212 6 74 81 90 89</p>
-				<p class="mb-0">
-					<i class="fas fa-envelope me-2"></i>
-					contact@kechlotus.com</p>
-			</div>
-		</div>
-	</div>
 
-	<div class="col-lg-2 col-md-6">
-		<h5 class="mb-3" style="color:white">Catégories</h5>
-		<ul class="list-unstyled footer-links">
-			{% for category in categories|slice(0, 4) %}
+		<div class="col-lg-2 col-md-6">
+			<h5 class="mb-3" style="color:white">Catégories</h5>
+			<ul class="list-unstyled footer-links">
+				{% for category in categories|slice(0, 4) %}
+					<li>
+						<a href="{{ path('show_category', {'slug': category.slug}) }}">
+							<i class="fas fa-leaf me-1"></i>
+							{{ category.name }}</a>
+					</li>
+				{% endfor %}
+
+			</ul>
+
+
+			<a class=" list-unstyled footer-links me-1" href="{{ path('app_blog_posts')}}">
+				<h5 class="mb-3" style="color:white">Notre Blog</h5>
+			</a>
+
+
+		</div>
+
+		<div class="col-lg-2 col-md-6">
+
+			<h5 class="mb-3" style="color:white">Informations</h5>
+			<ul class="list-unstyled footer-links">
 				<li>
-					<a href="{{ path('show_category', {'slug': category.slug}) }}">
-						<i class="fas fa-leaf me-1"></i>
-						{{ category.name }}</a>
+					<a href="{{ path('app_reglementation_show', {'route': 'cgv'}) }}">
+						<i class="fas fa-file-alt me-1"></i>
+						CGV
+					</a>
 				</li>
-			{% endfor %}
+				<li>
+					<a href="{{ path('app_reglementation_show', {'route': 'mentions-legales'}) }}">
+						<i class="fas fa-gavel me-1"></i>
+						Mentions légales
+					</a>
+				</li>
+				<li>
+					<a href="{{ path('app_reglementation_show', {'route': 'confidentialite'}) }}">
+						<i class="fas fa-lock me-1"></i>
+						Confidentialité
+					</a>
+				</li>
+				<li>
+					<a href="{{ path('app_reglementation_show', {'route': 'faq'}) }}">
+						<i class="fas fa-question-circle me-1"></i>
+						FAQ
+					</a>
+				</li>
 
-		</ul>
+				<li>
+					<a href="{{ path('app_contact')}}">
 
-
-		<a class=" list-unstyled footer-links me-1" href="{{ path('app_blog_posts')}}">
-			<h5 class="mb-3" style="color:white">Notre Blog</h5>
-		</a>
-
-
-	</div>
-
-	<div class="col-lg-2 col-md-6">
-
-		<h5 class="mb-3" style="color:white">Informations</h5>
-		<ul class="list-unstyled footer-links">
-			<li>
-				<a href="{{ path('app_reglementation_show', {'route': 'cgv'}) }}">
-					<i class="fas fa-file-alt me-1"></i>
-					CGV
-				</a>
-			</li>
-			<li>
-				<a href="{{ path('app_reglementation_show', {'route': 'mentions-legales'}) }}">
-					<i class="fas fa-gavel me-1"></i>
-					Mentions légales
-				</a>
-			</li>
-			<li>
-				<a href="{{ path('app_reglementation_show', {'route': 'confidentialite'}) }}">
-					<i class="fas fa-lock me-1"></i>
-					Confidentialité
-				</a>
-			</li>
-			<li>
-				<a href="{{ path('app_reglementation_show', {'route': 'faq'}) }}">
-					<i class="fas fa-question-circle me-1"></i>
-					FAQ
-				</a>
-			</li>
-
-			<li>
-				<a href="#">
-					<i class="fas fa-phone me-1"></i>
-					Contact</a>
-			</li>
-		</ul>
-	</div>
-
-	<div class="col-lg-4 col-md-6">
-		<h5 class="mb-3" style="color:white">Newsletter</h5>
-		<p>Abonnez-vous pour recevoir nos conseils beauté et offres exclusives.</p>
-		<form class="mb-4">
-			<div class="input-group">
-				<input type="email" class="form-control" placeholder="Votre email" required>
-				<button class="btn btn-beauty" type="submit">Ok</button>
-			</div>
-		</form>
-
-		<h5 class="mb-3" style="color:white">Suivez-nous</h5>
-		<div class="d-flex">
-			<a href="https://www.instagram.com/cooperativekechlotus/" target="_blank" class="social-icon me-2">
-				<i class="fab fa-instagram"></i>
-			</a>
-			<a href="#" class="social-icon me-2">
-				<i class="fab fa-facebook-f"></i>
-			</a>
-			<a href="#" class="social-icon me-2">
-				<i class="fab fa-pinterest-p"></i>
-			</a>
-			<a href="#" class="social-icon">
-				<i class="fab fa-youtube"></i>
-			</a>
+						<i class="fas fa-phone me-1"></i>
+						Contact</a>
+				</li>
+			</ul>
 		</div>
 
-		<div class="mt-4 pt-2" style="z-index: 10;">
-			<div class="d-flex flex-wrap">
-				<img src="/assets/img/payment-methods.webp" style="max-width: 30%;" loading="lazy" alt="Moyens de paiement" class="img-fluid">
+		{% if footer_form is defined %}
+			<div class="col-lg-4 col-md-6">
+				<h5 class="mb-3" style="color:white">Newsletter</h5>
+				<p>Abonnez-vous pour recevoir nos conseils beauté et offres exclusives.</p>
+				{{ form_start(footer_form, {'attr': {'class': 'd-flex mt-3'}}) }}
+				{{ form_widget(footer_form.email, {'attr': {'class': 'form-control me-2', 'placeholder': 'Votre email'}}) }}
+				<button class="btn btn-success" type="submit">Ok</button>
+				{{ form_end(footer_form) }}
+
+			{% else %}
+				<div class="col-lg-4 col-md-6">
+					<h5 class="mb-3" style="color:white">Newsletter</h5>
+					<p>Abonnez-vous pour recevoir nos conseils beauté et offres exclusives.</p>
+					<form method="POST" action="{{ path('app_newsletter_subscriber') }}" class="mb-4">
+						<div class="input-group">
+							<input type="email" name="email" class="form-control" placeholder="Votre email" required>
+							<button class="btn btn-success" type="submit">Ok</button>
+						</div>
+					</form>
+
+				{% endif %}
+
+
+				<h5 class="mb-3" style="color:white">Suivez-nous</h5>
+				<div class="d-flex">
+					<a href="https://www.instagram.com/cooperativekechlotus/" target="_blank" class="social-icon me-2">
+						<i class="fab fa-instagram"></i>
+					</a>
+					<a href="#" class="social-icon me-2">
+						<i class="fab fa-facebook-f"></i>
+					</a>
+					<a href="#" class="social-icon me-2">
+						<i class="fab fa-pinterest-p"></i>
+					</a>
+					<a href="#" class="social-icon">
+						<i class="fab fa-youtube"></i>
+					</a>
+				</div>
+
+				<div class="mt-4 pt-2" style="z-index: 10;">
+					<div class="d-flex flex-wrap">
+						<img src="/assets/img/payment-methods.webp" style="max-width: 30%;" loading="lazy" alt="Moyens de paiement" class="img-fluid">
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
 
-<div class="footer-bottom mt-5 pt-4 border-top border-secondary">
-	<div class="row align-items-center">
-		<div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-			<p class="mb-0">&copy; 2023 Kech Lotus Cooperative. Tous droits réservés.</p>
-		</div>
-		<div class="col-md-6 text-center text-md-end">
-			<p class="mb-0">Fait avec
-				<i class="fas fa-heart text-danger"></i>
-				au Maroc</p>
+		<div class="footer-bottom mt-5 pt-4 border-top border-secondary">
+			<div class="row align-items-center">
+				<div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+					<p class="mb-0">&copy; 2023 Kech Lotus Cooperative. Tous droits réservés.</p>
+				</div>
+				<div class="col-md-6 text-center text-md-end">
+					<p class="mb-0">Fait avec
+						<i class="fas fa-heart text-danger"></i>
+						au Maroc</p>
+				</div>
+			</div>
 		</div>
 	</div>
-</div></div><a href="#" class="back-to-top">
-<i class="fas fa-arrow-up"></i></a></footer><!-- JavaScript --><script src="{{asset('/assets/js/bootstrap.bundle.min.js')}}"></script><script>// Navbar scroll effect
+	<a href="#" class="back-to-top">
+		<i class="fas fa-arrow-up"></i>
+	</a>
+</footer><!-- JavaScript --><script src="{{asset('/assets/js/bootstrap.bundle.min.js')}}"></script>
+<script>
+	// Navbar scroll effect
 window.addEventListener('scroll', function () {
 const navbar = document.querySelector('.cosmetic-navbar');
 if (window.scrollY > 30) {
@@ -634,4 +433,5 @@ bootstrap.Dropdown.getOrCreateInstance(toggle).dispose();
 setupHoverForDropdowns();
 
 // Re-setup on window resize
-window.addEventListener('resize', setupHoverForDropdowns);</script></body></html>
+window.addEventListener('resize', setupHoverForDropdowns);
+</script></body></html>

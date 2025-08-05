@@ -66,7 +66,13 @@
                                         <tr>
                                             <td>{{order.createdAt|date('Y')}}/{{ order.id }}</td>
                                             <td>{{ order.createdAt|date('d/m/Y') }}</td>
-                                            <td class="fw-bold">{{ order.getTotalTTC()|format_price }}</td>
+                                            <td class="fw-bold">
+                                            {% if order.currency == 'EUR' %}
+                                                {{ ((order.getTotalHT() + order.getTotalTVA())/10)|format_currency('EUR') }}
+                                            {% else %}
+                                                {{ (order.getTotalHT() + order.getTotalTVA())|format_currency('MAD') }}
+                                            {% endif %}                                            
+                                            </td>
                                             <td>
                                                 {{ include('admin/order_state.html.twig', { field: { 'value': order.state } }) }}
                                             </td>
@@ -88,16 +94,4 @@
     </div>
 </div>
 
-<style>
-    .card {
-        transition: transform 0.2s;
-        border-radius: 0.5rem;
-    }
-    .card:hover {
-        transform: translateY(-3px);
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(var(--bs-primary-rgb), 0.05);
-    }
-</style>
 {% endblock %}

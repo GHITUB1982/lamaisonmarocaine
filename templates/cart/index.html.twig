@@ -7,7 +7,7 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-12 mx-auto">
-            
+           
             {# Breadcrumb identique à la page réglementation #}
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
@@ -18,7 +18,8 @@
 
             {# Titre de la page #}
             <h1 class="display-5 mb-4">Mon panier</h1>
-<hr>
+            <hr>
+
             {# Nombre d'articles #}
             <div class="text-muted mb-4">
                 <i class="fas fa-shopping-cart me-2"></i>
@@ -63,7 +64,7 @@
                                                             <img src="{{ item.product.illustration ? asset('uploads/products/' ~ item.product.illustration) : asset('images/default-product.png') }}" 
                                                                  alt="{{ item.product.name }}" 
                                                                  class="img-fluid rounded me-3" 
-                                                                 style="width: 80px; height: 80px; object-fit: cover; background: transparent;">
+                                                                 style="width: 80px; height: 80px; object-fit: cover;">
                                                             <div>
                                                                 <strong>{{ item.product.name }}</strong>
                                                                 <div class="text-muted small">
@@ -72,7 +73,15 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>{{ item.product.pricewithtax|format_price }}</td>
+                                                    <td>
+                                                        {% if app.session.get('currency') == 'EUR' %}
+                                                            {{ (item.product.pricewithtax / 10)|format_currency('EUR') }}
+                                                            {# <small class="text-muted">({{ item.product.pricewithtax|format_currency('MAD') }})</small> #}
+                                                        {% else %}
+                                                            {{ item.product.pricewithtax|format_currency('MAD') }}
+                                                            {# <small class="text-muted">({{ (item.product.pricewithtax / 10)|format_currency('EUR') }})</small> #}
+                                                        {% endif %}
+                                                    </td>
                                                     <td class="text-center">
                                                         <div class="btn-group" role="group">
                                                             <a href="{{ path('app_cart_decrease', { id: item.product.id }) }}" 
@@ -88,7 +97,13 @@
                                                     </td>
                                                     <td class="fw-bold">
                                                         {% set total = item.product.pricewithtax * item.quantity %}
-                                                        {{ total|format_price }}
+                                                        {% if app.session.get('currency') == 'EUR' %}
+                                                            {{ (total / 10)|format_currency('EUR') }}
+                                                            {# <small class="text-muted">({{ total|format_currency('MAD') }})</small> #}
+                                                        {% else %}
+                                                            {{ total|format_currency('MAD') }}
+                                                            {# <small class="text-muted">({{ (total / 10)|format_currency('EUR') }})</small> #}
+                                                        {% endif %}
                                                     </td>
                                                     <td>
                                                         <a href="{{ path('app_cart_remove', { id: item.product.id }) }}" 
@@ -112,7 +127,7 @@
                             <div class="card-body">
                                 <h3 class="h4 mb-4 pb-3 border-bottom">
                                     <i class="fas fa-file-alt me-2 text-primary"></i>
-                                    Récapitulatif
+                                    Total Panier
                                 </h3>
 
                                 <ul class="list-group list-group-flush mb-3">
@@ -126,17 +141,41 @@
 
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Total HT :</span>
-                                    <span>{{ (cart_total / 1.2)|format_price }}</span>
+                                    <span>
+                                        {% if app.session.get('currency') == 'EUR' %}
+                                            {{ ((cart_total / 1.2) / 10)|format_currency('EUR') }}
+                                            {# <small class="text-muted">({{ (cart_total / 1.2)|format_currency('MAD') }})</small> #}
+                                        {% else %}
+                                            {{ (cart_total / 1.2)|format_currency('MAD') }}
+                                            {# <small class="text-muted">({{ (cart_total / 1.2 / 10)|format_currency('EUR') }})</small> #}
+                                        {% endif %}
+                                    </span>
                                 </div>
 
                                 <div class="d-flex justify-content-between mb-3 text-success">
                                     <span>TVA (20%) :</span>
-                                    <span>{{ (cart_total - (cart_total / 1.2))|format_price }}</span>
+                                    <span>
+                                        {% if app.session.get('currency') == 'EUR' %}
+                                            {{ ((cart_total - (cart_total / 1.2)) / 10)|format_currency('EUR') }}
+                                            {# <small class="text-muted">({{ (cart_total - (cart_total / 1.2))|format_currency('MAD') }})</small> #}
+                                        {% else %}
+                                            {{ (cart_total - (cart_total / 1.2))|format_currency('MAD') }}
+                                            {# <small class="text-muted">{{ (cart_total - (cart_total / 1.2) / 10)|format_currency('EUR') }}</small> #}
+                                        {% endif %}
+                                    </span>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center mb-3 py-2 border-top border-bottom">
                                     <span class="fw-bold">Total TTC :</span>
-                                    <span class="fw-bold text-primary">{{ cart_total|format_price }}</span>
+                                    <span class="fw-bold text-primary">
+                                        {% if app.session.get('currency') == 'EUR' %}
+                                            {{ (cart_total / 10)|format_currency('EUR') }}
+                                            {# <small class="text-muted">({{ cart_total|format_currency('MAD') }})</small> #}
+                                        {% else %}
+                                            {{ cart_total|format_currency('MAD') }}
+                                            {# <small class="text-muted">({{ (cart_total / 10)|format_currency('EUR') }})</small> #}
+                                        {% endif %}
+                                    </span>
                                 </div>
 
                                 <div class="d-grid gap-2">
@@ -172,15 +211,14 @@
                                 </a>
                             </div>
                         {% else %}
-                            <div class="row g-4">
+                            <div class="d-flex overflow-auto flex-nowrap gap-3 pb-2">
                                 {% for product in wishlistItems %}
                                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                        <div class="card h-100 border-0">
-                                            {# Image sans cadre #}
+                                        <div class="card h-100 border-1">
                                             <img src="/uploads/products/{{ product.illustration }}" 
                                                  alt="{{ product.name }}"
                                                  class="img-fluid rounded-top"
-                                                 style="height: 180px; object-fit: cover; background: transparent;">
+                                                 style="height: 180px; object-fit: cover;">
 
                                             <div class="card-body">
                                                 <div class="d-flex justify-content-between">
@@ -192,7 +230,13 @@
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                                     <span class="fw-bold text-primary">
-                                                        {{ product.pricewithtax|format_price }}
+                                                        {% if app.session.get('currency') == 'EUR' %}
+                                                            {{ (product.pricewithtax / 10)|format_currency('EUR') }}
+                                                            {# <small class="text-muted">({{ product.pricewithtax|format_currency('MAD') }})</small> #}
+                                                        {% else %}
+                                                            {{ product.pricewithtax|format_currency('MAD') }}
+                                                            {# <small class="text-muted">({{ (product.pricewithtax / 10)|format_currency('EUR') }})</small> #}
+                                                        {% endif %}
                                                     </span>
                                                 </div>
                                             </div>
@@ -225,21 +269,9 @@
 {% block stylesheets %}
 {{ parent() }}
 <style>
-    .table {
-        background: #fff;
-        border-radius: 0.5rem;
-    }
-    .table th {
-        background-color: #f8f9fa;
-    }
-    .img-fluid.rounded-top {
-        border-radius: 0.5rem 0.5rem 0 0 !important;
-    }
-    .card {
-        transition: transform 0.2s;
-    }
-    .card:hover {
-        transform: translateY(-3px);
+    .text-muted {
+        font-size: 0.8em;
+        opacity: 0.8;
     }
 </style>
 {% endblock %}

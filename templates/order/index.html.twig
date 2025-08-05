@@ -80,27 +80,7 @@
 {% block stylesheets %}
 {{ parent() }}
 <style>
-    .card {
-        border-radius: 0.5rem;
-    }
-    .form-select {
-        padding: 0.5rem 1rem;
-    }
-    .form-check {
-        padding: 1rem;
-        margin-bottom: 0.5rem;
-        border: 1px solid #dee2e6;
-        border-radius: 0.5rem;
-    }
-    .form-check:hover {
-        border-color: #0d6efd;
-    }
-    .form-check-input:checked + .form-check-label {
-        font-weight: 500;
-    }
-    .form-check-label {
-        width: 100%;
-    }
+    
 </style>
 {% endblock %}
 
@@ -112,7 +92,6 @@
         document.querySelectorAll('.form-check-input').forEach(radio => {
             const parent = radio.closest('.form-check');
             const label = parent.querySelector('.form-check-label');
-            const priceMatch = label.textContent.match(/(\d+\.\d+) Dhs/);
             
             if (priceMatch) {
                 const priceSpan = document.createElement('span');

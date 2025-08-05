@@ -4,10 +4,8 @@
 
 {% block body %}
 <div class="container py-4">
-    {# Inclusion de la bannière utilisateur #}
     {% include "account/_user_header.html.twig" %}
     
-    {# Barre de navigation cohérente #}
     <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
         <div>
             <a href="{{ path('app_account_order') }}" class="btn btn-outline-secondary">
@@ -15,17 +13,19 @@
             </a>
             {% if order.state >0 %}
             <a target="_blank" href="{{ path('app_invoice_user', {id_order: order.id}) }}" class="btn btn-primary">
-            <i class="fas fa-download"> Facture</i>            
+                <i class="fas fa-download"></i> Facture
             </a>
             {% endif %}
         </div>
         <h1 class="mb-0 fs-3 fw-bold text-primary">
             <i data-feather="file-text" class="me-2"></i>Commande {{order.createdAt|date('Y')}}/{{ order.id }}
+            <span class="badge bg-{{ order.currency == 'MAD' ? 'success' : 'info' }} ms-2">
+                {{ order.currency }} (Paiement)
+            </span>
         </h1>
     </div>
 
     <div class="row g-4">
-        {# Menu de gauche #}
         <div class="col-md-3">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body p-0">
@@ -34,11 +34,9 @@
             </div>
         </div>
         
-        {# Détails de la commande #}
         <div class="col-md-9">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
-                    {# En-tête de commande #}
                     <div class="d-flex justify-content-between align-items-start mb-4">
                         <div>
                             <h2 class="h4 fw-bold mb-2">Commande: {{order.createdAt|date('Y')}}/{{ order.id }}</h2>
@@ -51,9 +49,15 @@
                                 {{ order.createdAt|date('d/m/Y à H:i') }}
                             </div>
                         </div>
+                        {% if order.currency == 'EUR' %}
+                            <div class="alert alert-info p-2 mb-0">
+                                <small>
+                                    <i class="fas fa-info-circle"></i> Cette commande a été payée en Euros
+                                </small>
+                            </div>
+                        {% endif %}
                     </div>
 
-                    {# Informations de livraison #}
                     <div class="row mb-4">
                         <div class="col-md-6 mb-3 mb-md-0">
                             <div class="card bg-light border-0 h-100">
@@ -62,14 +66,38 @@
                                         <i data-feather="truck" class="me-2"></i>Livraison
                                     </h3>
                                     <p class="mb-1"><strong>Transporteur :</strong> {{ order.carrierName }}</p>
-                                    <p class="mb-1"><strong>Coût :</strong> {{ order.carrierPrice|format_price }}</p>
+                                    <p class="mb-1"><strong>Coût :</strong> 
+                                        {% if order.currency == 'EUR' %}
+                                                {{ (order.carrierPrice/ 10)|format_currency('EUR')  }}
+                                        {% else %}
+                                                {{ order.carrierPrice |format_currency('MAD') }}
+                                        {% endif %}
+                                    </p>
                                     <p class="mb-0"><strong>Adresse :</strong> {{ order.delivery|nl2br }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body">
+                                    <h3 class="h6 fw-bold mb-3">
+                                        <i data-feather="credit-card" class="me-2"></i>Paiement
+                                    </h3>
+                                    <p class="mb-1">
+                                        <strong>Méthode :</strong> 
+                                        {{ order.paymentMethod|default('Carte bancaire') }}
+                                    </p>
+                                    <p class="mb-0">
+                                        <strong>Devise originale :</strong> 
+                                        <span class="badge bg-{{ order.currency == 'MAD' ? 'success' : 'info' }}">
+                                            {{ order.currency }}
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {# Détails des produits #}
                     <h3 class="h5 fw-bold mb-3">
                         <i data-feather="shopping-cart" class="me-2"></i>Produits commandés
                     </h3>
@@ -96,7 +124,16 @@
                                                  style="max-width: 80px; height: auto;">
                                         </td>
                                         <td class="text-center">{{ detail.productQuantity }}</td>
-                                        <td class="text-end">{{ detail.productPrice|format_price }}</td>
+                                        <td class="text-end">
+                                            {% if order.currency == 'EUR' %}
+                                            {{ (detail.productPrice/ 10)|format_currency('EUR') }}
+                                            {% else %}
+                                                {{ detail.productPrice |format_currency('MAD') }}
+                                            {% endif %}
+
+
+
+                                        </td>
                                         <td class="text-end">{{ detail.productTva }}%</td>
                                     </tr>
                                 {% else %}
@@ -111,23 +148,41 @@
                         </table>
                     </div>
 
-                    {# Récapitulatif des prix #}
                     <div class="row justify-content-end">
                         <div class="col-md-5">
                             <div class="card border-0 bg-light">
                                 <div class="card-body">
-                                    <h4 class="h6 fw-bold mb-3">Récapitulatif</h4>e
+                                    <h4 class="h6 fw-bold mb-3">Récapitulatif</h4>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Total HT :</span>
-                                        <strong>{{ order.getTotalHT()|format_price }}</strong>
+                                        <strong>
+                                         {% if order.currency == 'EUR' %}
+                                                {{ (order.getTotalHT()/10)|format_currency('EUR') }}
+                                            {% else %}
+                                                {{ order.getTotalHT()|format_currency('MAD') }}
+                                            {% endif %}  
+                                        </strong>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>TVA :</span>
-                                        <strong>{{ order.getTotalTVA()|format_price }}</strong>
+                                        <strong>
+                                         {% if order.currency == 'EUR' %}
+                                                {{ ((order.getTotalTVA())/10)|format_currency('EUR') }}
+                                            {% else %}
+                                                {{ (order.getTotalTVA())|format_currency('MAD') }}
+                                            {% endif %}  
+                                        </strong>
                                     </div>
                                     <div class="d-flex justify-content-between border-top pt-2">
                                         <span class="fw-bold">Total TTC :</span>
-                                        <strong class="text-primary">{{ (order.getTotalHT() + order.getTotalTVA())|format_price }}</strong>
+                                        <strong class="text-primary">
+                                            {# {{ ((order.getTotalHT() + order.getTotalTVA())/ 10)|format_currency(order.currency) }} #}
+                                              {% if order.currency == 'EUR' %}
+                                                {{ ((order.getTotalHT() + order.getTotalTVA())/10)|format_currency('EUR') }}
+                                            {% else %}
+                                                {{ (order.getTotalHT() + order.getTotalTVA())|format_currency('MAD') }}
+                                            {% endif %}  
+                                        </strong>
                                     </div>
                                 </div>
                             </div>
@@ -140,12 +195,7 @@
 </div>
 
 <style>
-    .card {
-        transition: transform 0.2s;
-        border-radius: 0.5rem;
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(var(--bs-primary-rgb), 0.05);
-    }
+    .badge.bg-success { background-color: #28a745 !important; }
+    .badge.bg-info { background-color: #17a2b8 !important; }
 </style>
 {% endblock %}

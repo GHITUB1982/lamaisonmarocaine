@@ -48,6 +48,11 @@ final class OrderController extends AbstractController
             'addresses' => $this->getUser()->getAddresses(),
         ]);
 
+        // Récupération de la devise depuis la session (MAD par défaut)
+        $session = $request->getSession();
+        // $currency = $session->get('user_currency', 'MAD');
+        $currency = $session->get('currency', 'MAD'); // app.session.get('currency')
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -68,6 +73,8 @@ final class OrderController extends AbstractController
             $order->setCarrierName($form->get('carrier')->getData()->getName());
             $order->setCarrierPrice($form->get('carrier')->getData()->getPrice());
             $order->setDelivery($address);
+            $order->setCurrency($currency); // Sauvegarde la devise utilisée
+
 
             $entityManager->persist($order);
 
@@ -91,6 +98,7 @@ final class OrderController extends AbstractController
             }
 
             $entityManager->flush();
+            
 
             return $this->render('order/summary.html.twig', [
                 'choices' => $form->getData(),

@@ -6,10 +6,12 @@ use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Header;
 use App\Entity\Carrier;
+use App\Entity\Contact;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\BlogPosts;
 use App\Entity\Reglementation;
+use App\Entity\NewsletterSubscriber;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -46,6 +48,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Postes du Blog', 'fas fa-newspaper', BlogPosts::class);
         yield MenuItem::linkToCrud('Entêtes', 'fas fa-image', Header::class);
         yield MenuItem::linkToCrud('Menu A Propos', 'fas fa-gavel', Reglementation::class);
+        yield MenuItem::linkToCrud('Messages contact', 'fas fa-envelope', Contact::class);
+        yield MenuItem::linkToCrud('Newsletter', 'fas fa-newspaper', NewsletterSubscriber::class);
+
+
+
         yield MenuItem::section();
         yield MenuItem::linkToRoute('Retour au site', 'fas fa-arrow-left', 'app_home');
     }

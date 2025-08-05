@@ -1,0 +1,40 @@
+{# templates/newsletter_subscriber/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Newsletter - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Newsletter</li>
+        </ol>
+    </nav>
+
+    {# Titre de la page #}
+    <h1 class="display-5 mb-4">Abonnez-vous à notre newsletter</h1>
+    <hr>
+
+    {# Messages flash succès #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="newsletter-form text-center mt-5">
+        {{ form_start(pageForm) }}
+            {{ form_widget(pageForm.email, {
+                attr: {
+                    class: 'form-control form-control-lg mb-3',
+                    placeholder: 'Votre adresse email'
+                }
+            }) }}
+            <button type="submit" class="btn btn-success btn-lg">S’abonner</button>
+        {{ form_end(pageForm) }}
+    </div>
+</div>
+{% endblock %}

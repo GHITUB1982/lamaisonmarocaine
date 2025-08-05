@@ -43,6 +43,9 @@ class Order
     #[ORM\OneToMany(targetEntity: OrderDetails::class, mappedBy: "myOrder")]
     private Collection $orderDetails;
 
+    #[ORM\Column(length: 3)]
+    private ?string $currency = null;
+
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
@@ -196,6 +199,18 @@ class Order
     public function setStripeSessionId(?string $stripe_session_id): self
     {
         $this->stripe_session_id = $stripe_session_id;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): static
+    {
+        $this->currency = $currency;
 
         return $this;
     }

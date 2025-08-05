@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Header;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -27,6 +28,7 @@ class HeaderCrudController extends AbstractCrudController
             TextareaField::new(propertyName: 'content',label: 'Contenu'),
             TextField::new(propertyName: 'button_title',label: 'Button Titre'),
             TextField::new(propertyName: 'button_link',label: 'Button URL'),
+            BooleanField::new('isHome')->setLabel('A la une')->setHelp('Article affiché sur la page d\'accueil'),
             ImageField::new('illustration', 'Illustration')
                             ->setLabel('Image Entête')
                             ->setUploadedFileNamePattern('[day]-[month]-[year]-[slug]-[contenthash].[extension]')

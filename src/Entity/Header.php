@@ -29,6 +29,9 @@ class Header
     #[ORM\Column(length: 255)]
     private ?string $illustration = null;
 
+    #[ORM\Column]
+    private ?bool $is_home = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class Header
     public function setIllustration(string $illustration): static
     {
         $this->illustration = $illustration;
+
+        return $this;
+    }
+
+    public function isHome(): ?bool
+    {
+        return $this->is_home;
+    }
+
+    public function setIsHome(bool $is_home): static
+    {
+        $this->is_home = $is_home;
 
         return $this;
     }

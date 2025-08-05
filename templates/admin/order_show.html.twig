@@ -23,7 +23,15 @@
                     >
                 </td>
                 <td>{{ detail.productQuantity }}</td>
-                <td>{{ detail.productPrice }}</td>
+                <td>
+                    {% if entity.instance.currency == 'EUR' %}
+                        {{ (detail.productPrice/10)|format_currency('EUR') }}
+                        <small class="text-muted">({{ detail.productPrice|format_currency('MAD') }})</small>
+                    {% else %}
+                        {{ detail.productPrice|format_currency('MAD') }}
+                        <small class="text-muted">({{ (detail.productPrice/10)|format_currency('EUR') }})</small>
+                    {% endif %}  
+                </td>
                 <td>{{ detail.productTva }}</td>
             </tr>
         {% else %}

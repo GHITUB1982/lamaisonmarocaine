@@ -79,4 +79,16 @@ class Cart
 
         return $quantity;
     }
+
+     public function removeProduct(int $productId): void
+    {
+        
+            $cart = $this->getSession()->get('cart', []);
+
+            if (isset($cart[$productId])) {
+                unset($cart[$productId]);
+            }
+
+            $this->getSession()->set('cart', $cart);   
+    }
 }

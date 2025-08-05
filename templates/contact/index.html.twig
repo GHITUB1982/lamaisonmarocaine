@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+   
+    <div class="container py-5">
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item active">Contact</li>
+        </ol>
+    </nav>
+
+            {# Titre de la page #}
+            <h1 class="display-5 mb-4">Nous Contacter</h1>
+<hr>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+        <div class="row g-3">
+            <div class="col-md-6">
+                {{ form_row(form.nom) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.email) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.sujet) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.message) }}
+            </div>
+             <div class="col-12 d-none" >
+                {{ form_row(form.createdAt) }}
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+    
