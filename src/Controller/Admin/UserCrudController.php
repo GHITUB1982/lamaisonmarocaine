@@ -46,9 +46,9 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-          $rerquired=true;
+          $required=true;
         if($pageName='edit'){
-            $rerquired=false;
+            $required=false;
 
         }
         return [
@@ -58,17 +58,25 @@ class UserCrudController extends AbstractCrudController
                     'Madame' => 'Madame',
                     'Mademoiselle' => 'Mademoiselle'
                     
-                ])->setRequired( $rerquired),
+                ])->setRequired( $required),
             TextField::new('firstName', 'Prénom'),
             TextField::new('lastName', 'Nom'),
             // TextField::new('email', 'Email')->onlyOnIndex(),
-            TextField::new('email', 'Email')->setRequired( $rerquired),
+            TextField::new('email', 'Email')->setRequired( $required),
             // TextEditorField::new('description'),
-             ChoiceField::new('roles')->setChoices([
-                'ROLE_USER' => 'ROLE_USER',
-                'ROLE_ADMIN' => 'ROLE_ADMIN',
-             ])->allowMultipleChoices()->setHelp('Choisir le role de l\'utilisateur')->setRequired( $rerquired),
-             DateTimeField::new('lastLoginAt')->setLabel('Dernière connexion')->onlyOnIndex(),
+            ChoiceField::new('roles')
+    ->setChoices([
+        'Administrateur' => 'ROLE_ADMIN',
+        'Utilisateur' => 'ROLE_USER',
+    ])
+    ->renderAsBadges([
+        'ROLE_ADMIN' => 'danger',
+        'ROLE_USER' => 'warning',
+    ])
+    ->allowMultipleChoices()
+    ->setHelp('Choisir le rôle de l\'utilisateur')
+    ->setRequired($required),
+DateTimeField::new('lastLoginAt')->setLabel('Dernière connexion')->onlyOnIndex(),
             
         ];
     }

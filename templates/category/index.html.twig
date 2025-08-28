@@ -74,8 +74,13 @@
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ product.name }}</h5>
                                                     <div class="mb-2">
-                                                        <span class="text-primary fw-bold">{{ product.pricewithtax }} Dhs</span>
-                                                    </div>
+                                                        {% if app.session.get('currency') == 'EUR' %}
+                                                            {{ (product.pricewithtax / 10)|format_currency('EUR') }}
+                                                            {# <small class="text-muted">({{ item.product.pricewithtax|format_currency('MAD') }})</small> #}
+                                                        {% else %}
+                                                            {{ product.pricewithtax|format_currency('MAD') }}
+                                                            {# <small class="text-muted">({{ (item.product.pricewithtax / 10)|format_currency('EUR') }})</small> #}
+                                                        {% endif %}                                                    </div>
                                                     <p class="card-text text-muted small">
                                                         {{ product.description|striptags|slice(0, 60) ~ '...' }}
                                                     </p>

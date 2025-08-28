@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Test Email</title>
+    <style>
+       
+    </style>
 </head>
 <body>
-    <h1>Test d'envoi d'email</h1>
-    <p>{{ message }}</p>
+    <div class="container">
+        <h1>Bonjour,</h1>
+        <p>Voici votre lien de réinitialisation :</p>
+        <a href="{{ resetLink }}{" class="button">Réinitialiser le mot de passe</a>
+        <p>Si vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet email.</p>
+    </div>
 </body>
 </html>

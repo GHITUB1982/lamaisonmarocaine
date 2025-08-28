@@ -30,6 +30,9 @@ class Category
      #[ORM\OneToMany(targetEntity: BlogPosts::class, mappedBy: 'category')]
     private Collection $blogPosts;
 
+     #[ORM\Column]
+     private ?bool $menu = null;
+
    
 
     public function __construct()
@@ -108,6 +111,18 @@ class Category
                 $product->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isMenu(): ?bool
+    {
+        return $this->menu;
+    }
+
+    public function setMenu(bool $menu): static
+    {
+        $this->menu = $menu;
 
         return $this;
     }

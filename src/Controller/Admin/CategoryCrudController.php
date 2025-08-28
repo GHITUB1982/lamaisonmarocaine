@@ -5,10 +5,11 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 
 class CategoryCrudController extends AbstractCrudController
 {
@@ -37,7 +38,11 @@ class CategoryCrudController extends AbstractCrudController
             // TextField::new('title'),
             // TextEditorField::new('description'),
             TextField::new('name', 'Nom')->setHelp('Nom de la catégorie'),
-            SlugField::new('slug', 'Slug')->setLabel('Slug ou URL')->setTargetFieldName('name')->setHelp('Genéré automatiquement à partir du nom de la catégorie'),
+            SlugField::new('slug', 'Slug')->setLabel('Slug ou URL')
+                        ->setTargetFieldName('name')
+                        ->setHelp('Genéré automatiquement à partir du nom de la catégorie'),
+            BooleanField::new('menu', 'Afficher dans le menu')->setHelp('Afficher la catégorie dans le menu principal Produits'),
+
         ];
     }
 

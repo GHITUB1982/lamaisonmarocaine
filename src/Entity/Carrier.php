@@ -23,9 +23,21 @@ class Carrier
     #[ORM\Column]
     private ?float $price = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $duration = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 0)]
+    private ?string $price_devise = null;
+
+      /**
+     * @var list<string> The carrier's destinations
+     */
+    #[ORM\Column]
+    private array $destination = [];
+
     public function __toString()
     {
-        return $this->name . ' - ' . number_format($this->price, 2) . ' Dhs';
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -65,6 +77,46 @@ class Carrier
     public function setPrice(float $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDuration(): ?string
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(string $duration): static
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getPriceDevise(): ?string
+    {
+        return $this->price_devise;
+    }
+
+    public function setPriceDevise(string $price_devise): static
+    {
+        $this->price_devise = $price_devise;
+
+        return $this;
+    }
+
+    public function getDestination(): ?array
+    {
+                $destination = $this->destination;
+
+                $destination[] = "";
+                return array_unique($destination);
+
+    }
+
+    public function setDestination(array $destination): static
+    {
+        $this->destination = $destination;
 
         return $this;
     }

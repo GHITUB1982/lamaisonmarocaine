@@ -15,9 +15,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class OrderController extends AbstractController
 {
     #[Route('/commande/livraison', name: 'app_order')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $addresses = $this->getUser()->getAddresses();
+           $session = $request->getSession();
+        // $currency = $session->get('user_currency', 'MAD');
+        $currency = $session->get('currency', 'MAD'); // app.session.get('currency')
+
         
         if (count($addresses) == 0) {
             $this->addFlash('warning', 'Vous devez ajouter une adresse de livraison avant de passer une commande.');
@@ -32,6 +36,7 @@ final class OrderController extends AbstractController
 
         return $this->render('order/index.html.twig', [
             'deliveryForm' => $form->createView(),
+            'currency' => $currency
         ]);
     }
 

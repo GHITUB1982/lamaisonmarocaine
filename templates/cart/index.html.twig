@@ -76,10 +76,8 @@
                                                     <td>
                                                         {% if app.session.get('currency') == 'EUR' %}
                                                             {{ (item.product.pricewithtax / 10)|format_currency('EUR') }}
-                                                            {# <small class="text-muted">({{ item.product.pricewithtax|format_currency('MAD') }})</small> #}
                                                         {% else %}
                                                             {{ item.product.pricewithtax|format_currency('MAD') }}
-                                                            {# <small class="text-muted">({{ (item.product.pricewithtax / 10)|format_currency('EUR') }})</small> #}
                                                         {% endif %}
                                                     </td>
                                                     <td class="text-center">
@@ -99,10 +97,8 @@
                                                         {% set total = item.product.pricewithtax * item.quantity %}
                                                         {% if app.session.get('currency') == 'EUR' %}
                                                             {{ (total / 10)|format_currency('EUR') }}
-                                                            {# <small class="text-muted">({{ total|format_currency('MAD') }})</small> #}
                                                         {% else %}
                                                             {{ total|format_currency('MAD') }}
-                                                            {# <small class="text-muted">({{ (total / 10)|format_currency('EUR') }})</small> #}
                                                         {% endif %}
                                                     </td>
                                                     <td>
@@ -144,10 +140,8 @@
                                     <span>
                                         {% if app.session.get('currency') == 'EUR' %}
                                             {{ ((cart_total / 1.2) / 10)|format_currency('EUR') }}
-                                            {# <small class="text-muted">({{ (cart_total / 1.2)|format_currency('MAD') }})</small> #}
                                         {% else %}
                                             {{ (cart_total / 1.2)|format_currency('MAD') }}
-                                            {# <small class="text-muted">({{ (cart_total / 1.2 / 10)|format_currency('EUR') }})</small> #}
                                         {% endif %}
                                     </span>
                                 </div>
@@ -157,10 +151,8 @@
                                     <span>
                                         {% if app.session.get('currency') == 'EUR' %}
                                             {{ ((cart_total - (cart_total / 1.2)) / 10)|format_currency('EUR') }}
-                                            {# <small class="text-muted">({{ (cart_total - (cart_total / 1.2))|format_currency('MAD') }})</small> #}
                                         {% else %}
                                             {{ (cart_total - (cart_total / 1.2))|format_currency('MAD') }}
-                                            {# <small class="text-muted">{{ (cart_total - (cart_total / 1.2) / 10)|format_currency('EUR') }}</small> #}
                                         {% endif %}
                                     </span>
                                 </div>
@@ -170,10 +162,8 @@
                                     <span class="fw-bold text-primary">
                                         {% if app.session.get('currency') == 'EUR' %}
                                             {{ (cart_total / 10)|format_currency('EUR') }}
-                                            {# <small class="text-muted">({{ cart_total|format_currency('MAD') }})</small> #}
                                         {% else %}
                                             {{ cart_total|format_currency('MAD') }}
-                                            {# <small class="text-muted">({{ (cart_total / 10)|format_currency('EUR') }})</small> #}
                                         {% endif %}
                                     </span>
                                 </div>
@@ -193,13 +183,25 @@
                     </div>
                 </div>
 
-                {# Section Wishlist #}
+                {# Section Wishlist Carousel #}
                 <div class="card shadow-sm mt-5">
                     <div class="card-body">
-                        <h3 class="h4 mb-4 pb-3 border-bottom">
-                            <i class="fas fa-heart text-danger me-2"></i>
-                            Mes Produits Favoris
-                        </h3>
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                            <h3 class="h4 mb-0">
+                                <i class="fas fa-heart text-danger me-2"></i>
+                                Mes Produits Favoris
+                            </h3>
+                            {% if wishlistItems is not empty %}
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-outline-secondary btn-sm me-2" type="button" data-bs-target="#wishlistCarousel" data-bs-slide="prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-target="#wishlistCarousel" data-bs-slide="next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
 
                         {% if wishlistItems is empty %}
                             <div class="text-center py-5">
@@ -211,51 +213,90 @@
                                 </a>
                             </div>
                         {% else %}
-                            <div class="d-flex overflow-auto flex-nowrap gap-3 pb-2">
-                                {% for product in wishlistItems %}
-                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                        <div class="card h-100 border-1">
-                                            <img src="/uploads/products/{{ product.illustration }}" 
-                                                 alt="{{ product.name }}"
-                                                 class="img-fluid rounded-top"
-                                                 style="height: 180px; object-fit: cover;">
+                            <div id="wishlistCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner pb-0">
+                                    {% set itemsPerSlide = 4 %}
+                                    {% set totalSlides = (wishlistItems|length / itemsPerSlide)|round(0, 'ceil') %}
+                                    
+                                    {% for slideIndex in 0..(totalSlides - 1) %}
+                                        <div class="carousel-item {% if slideIndex == 0 %}active{% endif %} pb-0">
+                                            <div class="row g-3 mb-0">
+                                                {% set startIndex = slideIndex * itemsPerSlide %}
+                                                {% set endIndex = startIndex + itemsPerSlide - 1 %}
+                                                
+                                                {% for i in startIndex..endIndex %}
+                                                    {% if wishlistItems[i] is defined %}
+                                                        {% set product = wishlistItems[i] %}
+                                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                            <div class="card h-100 border-1 wishlist-card mb-0">
+                                                                <div class="position-relative overflow-hidden">
+                                                                    <img src="{{ product.illustration ? asset('uploads/products/' ~ product.illustration) : asset('images/default-product.png') }}" 
+                                                                         alt="{{ product.name }}"
+                                                                         class="card-img-top"
+                                                                         style="height: 180px; object-fit: cover; transition: transform 0.3s ease;">
+                                                                    
+                                                                    <div class="position-absolute top-0 end-0 p-2">
+                                                                        <a href="{{ path('app_account_wishlist_remove', {id: product.id}) }}" 
+                                                                           class="btn btn-sm btn-danger rounded-circle shadow-sm"
+                                                                           title="Retirer des favoris">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
 
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <h5 class="card-title">{{ product.name }}</h5>
-                                                    <a href="{{ path('app_account_wishlist_remove', {id: product.id}) }}" 
-                                                       class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-times"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                                    <span class="fw-bold text-primary">
-                                                        {% if app.session.get('currency') == 'EUR' %}
-                                                            {{ (product.pricewithtax / 10)|format_currency('EUR') }}
-                                                            {# <small class="text-muted">({{ product.pricewithtax|format_currency('MAD') }})</small> #}
-                                                        {% else %}
-                                                            {{ product.pricewithtax|format_currency('MAD') }}
-                                                            {# <small class="text-muted">({{ (product.pricewithtax / 10)|format_currency('EUR') }})</small> #}
-                                                        {% endif %}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="card-footer bg-transparent border-top-0">
-                                                <div class="d-grid gap-2">
-                                                    <a href="{{ path('app_product', {slug: product.slug}) }}" 
-                                                       class="btn btn-sm btn-outline-primary">
-                                                        <i class="fas fa-eye me-1"></i>Voir
-                                                    </a>
-                                                    <a href="{{ path('app_cart_add', {id: product.id}) }}" 
-                                                       class="btn btn-sm btn-success">
-                                                        <i class="fas fa-shopping-cart me-1"></i>Panier
-                                                    </a>
-                                                </div>
+                                                                <div class="card-body d-flex flex-column">
+                                                                    <h6 class="card-title text-truncate mb-2" title="{{ product.name }}">{{ product.name }}</h6>
+                                                                    
+                                                                    <div class="text-muted small mb-2">
+                                                                        {% if product.category is defined %}
+                                                                            {{ product.category.name }}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    
+                                                                    <div class="mt-auto">
+                                                                        <div class="mb-3">
+                                                                            <span class="fw-bold text-primary fs-6">
+                                                                                {% if app.session.get('currency') == 'EUR' %}
+                                                                                    {{ (product.pricewithtax / 10)|format_currency('EUR') }}
+                                                                                {% else %}
+                                                                                    {{ product.pricewithtax|format_currency('MAD') }}
+                                                                                {% endif %}
+                                                                            </span>
+                                                                        </div>
+                                                                        
+                                                                        <div class="d-grid gap-2">
+                                                                            <a href="{{ path('app_product', {slug: product.slug}) }}" 
+                                                                               class="btn btn-sm btn-outline-primary">
+                                                                                <i class="fas fa-eye me-1"></i>Voir détails
+                                                                            </a>
+                                                                            <a href="{{ path('app_cart_add', {id: product.id}) }}" 
+                                                                               class="btn btn-sm btn-success">
+                                                                                <i class="fas fa-shopping-cart me-1"></i>Ajouter au panier
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
                                             </div>
                                         </div>
+                                    {% endfor %}
+                                </div>
+
+                                {# Indicateurs de slide (optionnel) #}
+                                {% if totalSlides > 1 %}
+                                    <div class="carousel-indicators position-static mt-3 mb-0">
+                                        {% for slideIndex in 0..(totalSlides - 1) %}
+                                            <button type="button" data-bs-target="#wishlistCarousel" data-bs-slide-to="{{ slideIndex }}" 
+                                                    class="{% if slideIndex == 0 %}active{% endif %}" 
+                                                    style="width: 12px; height: 12px; border-radius: 50%;"
+                                                    aria-label="Slide {{ slideIndex + 1 }}">
+                                            </button>
+                                        {% endfor %}
                                     </div>
-                                {% endfor %}
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>
@@ -272,6 +313,54 @@
     .text-muted {
         font-size: 0.8em;
         opacity: 0.8;
+    }
+    
+    .wishlist-card:hover img {
+        transform: scale(1.05);
+    }
+    
+    .wishlist-card {
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef !important;
+    }
+    
+    .wishlist-card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        border-color: #007bff !important;
+    }
+    
+    .carousel-indicators button {
+        background-color: #6c757d;
+        opacity: 0.5;
+        border: none;
+    }
+    
+    .carousel-indicators button.active {
+        background-color: #007bff;
+        opacity: 1;
+    }
+    
+    /* Suppression des marges en bas du carousel */
+    #wishlistCarousel .carousel-inner,
+    #wishlistCarousel .carousel-item,
+    #wishlistCarousel .row {
+        margin-bottom: 0 !important;
+    }
+    
+    #wishlistCarousel .card {
+        margin-bottom: 0 !important;
+    }
+    
+    @media (max-width: 767.98px) {
+        .carousel-item .row .col-12:nth-child(n+3) {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .carousel-item .row .col-12:nth-child(n+2) {
+            display: none;
+        }
     }
 </style>
 {% endblock %}

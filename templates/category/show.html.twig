@@ -6,11 +6,15 @@
 {% endblock %}
 
 {% block body %}
+{# Variables pour la devise - à définir au début du template #}
+{% set rate = app.session.get('currency') == 'EUR' ? 0.1 : 1 %}
+{% set symbol = app.session.get('currency') == 'EUR' ? '€' : 'Dhs' %}
+
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-12 mx-auto">
             
-            {# Breadcrumb identique à la page réglementation #}
+            {# Breadcrumb #}
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
@@ -19,15 +23,14 @@
             </nav>
 
             {# Titre de la page #}
-            <div class="d-flex  align-items-center justify-content-between p-2" style="">
+            <div class="d-flex align-items-center justify-content-between p-2">
+                <h1 class="display-5 p-1">{{ category.name }}</h1>
 
-            <h1 class="display-5 p-1">{{ category.name }}</h1>
-
-            {# Référence catégorie #}
-            <div class="text-muted p-1">
-                <i class="fas fa-tag me-2"></i>
-                Collection : {{ category.slug }}
-            </div>
+                {# Référence catégorie #}
+                <div class="text-muted p-1">
+                    <i class="fas fa-tag me-2"></i>
+                    Collection : {{ category.slug }}
+                </div>
             </div>
             <hr>
 
@@ -44,31 +47,42 @@
                 <div class="row g-4">
                     {% for product in category.products %}
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="card shadow-sm h-100">
-                                {# Image du produit - Sans cadre #}
-                                <img src="/uploads/products/{{ product.illustration }}" 
-                                     alt="{{ product.name }}" 
-                                     class="img-fluid rounded-top"
-                                     style="object-fit: cover; height: 200px; background: transparent;">
+                            <div class="card shadow-sm h-100 product-card">
+                                {# Image du produit #}
+                                <div class="card-img-container">
+                                    <img src="/uploads/products/{{ product.illustration }}" 
+                                         alt="{{ product.name }}" 
+                                         class="card-img-top"
+                                         style="object-fit: cover; height: 200px; background: transparent;"
+                                         loading="lazy">
+                                </div>
 
                                 <div class="card-body">
                                     {# En-tête avec prix et wishlist #}
                                     <div class="d-flex justify-content-between align-items-start mb-3">
                                         <span class="badge bg-primary">
-                                            {# {{ product.pricewithtax|format_price }} #}
                                             {{ (product.pricewithtax * rate)|number_format(2, '.', ' ') ~ ' ' ~ symbol }}
-
                                         </span>
                                         
-                                        {% if app.user and product in app.user.wishlists %}
-                                            <a href="{{ path('app_account_wishlist_remove', { id: product.id }) }}" 
-                                               class="btn btn-sm btn-warning">
-                                                <i class="fas fa-heart text-danger"></i>
-                                            </a>
+                                        {% if app.user %}
+                                            {% if product in app.user.wishlists %}
+                                                <a href="{{ path('app_account_wishlist_remove', { id: product.id }) }}" 
+                                                   class="btn btn-sm btn-warning" 
+                                                   title="Retirer des favoris">
+                                                    <i class="fas fa-heart text-danger"></i>
+                                                </a>
+                                            {% else %}
+                                                <a href="{{ path('app_account_wishlist_add', { id: product.id }) }}" 
+                                                   class="btn btn-sm btn-outline-secondary"
+                                                   title="Ajouter aux favoris">
+                                                    <i class="far fa-heart text-danger"></i>
+                                                </a>
+                                            {% endif %}
                                         {% else %}
-                                            <a href="{{ path('app_account_wishlist_add', { id: product.id }) }}" 
-                                               class="btn btn-sm btn-outline-secondary">
-                                                <i class="far fa-heart text-danger"></i>
+                                            <a href="{{ path('app_login') }}" 
+                                               class="btn btn-sm btn-outline-secondary"
+                                               title="Connectez-vous pour ajouter aux favoris">
+                                                <i class="far fa-heart text-muted"></i>
                                             </a>
                                         {% endif %}
                                     </div>
@@ -76,7 +90,11 @@
                                     {# Titre et description #}
                                     <h5 class="card-title">{{ product.name }}</h5>
                                     <p class="card-text text-muted small">
-                                        {{ product.description|striptags|slice(0, 80) ~ '...' }}
+                                        {% if product.description|length > 80 %}
+                                            {{ product.description|striptags|slice(0, 80) }}...
+                                        {% else %}
+                                            {{ product.description|striptags }}
+                                        {% endif %}
                                     </p>
                                 </div>
 
@@ -88,7 +106,8 @@
                                             <i class="fas fa-eye me-1"></i>Voir
                                         </a>
                                         <a href="{{ path('app_cart_add', { id: product.id }) }}" 
-                                           class="btn btn-sm btn-success">
+                                           class="btn btn-sm btn-success"
+                                           title="Ajouter au panier">
                                             <i class="fas fa-shopping-cart"></i>
                                         </a>
                                     </div>
@@ -106,25 +125,91 @@
 {% block stylesheets %}
 {{ parent() }}
 <style>
-   
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-container {
+    overflow: hidden;
+}
+
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+}
+
+.btn-sm {
+    font-size: 0.8rem;
+}
 </style>
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Animation au survol des cartes
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px)';
-                this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.1)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = '';
-                this.style.boxShadow = '';
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion des boutons wishlist
+    const wishlistButtons = document.querySelectorAll('a[href*="wishlist"]');
+    
+    wishlistButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // Animation du bouton
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.add('fa-bounce');
+                setTimeout(() => {
+                    icon.classList.remove('fa-bounce');
+                }, 1000);
+            }
         });
     });
+
+    // Animation des boutons d'ajout au panier
+    const cartButtons = document.querySelectorAll('a[href*="cart_add"]');
+    
+    cartButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.add('fa-spin');
+                setTimeout(() => {
+                    icon.classList.remove('fa-spin');
+                }, 500);
+            }
+        });
+    });
+
+    // Amélioration du lazy loading pour les images
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.classList.add('fade-in');
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        document.querySelectorAll('.card-img-top').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+});
 </script>
 {% endblock %}

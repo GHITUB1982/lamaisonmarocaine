@@ -3,7 +3,7 @@
 {% block body %}
 	<main>
 		<!-- Carousel -->
-		<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+		<div id="myCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="9000">
 			{% if headers|length > 1 %}
 				<div class="carousel-indicators">
 					{% for key, header in headers %}
@@ -12,13 +12,13 @@
 				</div>
 			{% endif %}
 
-			<div class="carousel-inner">
+			<div class="carousel-inner" >
 				{% for key, header in headers %}
 					<div class="carousel-item {% if key == 0 %}active{% endif %}" style="height: 80vh;">
 						<img src="/uploads/products/{{ header.illustration }}" class="d-block w-100 h-100 object-fit-cover" alt="{{ header.title }}">
 						<div class="container">
-							<div class="carousel-caption text-start">
-								<h1 class="title" style="color:white;">{{ header.title }}</h1>
+							<div class="carousel-caption text-start" style="color:black; font-family: 'Montserrat', sans-serif;">
+								<h2 class="title">{{ header.title }}</h2>
 								<p class="opacity-75">{{ header.content }}</p>
 								<p>
 									<a class="btn btn-lg btn-primary" href="{{ header.buttonLink }}">{{ header.buttonTitle }}</a>
@@ -47,55 +47,58 @@
 			<!-- Three columns of text below the carousel -->
 			<div class="row ">
 				<div class="title col-lg-12 text-center mb-4">
-					<h1 class="featurette-heading fw-normal lh-2 mt-1">Nos Meilleurs Produits</h1>
+					<h1 class="featurette-heading fw-normal lh-2 mt-1  p-3">Nos Meilleurs Produits</h1>
 					<p class="lead">"Découvrez nos produits les plus vendus pour améliorer votre expérience d'achat."</p>
 				</div>
 				{% for product in homeproducts %}
-					<div class="col-lg-4">
-						<img src="/uploads/products/{{ product.illustration }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"  width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveaspectratio="xMidYMid slice" focusable="false">
+					<div class="col-lg-3">
+						<a class="" href="{{ path('app_product', {'slug': product.slug}) }}"><img src="/uploads/products/{{ product.illustration }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"  width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveaspectratio="xMidYMid slice" focusable="false"></a>
 						<title>{{product.slug}}</title>
 						{# <rect width="100%" height="100%" fill="var(--bs-secondary-color)"/> #}
 					</svg>
 					<h2 class="fw-normal">{{product.name}}</h2>
-					<p class="product-description">
+					<p class="product-description" style="text-align: justify;">
 						{{ product.description|striptags|slice(0, 200)|raw }}{{ product.description|length > 200 ? '...' : '' }}
 					</p>
 					<div class="" style="float: right;">
 						<p>
-							<a class="btn btn-outline-success mb-5" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
+							<a class="btn btn-outline-success mt-3  p-2" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
 						</p>
 					</div>
 				</div>
 			{% endfor %}
 		</div>
+<hr class="featurette-divider">
 
 		<!-- Featurettes -->
-		<div class="title col-lg-12 text-center mb-4">
-    <h2 class="featurette-heading fw-normal lh-2 mt-1">Notre Blog</h2>
+		<div class="title col-lg-12 text-center mb-3 py-5 bg-light text-center">
+    <h2 class="featurette-heading fw-normal lh-2 mt-1  p-3">Notre Blog</h2>
     <p class="lead">💬 Inspirez-vous avec nos derniers articles autour de la beauté naturelle, des rituels marocains et des conseils bien-être du quotidien.</p>
     <p class="text-muted">Nous partageons avec vous des astuces, des traditions et des histoires qui font la richesse de notre univers naturel. 🌸</p>
-    <a href="{{path('app_blog_posts')}}" class="btn btn-outline-success mt-3">Lire le blog</a>
+    <a href="{{path('app_blog_posts')}}" class="btn btn-outline-success mt-3 p-2	">Lire le blog</a>
 </div>
-
+<hr class="featurette-divider">
+<div class="title col-lg-12 text-center mb-4">
+					<h1 class="featurette-heading fw-normal lh-2 mt-1 p-3">Nos Meilleurs Articles</h1>
+							<p class="lead">"Découvrez nos articles les plus populaires pour améliorer votre expérience."</p>
+				</div>
 		{% for blog in blogposts %}
             {% if blog.status == 'published' %}
-			<hr class="featurette-divider">
-
 			<div class="row featurette">
 				<div class="col-md-7 {% if loop.index is even %}order-md-2{% endif %}">
-					<h2 class="featurette-heading fw-normal lh-1">
+					<h2 class="featurette-heading fw-normal p-3" style="text-align: justify;">
 						{{ blog.title }}
-						<span class="text-body-secondary">{{ blog.category.name ?? 'Général' }}</span>
+						{# <span class="text-body-secondary">{{ blog.category.name ?? 'Général' }}</span> #}
 					</h2>
-					<p class="lead">{{ blog.excerpt|default(blog.content|striptags|slice(0, 200)) }}</p>
-					<p class="text-muted">
+					<p class="lead" style="text-align: justify;">{{ blog.excerpt|default(blog.content|striptags|slice(0, 200)) }}</p>
+					{# <p class="text-muted">
 						<small>
 							Publié le
 							{{ blog.createdAt|date('d/m/Y') }}
 							par
 							{{ blog.author.username ?? 'Admin' }}
 						</small>
-					</p>
+					</p> #}
 					<a href="{{ path('app_blog_show', {slug: blog.slug}) }}" class="btn btn-outline-primary">
 						Lire la suite
 						<i class="fas fa-arrow-right ms-2"></i>
@@ -104,7 +107,7 @@
 
 				<div class="col-md-5 {% if loop.index is even %}order-md-1{% endif %}">
 					{% if blog.featuredImage %}
-						<img src="{{ asset('uploads/products/blog/img/' ~ blog.featuredImage) }}" alt="{{ blog.title }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="400 " height="200" style="object-fit: cover;">
+						<a href="{{ path('app_blog_show', {slug: blog.slug}) }}"><img src="{{ asset('uploads/products/blog/img/' ~ blog.featuredImage) }}" alt="{{ blog.title }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto " width="500 " height="500" style="object-fit: cover; "></a>
 					{% else %}
 						<svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" focusable="false">
 							<title>Placeholder</title>
@@ -119,7 +122,7 @@
 
 				<hr class="featurette-divider">
 
-<section class="newsletter-promo py-5 ">
+<section class="newsletter-promo py-5 bg-light text-center">
     <div class="container text-center">
         <h2 class="fw-bold mb-3">Restez informé(e) !</h2>
         <p class="lead mb-4">Recevez nos conseils beauté, recettes naturelles et offres exclusives directement par email.</p>

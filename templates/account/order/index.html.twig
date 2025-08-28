@@ -9,12 +9,12 @@
 	
     {# Barre de navigation cohérente #}
     <div class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
-        <div>
+       <div>
             <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-                <i data-feather="home" class="me-2"></i>Accueil
+                <i data-feather="home" class="feather feather-home fas fa-home me-2"></i>Accueil
             </a>
             <a href="{{ path('app_account') }}" class="btn btn-outline-secondary ms-2">
-                <i data-feather="user" class="me-2"></i>Mon compte
+                <i data-feather="user" class="feather feather-user fas fa-user me-2"></i>Mon compte
             </a>
         </div>
         <h1 class="mb-0 fs-3 fw-bold text-primary">
@@ -40,8 +40,8 @@
                     <div class="d-flex align-items-center mb-4">
                         <img src="{{ asset('assets/img/check-out.png') }}" 
                              alt="Commande avec succès" 
-                             style="width: 60px; height: 60px; margin-right: 15px;">
-                        <h2 class="mb-0">Historique des commandes</h2>
+                             style="width: 40px; height: 40px;">
+                        <h2 class="mb-0 p-2">Historique des commandes</h2>
                     </div>
 
                     {% if orders|length == 0 %}
