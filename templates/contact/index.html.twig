@@ -44,5 +44,26 @@
         </div>
     {{ form_end(form) }}
 </div>
+            <h1 class="display-5 mb-4">Nous Trouver</h1>
+<hr class="">
+
+<div class="d-flex">
+
+        <div class="me-5 bg-light p-3 rounded">
+                <h2>Nos Horaires:</h2>
+                {% for cooperative in cooperatives %}
+                <p>{{ cooperative.horaire|nl2br }}</p>
+                <br>
+                <hr>
+                <h2>Adresse:</h2>
+                <p><strong>{{cooperative.name}}</strong> - {{ cooperative.address|nl2br }}</p>
+                {% endfor %}
+        </div>
+        <div class="mb-5" style="height: auto;">
+        <h2 class="mb-3">Nous trouver sur la carte:</h2>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d849.8004902648435!2d-7.982404071502077!3d31.573509140960176!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDM0JzI0LjYiTiA3wrA1OCc1NC4zIlc!5e0!3m2!1sfr!2sma!4v1756808442828!5m2!1sfr!2sma" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+</div>
+
 {% endblock %}
     

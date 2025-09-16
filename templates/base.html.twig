@@ -4,9 +4,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="theme-color" content="#198754">
-		<title>Kech Lotus Cooperative - Cooperative Naturels du Maroc</title>
+		<title>{{ cooperative.name }} - Cooperative Naturels du {{ cooperative.country }}</title>
 		<meta
-		name="description" content="Découvrez nos cosmétiques 100% naturels inspirés des secrets de beauté marocains">
+		name="description" content="Découvrez nos cosmétiques 100% naturels inspirés des secrets de beauté {{ cooperative.country }}ains">
 
 		<!-- Preconnect for performance -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,8 +50,8 @@
 			{
 						"@context": "https://schema.org",
 						"@type": "Organization",
-						"name": "Kech Lotus Cooperative",
-						"description": "Cosmétiques 100% naturels inspirés des secrets de beauté marocains",
+						"name": "{{ cooperative.name }}",
+						"description": "Cosmétiques 100% naturels inspirés des secrets de beauté {{ cooperative.country }}ains",
 						"url": "{{ app.request.schemeAndHttpHost }}",
 						"logo": "{{ app.request.schemeAndHttpHost }}{{ asset('assets/img/logo_kech_lotus_complet.png') }}",
 						"contactPoint": {
@@ -62,7 +62,7 @@
 						},
 						"address": {
 							"@type": "PostalAddress",
-							"addressLocality": "Marrakech",
+							"addressLocality": "{{ cooperative.ville }}",
 							"addressCountry": "MA"
 						},
 						"sameAs": [
@@ -70,6 +70,30 @@
 						]
 					}
 		</script>
+
+		<style>
+		/* Appliquer un effet hover à toutes les images */
+img:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+    cursor: pointer;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+		</style>
 	</head>
 
 	<body
@@ -80,13 +104,13 @@
 		</a>
 
 		<header role="banner">
-			<nav class="navbar navbar-expand-lg cosmetic-navbar fixed-top" role="navigation" aria-label="Navigation principale">
-				<div class="container gap-5">
+			<nav class="navbar navbar-expand-lg cosmetic-navbar fixed-top bg-transparent " role="navigation" aria-label="Navigation principale">
+				<div class="container gap-5" >
 					<div class="d-flex align-items-center gap-3 space">
-						<a class="navbar-brand" href="{{ path('app_home') }}" aria-label="Retour à l'accueil - Kech Lotus Cooperative">
-							<img src="{{ asset('assets/img/logo_kech_lotus_complet.png') }}" class="img-fluid" loading="lazy" alt="Logo Kech Lotus Cooperative" style="height: 25%; width: 25%;">
+						<a class="navbar-brand" href="{{ path('app_home') }}" aria-label="Retour à l'accueil - {{ cooperative.name }}">
+							<img src="{{ asset('assets/img/logo_kech_lotus_complet.png') }}" class="img-fluid" loading="lazy" alt="Logo {{ cooperative.name }}" style="height: 100px; width: 100px;">
 							<h4 class="h4 d-md-inline text-success fw-bold">
-								Kech Lotus Cooperative
+								{{ cooperative.name }}
 							</h4>
 						</a>
 					</div>
@@ -100,26 +124,44 @@
 								<a class="nav-link {{ app.request.attributes.get('_route') == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}" role="menuitem" {% if app.request.attributes.get('_route') == 'app_home' %} aria-current="page" {% endif %}>Accueil</a>
 							</li>
 							<li class="nav-item dropdown" role="none">
-								<a class="nav-link dropdown-toggle {{ app.request.attributes.get('_route') starts with 'show_category' ? 'active' : '' }}" href="#" id="productsDropdown" role="menuitem" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-									Produits
-								</a>
-								<ul class="dropdown-menu" aria-labelledby="productsDropdown" role="menu" style="z-index: 1050;">
-									{% for category in categories %}
-										{% if  category.menu == 1 %}
-										<li role="none">
-											<a class="dropdown-item d-flex align-items-center py-2" href="{{ path('show_category', {'slug': category.slug}) }}" role="menuitem">
-												{% if category.products|slice(0, 4) and category.menu == 1 %}
-													<img src="/uploads/products/{{ category.products[0].illustration }}" loading="lazy" alt="" class="me-3 flex-shrink-0" style="width: 	140px; height: 140px; object-fit: cover; border-radius: 4px;" aria-hidden="true">
-												{% endif %}
-												
-												<span class="text-truncate">{{ category.name }}</span>
-											</a>
-										</li>
-										{% endif %}
-									{% endfor %}
-								</ul>
-							</li>
-							<li class="nav-item" role="none">
+    <a class="nav-link dropdown-toggle {{ app.request.attributes.get('_route') starts with 'show_category' ? 'active' : '' }}" href="#" id="productsDropdown" role="menuitem" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+        Produits
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="productsDropdown" role="menu" style="z-index: 1050; width: 800px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    {% for category in categories %}
+                        {% if category.menu == 1 and loop.index0 < (categories|length)/2 %}
+                            <li role="none">
+                                <a class="dropdown-item d-flex align-items-center py-2" href="{{ path('show_category', {'slug': category.slug}) }}" role="menuitem">
+                                    {% if category.products|slice(0, 4) and category.menu == 1 %}
+                                        <img src="/uploads/products/{{ category.products[0].illustration }}" loading="lazy" alt="" class="me-3 flex-shrink-0" style="width: 140px; height: 140px; object-fit: cover; border-radius: 4px;" aria-hidden="true">
+                                    {% endif %}
+                                    <span class="text-truncate">{{ category.name }}</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="col-6">
+                    {% for category in categories %}
+                        {% if category.menu == 1 and loop.index0 >= (categories|length)/2 %}
+                            <li role="none">
+                                <a class="dropdown-item d-flex align-items-center py-2" href="{{ path('show_category', {'slug': category.slug}) }}" role="menuitem">
+                                    {% if category.products|slice(0, 4) and category.menu == 1 %}
+                                        <img src="/uploads/products/{{ category.products[0].illustration }}" loading="lazy" alt="" class="me-3 flex-shrink-0" style="width: 140px; height: 140px; object-fit: cover; border-radius: 4px;" aria-hidden="true">
+                                    {% endif %}
+                                    <span class="text-truncate">{{ category.name }}</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </ul>
+</li>							<li class="nav-item" role="none">
 								<a class="nav-link {{ app.request.attributes.get('_route') starts with 'app_blog' ? 'active' : '' }}" href="{{ path('app_blog_posts')}}" role="menuitem" {% if app.request.attributes.get('_route') starts with 'app_blog' %} aria-current="page" {% endif %}>Blog</a>
 							</li>
 							<li class="nav-item dropdown" role="none">
@@ -249,22 +291,22 @@
 						<div class="col-lg-4 col-md-6">
 							<div class="footer-about">
 								<a href="{{ path('app_home') }}" class="d-flex align-items-center mb-1 text-decoration-none" aria-label="Retour à l'accueil">
-									<img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" loading="lazy" alt="Kech Lotus Cooperative" height="25%" width="25%" class="">
-									<span class="h4 mb-0 text-light">Kech Lotus Cooperative</span>
+									<img src="{{asset('/assets/img/logo_kech_lotus_complet.png')}}" loading="lazy" alt="{{ cooperative.name }}" height="25%" width="25%" class="">
+									<span class="h4 mb-0 text-light">{{ cooperative.name }}</span>
 								</a>
-								<p class="mb-4">Des cosmétiques 100% naturels inspirés des secrets de beauté marocains, formulés avec des ingrédients biologiques et respectueux de votre peau.</p>
+								<p class="mb-4">{{ cooperative.description }} de beauté {{ cooperative.country }}ains, formulés avec des ingrédients biologiques et respectueux de votre peau.</p>
 								<address class="footer-contact">
 									<p class="mb-2">
 										<i class="fas fa-map-marker-alt me-2" aria-hidden="true"></i>
-										Marrakech, Maroc
+										{{ cooperative.ville }}, {{ cooperative.country }}
 									</p>
 									<p class="mb-2">
 										<i class="fas fa-phone me-2" aria-hidden="true"></i>
-										<a href="tel:+212674819089" class="text-light text-decoration-none">+212 6 74 81 90 89</a>
+										<a href="tel:+212674819089" class="text-light text-decoration-none">{{ cooperative.phone2 }}</a>
 									</p>
 									<p class="mb-0">
 										<i class="fas fa-envelope me-2" aria-hidden="true"></i>
-										<a href="mailto:contact@kechlotus.com" class="text-light text-decoration-none">contact@kechlotus.com</a>
+										<a href="mailto:{{ cooperative.email }}" class="text-light text-decoration-none">{{ cooperative.email }}</a>
 									</p>
 								</address>
 							</div>
@@ -350,16 +392,16 @@
 
 								<h5 class="mb-3" style="color:white">Suivez-nous</h5>
 								<div class="d-flex" role="list" aria-label="Réseaux sociaux">
-									<a href="https://www.instagram.com/cooperativekechlotus/" target="_blank" rel="noopener" class="social-icon me-2" aria-label="Suivez-nous sur Instagram (nouvelle fenêtre)">
+									<a href="{{ cooperative.instagram }}" target="_blank" rel="noopener" class="social-icon me-2" aria-label="Suivez-nous sur Instagram (nouvelle fenêtre)">
 										<i class="fab fa-instagram" aria-hidden="true"></i>
 									</a>
-									<a href="#" class="social-icon me-2" aria-label="Suivez-nous sur Facebook">
+									<a href="{{ cooperative.facebook }}" class="social-icon me-2" aria-label="Suivez-nous sur Facebook">
 										<i class="fab fa-facebook-f" aria-hidden="true"></i>
 									</a>
-									<a href="#" class="social-icon me-2" aria-label="Suivez-nous sur Pinterest">
-										<i class="fab fa-pinterest-p" aria-hidden="true"></i>
+									<a href="{{ cooperative.twitter }}" class="social-icon me-2" aria-label="Suivez-nous sur Twitter">
+										<i class="fab fa-twitter" aria-hidden="true"></i>
 									</a>
-									<a href="#" class="social-icon" aria-label="Suivez-nous sur YouTube">
+									<a href="{{ cooperative.youtube }}" class="social-icon" aria-label="Suivez-nous sur YouTube">
 										<i class="fab fa-youtube" aria-hidden="true"></i>
 									</a>
 								</div>
@@ -375,13 +417,13 @@
 						<div class="footer-bottom mt-5 pt-4 border-top border-secondary">
 							<div class="row align-items-center">
 								<div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-									<p class="mb-0">&copy; 2023 Kech Lotus Cooperative. Tous droits réservés.</p>
+									<p class="mb-0">&copy; 2023 {{ cooperative.name }}. Tous droits réservés.</p>
 								</div>
 								<div class="col-md-6 text-center text-md-end">
 									<p class="mb-0">Fait avec
 										<i class="fas fa-heart text-danger" aria-hidden="true"></i>
 										<span class="visually-hidden">amour</span>
-										au Maroc
+										au {{ cooperative.country }}
 									</p>
 								</div>
 							</div>

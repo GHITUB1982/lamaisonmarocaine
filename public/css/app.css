@@ -702,14 +702,14 @@ body.email {
 }
 
 @media (min-width: 768px) {
-    /* :root {
+    :root {
         --navbar-height: 70px;
         --dropdown-img-size: 110px;
     }
 
     .nav-link {
         font-size: 0.9rem;
-    } */
+    }
 }
 
 @media (min-width: 992px) {
@@ -779,3 +779,11 @@ h1 {
         transition-duration: 0.01ms !important;
     }
 }
+
+ /* Media query corrigé pour les marges mobiles */
+@media (max-width: 768px) {
+    .carousel-container-mobile {
+        margin: 0 15px !important;
+    }
+}
+

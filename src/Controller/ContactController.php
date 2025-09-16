@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Form\ContactType;
+use App\Entity\Cooperative;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -28,6 +29,7 @@ class ContactController extends AbstractController
     {
         $contact = new Contact();
         $contact->setCreatedAt(new \DateTimeImmutable());
+        $cooperatives = $this->entityManager->getRepository(Cooperative::class)->findAll();
 
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
@@ -58,6 +60,7 @@ class ContactController extends AbstractController
 
         return $this->render('contact/index.html.twig', [
             'form' => $form->createView(),
+            'cooperatives' => $cooperatives
         ]);
     }
 }

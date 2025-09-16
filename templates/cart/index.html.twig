@@ -213,7 +213,7 @@
                                 </a>
                             </div>
                         {% else %}
-                            <div id="wishlistCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div id="wishlistCarousel" class="carousel slide mb-0" data-bs-ride="carousel">
                                 <div class="carousel-inner pb-0">
                                     {% set itemsPerSlide = 4 %}
                                     {% set totalSlides = (wishlistItems|length / itemsPerSlide)|round(0, 'ceil') %}
@@ -233,7 +233,7 @@
                                                                     <img src="{{ product.illustration ? asset('uploads/products/' ~ product.illustration) : asset('images/default-product.png') }}" 
                                                                          alt="{{ product.name }}"
                                                                          class="card-img-top"
-                                                                         style="height: 180px; object-fit: cover; transition: transform 0.3s ease;">
+                                                                         style="height: auto; object-fit: cover; transition: transform 0.3s ease;">
                                                                     
                                                                     <div class="position-absolute top-0 end-0 p-2">
                                                                         <a href="{{ path('app_account_wishlist_remove', {id: product.id}) }}" 

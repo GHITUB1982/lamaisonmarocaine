@@ -12,7 +12,7 @@
 				</div>
 			{% endif %}
 
-			<div class="carousel-inner" >
+			<div class="carousel-inner">
 				{% for key, header in headers %}
 					<div class="carousel-item {% if key == 0 %}active{% endif %}" style="height: 80vh;">
 						<img src="/uploads/products/{{ header.illustration }}" class="d-block w-100 h-100 object-fit-cover" alt="{{ header.title }}">
@@ -42,93 +42,185 @@
 		</div>
 
 		<!-- Marketing messaging and featurettes -->
-		<div
-			class="container-fluid mb-4" style="max-width: 80%;">
+		<div class="container-fluid mb-4" style="max-width: 80%;">
 			<!-- Three columns of text below the carousel -->
-			<div class="row ">
+			<div class="row">
 				<div class="title col-lg-12 text-center mb-4">
-					<h1 class="featurette-heading fw-normal lh-2 mt-1  p-3">Nos Meilleurs Produits</h1>
+					<h1 class="featurette-heading fw-normal lh-2 mt-1 p-3">Nos Meilleurs Produits</h1>
 					<p class="lead">"Découvrez nos produits les plus vendus pour améliorer votre expérience d'achat."</p>
 				</div>
 				{% for product in homeproducts %}
-					<div class="col-lg-3">
-						<a class="" href="{{ path('app_product', {'slug': product.slug}) }}"><img src="/uploads/products/{{ product.illustration }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"  width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveaspectratio="xMidYMid slice" focusable="false"></a>
-						<title>{{product.slug}}</title>
-						{# <rect width="100%" height="100%" fill="var(--bs-secondary-color)"/> #}
-					</svg>
-					<h2 class="fw-normal">{{product.name}}</h2>
-					<p class="product-description" style="text-align: justify;">
-						{{ product.description|striptags|slice(0, 200)|raw }}{{ product.description|length > 200 ? '...' : '' }}
-					</p>
-					<div class="" style="float: right;">
-						<p>
-							<a class="btn btn-outline-success mt-3  p-2" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
+					{% if product.category.id != 10 %}
+
+					<div class="col-lg-3 mb-4">
+						<a href="{{ path('app_product', {'slug': product.slug}) }}">
+							<img src="/uploads/products/{{ product.illustration }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" alt="{{ product.name }}" style="object-fit: cover;">
+						</a>
+						<h2 class="fw-normal mt-3">{{ product.name }}</h2>
+						<p class="product-description" style="text-align: justify;">
+							{{ product.description|striptags|slice(0, 200)|raw }}{{ product.description|length > 200 ? '...' : '' }}
 						</p>
+						<div class="d-flex justify-content-between align-items-start mb-3">
+							<span class="badge bg-info">
+								{{ (product.pricewithtax * rate)|number_format(2, '.', ' ') ~ ' ' ~ symbol }}
+							</span>
+						</div>
+						<div class="text-end">
+							<a class="btn btn-outline-success mt-3 p-2" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
+						</div>
 					</div>
-				</div>
-			{% endfor %}
+					{% if loop.index % 4 == 0 and not loop.last %}
+						</div><div class="row">
+					{% endif %}
+										{% endif %}
+
+				{% endfor %}
+			</div>
 		</div>
-<hr class="featurette-divider">
+
+		<hr class="featurette-divider">
 
 		<!-- Featurettes -->
-		<div class="title col-lg-12 text-center mb-3 py-5 bg-light text-center">
-    <h2 class="featurette-heading fw-normal lh-2 mt-1  p-3">Notre Blog</h2>
-    <p class="lead">💬 Inspirez-vous avec nos derniers articles autour de la beauté naturelle, des rituels marocains et des conseils bien-être du quotidien.</p>
-    <p class="text-muted">Nous partageons avec vous des astuces, des traditions et des histoires qui font la richesse de notre univers naturel. 🌸</p>
-    <a href="{{path('app_blog_posts')}}" class="btn btn-outline-success mt-3 p-2	">Lire le blog</a>
-</div>
-<hr class="featurette-divider">
-<div class="title col-lg-12 text-center mb-4">
-					<h1 class="featurette-heading fw-normal lh-2 mt-1 p-3">Nos Meilleurs Articles</h1>
-							<p class="lead">"Découvrez nos articles les plus populaires pour améliorer votre expérience."</p>
-				</div>
-		{% for blog in blogposts %}
-            {% if blog.status == 'published' %}
-			<div class="row featurette">
-				<div class="col-md-7 {% if loop.index is even %}order-md-2{% endif %}">
-					<h2 class="featurette-heading fw-normal p-3" style="text-align: justify;">
-						{{ blog.title }}
-						{# <span class="text-body-secondary">{{ blog.category.name ?? 'Général' }}</span> #}
-					</h2>
-					<p class="lead" style="text-align: justify;">{{ blog.excerpt|default(blog.content|striptags|slice(0, 200)) }}</p>
-					{# <p class="text-muted">
-						<small>
-							Publié le
-							{{ blog.createdAt|date('d/m/Y') }}
-							par
-							{{ blog.author.username ?? 'Admin' }}
-						</small>
-					</p> #}
-					<a href="{{ path('app_blog_show', {slug: blog.slug}) }}" class="btn btn-outline-primary">
-						Lire la suite
-						<i class="fas fa-arrow-right ms-2"></i>
-					</a>
-				</div>
+		<div class="title col-lg-12 text-center mb-3 py-5 bg-light">
+			<h2 class="featurette-heading fw-normal lh-2 mt-1 p-3">Notre Blog</h2>
+			<p class="lead">💬 Inspirez-vous avec nos derniers articles autour de la beauté naturelle, des rituels {{ cooperative.country }}ains et des conseils bien-être du quotidien.</p>
+			<p class="text-muted">Nous partageons avec vous des astuces, des traditions et des histoires qui font la richesse de notre univers naturel. 🌸</p>
+			<a href="{{ path('app_blog_posts') }}" class="btn btn-outline-success mt-3 p-2">Lire le blog</a>
+		</div>
 
-				<div class="col-md-5 {% if loop.index is even %}order-md-1{% endif %}">
-					{% if blog.featuredImage %}
-						<a href="{{ path('app_blog_show', {slug: blog.slug}) }}"><img src="{{ asset('uploads/products/blog/img/' ~ blog.featuredImage) }}" alt="{{ blog.title }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto " width="500 " height="500" style="object-fit: cover; "></a>
-					{% else %}
-						<svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" focusable="false">
-							<title>Placeholder</title>
-							<rect width="100%" height="100%" fill="var(--bs-secondary-bg)"/>
-							<text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
-						</svg>
+		<hr class="featurette-divider">
+		
+		<!-- Section Packs -->
+		<div class="container-fluid mb-4" style="max-width: 80%;">
+			<div class="title col-lg-12 text-center mb-4">
+					<h1 class="featurette-heading fw-normal lh-2 mt-1 p-3">Nos Meilleurs Packs</h1>
+					<p class="lead">"Découvrez nos Packs les plus vendus pour améliorer votre expérience d'achat."</p>
+				</div>
+			
+			<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+				<!-- Indicateurs -->
+				{% set filteredProducts = [] %}
+				{% for product in homeproducts %}
+					{% if product.category.id == 10 %}
+						{% set filteredProducts = filteredProducts|merge([product]) %}
 					{% endif %}
-				</div>
+				{% endfor %}
+				
+				{% if filteredProducts|length > 0 %}
+					<div class="carousel-indicators">
+						{% set totalSlides = (filteredProducts|length / 3)|round(0, 'ceil') %}
+						{% for i in 0..totalSlides-1 %}
+							<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{ i }}" class="{{ i == 0 ? 'active' : '' }}" {% if i == 0 %}aria-current="true"{% endif %} aria-label="Slide {{ i + 1 }}"></button>
+						{% endfor %}
+					</div>
+
+					<!-- Slides -->
+					<div class="carousel-inner" style="height: 600px; overflow: hidden;">
+						{% for i in 0..(filteredProducts|length - 1) %}
+							{% if i % 3 == 0 %}
+								<div class="carousel-item {{ i == 0 ? 'active' : '' }}" data-bs-interval="10000">
+									<div class="container">
+										<div class="row">
+											{% for j in 0..2 %}
+												{% if filteredProducts[i + j] is defined %}
+													{% set product = filteredProducts[i + j] %}
+													<div class="col-md-4 mb-5">
+														<div class="card h-100">
+															<a class="link" href="{{ path('app_product', {'slug': product.slug}) }}">
+															<img src="/uploads/products/{{ product.illustration }}" class="card-img-top" alt="{{ product.name }}" style="height: auto; object-fit: cover;">
+															</a>
+															<div class="card-body">
+																<h5 class="card-title">{{ product.name }}</h5>
+																{# <p class="card-text">{{ product.description|striptags|slice(0, 80)|raw }}{{ product.description|length > 80 ? '...' : '' }}</p> #}
+																<div class="d-flex justify-content-between align-items-start mb-2">
+																	<span class="badge bg-info">
+																		{{ (product.pricewithtax * rate)|number_format(2, '.', ' ') ~ ' ' ~ symbol }}
+																	</span>
+																</div class="">
+															<a class="btn btn-outline-success mt-3 p-2" href="{{ path('app_product', {'slug': product.slug}) }}">Découvrez</a>
+
+															</div>
+														</div>
+													</div>
+												{% endif %}
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+
+					<!-- Contrôles de navigation -->
+					{% if filteredProducts|length > 3 %}
+						<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Précédent</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Suivant</span>
+						</button>
+					{% endif %}
+				{% else %}
+					<div class="text-center py-5">
+						<p class="text-muted">Aucun pack disponible pour le moment.</p>
+					</div>
+				{% endif %}
 			</div>
-            {% endif %}
-		{% endfor %}
+		</div>
 
-				<hr class="featurette-divider">
+		<hr class="featurette-divider">
 
-<section class="newsletter-promo py-5 bg-light text-center">
-    <div class="container text-center">
-        <h2 class="fw-bold mb-3">Restez informé(e) !</h2>
-        <p class="lead mb-4">Recevez nos conseils beauté, recettes naturelles et offres exclusives directement par email.</p>
-        <a href="{{ path('app_newsletter_subscriber') }}" class="btn btn-outline-success outline btn-lg">Je m’abonne à la newsletter</a>
-    </div>
-</section>
+		<!-- Section Articles de Blog -->
+		<div class="container-fluid mb-4" style="max-width: 80%;">
+			<div class="title col-lg-12 text-center mb-4">
+				<h1 class="featurette-heading fw-normal lh-2 mt-1 p-3">Nos Meilleurs Articles</h1>
+				<p class="lead">"Découvrez nos articles les plus populaires pour améliorer votre expérience."</p>
+			</div>
+			
+			{% for blog in blogposts %}
+				{% if blog.status == 'published' %}
+					<div class="row featurette mb-5">
+						<div class="col-md-7 {% if loop.index is even %}order-md-2{% endif %}">
+							<h2 class="featurette-heading fw-normal p-3">
+								{{ blog.title }}
+							</h2>
+							<p class="lead" style="text-align: justify;">{{ blog.excerpt|default(blog.content|striptags|slice(0, 200)) }}</p>
+							<a href="{{ path('app_blog_show', {slug: blog.slug}) }}" class="btn btn-outline-primary">
+								Lire la suite
+								<i class="fas fa-arrow-right ms-2"></i>
+							</a>
+						</div>
+						<div class="col-md-5 {% if loop.index is even %}order-md-1{% endif %}">
+							{% if blog.featuredImage %}
+								<a href="{{ path('app_blog_show', {slug: blog.slug}) }}">
+									<img src="{{ asset('uploads/products/blog/img/' ~ blog.featuredImage) }}" alt="{{ blog.title }}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" style="object-fit: cover;">
+								</a>
+							{% else %}
+								<svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" focusable="false">
+									<title>Placeholder</title>
+									<rect width="100%" height="100%" fill="var(--bs-secondary-bg)"/>
+									<text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+								</svg>
+							{% endif %}
+						</div>
+					</div>
+					{% if not loop.last %}
+						<hr class="featurette-divider">
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</div>
 
-	</div>
-</main>{% endblock %}
+		<hr class="featurette-divider">
+
+		<section class="newsletter-promo py-5 bg-light text-center">
+			<div class="container">
+				<h2 class="fw-bold mb-3">Restez informé(e) !</h2>
+				<p class="lead mb-4">Recevez nos conseils beauté, recettes naturelles et offres exclusives directement par email.</p>
+				<a href="{{ path('app_newsletter_subscriber') }}" class="btn btn-outline-success btn-lg">Je m'abonne à la newsletter</a>
+			</div>
+		</section>
+	</main>
+{% endblock %}

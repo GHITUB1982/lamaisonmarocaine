@@ -49,14 +49,17 @@
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <div class="card shadow-sm h-100 product-card">
                                 {# Image du produit #}
-                                <div class="card-img-container">
-                                    <img src="/uploads/products/{{ product.illustration }}" 
-                                         alt="{{ product.name }}" 
-                                         class="card-img-top"
-                                         style="object-fit: cover; height: 200px; background: transparent;"
-                                         loading="lazy">
-                                </div>
+                                <a href="{{ path('app_product', {'slug': product.slug}) }}" >
 
+                                <div class="card-img-container" style="height: auto;">
+
+                                <img src="/uploads/products/{{ product.illustration }}" 
+                                    alt="{{ product.name }}" 
+                                    class="card-img-top"
+                                    loading="lazy">
+                            
+                                </div>
+</a>
                                 <div class="card-body">
                                     {# En-tête avec prix et wishlist #}
                                     <div class="d-flex justify-content-between align-items-start mb-3">

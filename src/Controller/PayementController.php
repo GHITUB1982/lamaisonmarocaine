@@ -4,23 +4,36 @@ namespace App\Controller;
 
 use Stripe\Stripe;
 use App\Class\Cart;
+use App\Entity\Order;
 use Stripe\Checkout\Session;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class PayementController extends AbstractController
 {
     private $requestStack;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(
+        RequestStack $requestStack,
+        private TransportInterface $mailer,
+        private LoggerInterface $logger,
+        private EntityManagerInterface $entityManager,
+        private UrlGeneratorInterface $urlGenerator
+        )
     {
         $this->requestStack = $requestStack;
+        
     }
-
+      
     #[Route('/commande/paiement/{id_order}', name: 'app_payement')]
     public function index($id_order, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
     {
@@ -108,7 +121,7 @@ final class PayementController extends AbstractController
     }
 
     #[Route('/commande/merci/{stripe_session_id}', name: 'app_payement_success')]
-    public function success($stripe_session_id, OrderRepository $orderRepository, EntityManagerInterface $entityManager, Cart $cart): Response
+    public function success($stripe_session_id, OrderRepository $orderRepository, EntityManagerInterface $entityManager, Cart $cart, MailerInterface $mailer): Response
     {
         $order = $orderRepository->findOneBy([
             'stripe_session_id' => $stripe_session_id,
@@ -123,10 +136,31 @@ final class PayementController extends AbstractController
             $order->setState(1);
             $cart->remove();
             $entityManager->flush();
+
+            // Envoyer un email de confirmation
+            if ($this->getUser()) {
+                $user = $this->getUser();
+            } else {
+                $user = $order->getUser();
+            }
+           $emailMessage = (new TemplatedEmail())
+                ->from('no-reply@kechlotus.com')  // Adresse expéditeur stable
+                ->to($user->getEmail())        // Envoi au contact
+                ->subject('Confirmation de votre commande - Kechlotus')
+                ->html(
+                    $this->renderView('email/order_confirmation.html.twig', [
+                        'contact' => $user
+                    ])
+                )
+                ->text('Merci pour votre commande, nous donnerons suite dans les plus brefs délais.');
+
+            $this->mailer->send($emailMessage);
+
         }
 
         return $this->render('payement/success.html.twig', [
             'order' => $order,
         ]);
     }
+   
 }

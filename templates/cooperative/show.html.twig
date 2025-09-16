@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cooperative{% endblock %}
+
+{% block body %}
+    <h1>Cooperative</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cooperative.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ cooperative.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ cooperative.description }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ cooperative.address }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ cooperative.ville }}</td>
+            </tr>
+            <tr>
+                <th>Region</th>
+                <td>{{ cooperative.region }}</td>
+            </tr>
+            <tr>
+                <th>Postal</th>
+                <td>{{ cooperative.postal }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ cooperative.country }}</td>
+            </tr>
+            <tr>
+                <th>Phone1</th>
+                <td>{{ cooperative.phone1 }}</td>
+            </tr>
+            <tr>
+                <th>Phone2</th>
+                <td>{{ cooperative.phone2 }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ cooperative.email }}</td>
+            </tr>
+            <tr>
+                <th>Website</th>
+                <td>{{ cooperative.website }}</td>
+            </tr>
+            <tr>
+                <th>Facebook</th>
+                <td>{{ cooperative.facebook }}</td>
+            </tr>
+            <tr>
+                <th>Instagram</th>
+                <td>{{ cooperative.instagram }}</td>
+            </tr>
+            <tr>
+                <th>Twitter</th>
+                <td>{{ cooperative.twitter }}</td>
+            </tr>
+            <tr>
+                <th>Youtube</th>
+                <td>{{ cooperative.youtube }}</td>
+            </tr>
+            <tr>
+                <th>Linkedin</th>
+                <td>{{ cooperative.linkedin }}</td>
+            </tr>
+            <tr>
+                <th>Patente</th>
+                <td>{{ cooperative.patente }}</td>
+            </tr>
+            <tr>
+                <th>Register_commerce</th>
+                <td>{{ cooperative.registerCommerce }}</td>
+            </tr>
+            <tr>
+                <th>Identifiant_fiscal</th>
+                <td>{{ cooperative.identifiantFiscal }}</td>
+            </tr>
+            <tr>
+                <th>Cnss</th>
+                <td>{{ cooperative.cnss }}</td>
+            </tr>
+            <tr>
+                <th>Date_creation</th>
+                <td>{{ cooperative.dateCreation ? cooperative.dateCreation|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Secteur_activite</th>
+                <td>{{ cooperative.secteurActivite }}</td>
+            </tr>
+            <tr>
+                <th>Nombre_membres</th>
+                <td>{{ cooperative.nombreMembres }}</td>
+            </tr>
+            <tr>
+                <th>Representant_legal</th>
+                <td>{{ cooperative.representantLegal }}</td>
+            </tr>
+            <tr>
+                <th>Latitude</th>
+                <td>{{ cooperative.latitude }}</td>
+            </tr>
+            <tr>
+                <th>Longitude</th>
+                <td>{{ cooperative.longitude }}</td>
+            </tr>
+            <tr>
+                <th>Horaire</th>
+                <td>{{ cooperative.horaire }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ cooperative.createdAt ? cooperative.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ cooperative.updatedAt ? cooperative.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cooperative_index') }}">back to list</a>
+
+    <a href="{{ path('app_cooperative_edit', {'id': cooperative.id}) }}">edit</a>
+
+    {{ include('cooperative/_delete_form.html.twig') }}
+{% endblock %}

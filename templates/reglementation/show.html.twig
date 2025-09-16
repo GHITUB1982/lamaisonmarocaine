@@ -36,7 +36,7 @@
             {# Contenu principal #}
             <div class="card shadow-sm mb-5">
                 <div class="card-body regulation-content">
-                    {{ reglementation.content|raw }}
+    {{ reglementation.content|replace_variables|raw }}
                 </div>
             </div>
 

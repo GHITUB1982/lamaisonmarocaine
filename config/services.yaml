@@ -29,4 +29,6 @@ services:
     Src\EventSubscriber\LoginSubscriber:
         tags: [kernel.event_subscriber]
     App\EventSubscriber\TwigGlobalSubscriber:
-        tags: ['kernel.event_subscriber']
+        tags: ['kernel.event_subscriber', 'twig.global']
+        arguments:
+            $cooperativeRepository: '@App\Repository\CooperativeRepository'

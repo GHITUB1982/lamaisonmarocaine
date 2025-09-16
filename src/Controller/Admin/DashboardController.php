@@ -10,8 +10,10 @@ use App\Entity\Contact;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\BlogPosts;
+use App\Entity\Cooperative;
 use App\Entity\Reglementation;
 use App\Entity\NewsletterSubscriber;
+use App\Repository\CooperativeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -22,6 +24,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
+    private CooperativeRepository $cooperativeRepository;
+
+    public function __construct(CooperativeRepository $cooperativeRepository)
+    {
+        $this->cooperativeRepository = $cooperativeRepository;
+    }
+
     public function index(): Response
     {
         // Redirige vers la liste des utilisateurs à l'arrivée sur le dashboard
@@ -29,12 +38,17 @@ class DashboardController extends AbstractDashboardController
         return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
     }
 
-    public function configureDashboard(): Dashboard
-    {
-        return Dashboard::new()
-            ->setTitle('Kech Lotus Cooperative')
-            ->renderContentMaximized();
-    }
+  public function configureDashboard(): Dashboard
+{
+    // Injectez le repository dans le contrôleur ou via l'autowiring
+    $cooperative = $this->cooperativeRepository->findOneBy([]); // Récupère la première coopérative
+    
+    $name = $cooperative ? $cooperative->getName() : 'Tableau de Bord';
+
+    return Dashboard::new()
+        ->setTitle($name)
+        ->renderContentMaximized();
+}
 
     public function configureMenuItems(): iterable
     {
@@ -50,6 +64,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Menu A Propos', 'fas fa-gavel', Reglementation::class);
         yield MenuItem::linkToCrud('Messages contact', 'fas fa-envelope', Contact::class);
         yield MenuItem::linkToCrud('Newsletter', 'fas fa-newspaper', NewsletterSubscriber::class);
+        yield MenuItem::linkToCrud('Informations', 'fas fa-info-circle', Cooperative::class);
 
 
 

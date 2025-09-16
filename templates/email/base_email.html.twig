@@ -10,7 +10,7 @@
         {% block content %}{% endblock %}
         
         <div class="footer">
-            <p>© {{ "now"|date("Y") }} Kech Lotus Cooperative. Tous droits réservés.</p>
+            <p>© {{ "now"|date("Y") }} {{ cooperative.name }}. Tous droits réservés.</p>
             <p>
                 <a href="{{ absolute_url(path('app_home')) }}" style="color: #6B8E23;">
                     Visitez notre site

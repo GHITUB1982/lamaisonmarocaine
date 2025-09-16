@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cooperative index{% endblock %}
+
+{% block body %}
+    <h1>Cooperative index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Address</th>
+                <th>Ville</th>
+                <th>Region</th>
+                <th>Postal</th>
+                <th>Country</th>
+                <th>Phone1</th>
+                <th>Phone2</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>Facebook</th>
+                <th>Instagram</th>
+                <th>Twitter</th>
+                <th>Youtube</th>
+                <th>Linkedin</th>
+                <th>Patente</th>
+                <th>Register_commerce</th>
+                <th>Identifiant_fiscal</th>
+                <th>Cnss</th>
+                <th>Date_creation</th>
+                <th>Secteur_activite</th>
+                <th>Nombre_membres</th>
+                <th>Representant_legal</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Horaire</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cooperative in cooperatives %}
+            <tr>
+                <td>{{ cooperative.id }}</td>
+                <td>{{ cooperative.name }}</td>
+                <td>{{ cooperative.description }}</td>
+                <td>{{ cooperative.address }}</td>
+                <td>{{ cooperative.ville }}</td>
+                <td>{{ cooperative.region }}</td>
+                <td>{{ cooperative.postal }}</td>
+                <td>{{ cooperative.country }}</td>
+                <td>{{ cooperative.phone1 }}</td>
+                <td>{{ cooperative.phone2 }}</td>
+                <td>{{ cooperative.email }}</td>
+                <td>{{ cooperative.website }}</td>
+                <td>{{ cooperative.facebook }}</td>
+                <td>{{ cooperative.instagram }}</td>
+                <td>{{ cooperative.twitter }}</td>
+                <td>{{ cooperative.youtube }}</td>
+                <td>{{ cooperative.linkedin }}</td>
+                <td>{{ cooperative.patente }}</td>
+                <td>{{ cooperative.registerCommerce }}</td>
+                <td>{{ cooperative.identifiantFiscal }}</td>
+                <td>{{ cooperative.cnss }}</td>
+                <td>{{ cooperative.dateCreation ? cooperative.dateCreation|date('Y-m-d') : '' }}</td>
+                <td>{{ cooperative.secteurActivite }}</td>
+                <td>{{ cooperative.nombreMembres }}</td>
+                <td>{{ cooperative.representantLegal }}</td>
+                <td>{{ cooperative.latitude }}</td>
+                <td>{{ cooperative.longitude }}</td>
+                <td>{{ cooperative.horaire }}</td>
+                <td>{{ cooperative.createdAt ? cooperative.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ cooperative.updatedAt ? cooperative.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_cooperative_show', {'id': cooperative.id}) }}">show</a>
+                    <a href="{{ path('app_cooperative_edit', {'id': cooperative.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="31">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cooperative_new') }}">Create new</a>
+{% endblock %}
