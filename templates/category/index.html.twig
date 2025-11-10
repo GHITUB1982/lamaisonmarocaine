@@ -4,6 +4,10 @@
 {% block title %}Liste des catégories - {{ parent() }}{% endblock %}
 
 {% block body %}
+{# Variables pour la devise - à définir au début du template #}
+{% set rate = app.session.get('currency') == 'EUR' ? 0.1 : 1 %}
+{% set symbol = app.session.get('currency') == 'EUR' ? '€' : 'Dhs' %}
+
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-12 mx-auto">
@@ -26,12 +30,6 @@
                 {{ categories|length }} catégories disponibles
             </div>
 
-            {# Bouton retour #}
-            {# <div class="mb-4">
-                <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-home me-2"></i>Retour à l'accueil
-                </a>
-            </div> #}
             {% if categories is empty %}
                 {# État vide - version carte comme réglementation #}
                 <div class="card shadow-sm mb-5">
@@ -44,7 +42,7 @@
             {% else %}
                 {# Liste des catégories #}
                 {% for category in categories %}
-                    <div class="card shadow-sm mb-5">
+                    <div class="card shadow-sm mb-5 category-card">
                         <div class="card-body">
                             {# En-tête de catégorie #}
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -64,33 +62,85 @@
                                 <div class="row g-4 mt-3">
                                     {% for product in category.products %}
                                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                            <div class="card h-100 border-0">
-                                                {# Image sans cadre #}
-                                                <img src="/uploads/products/{{ product.illustration }}" 
-                                                     alt="{{ product.name }}" 
-                                                     class="img-fluid rounded-top"
-                                                     style="height: 200px; object-fit: cover; background: transparent;">
-
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{ product.name }}</h5>
-                                                    <div class="mb-2">
-                                                        {% if app.session.get('currency') == 'EUR' %}
-                                                            {{ (product.pricewithtax / 10)|format_currency('EUR') }}
-                                                            {# <small class="text-muted">({{ item.product.pricewithtax|format_currency('MAD') }})</small> #}
+                                            <div class="card shadow-sm h-100 product-card"> 
+                                                {# Image du produit - Style amélioré comme page produit #}
+                                                <a href="{{ path('app_product', {'slug': product.slug}) }}" class="position-relative">
+                                                    <div class="card-img-container overflow-hidden" style="height: 250px;">
+                                                        <img src="/uploads/products/{{ product.illustration }}" 
+                                                            alt="{{ product.name }}" 
+                                                            class="card-img-top w-100 h-100 object-fit-cover"
+                                                            loading="lazy">
+                                                        <div class="position-absolute top-0 end-0 m-2">
+                                                            {% if app.user and product in app.user.wishlists %}
+                                                                <span class="badge bg-warning text-dark">
+                                                                    <i class="fas fa-heart"></i> Favori
+                                                                </span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                
+                                                <div class="card-body d-flex flex-column">
+                                                    {# En-tête avec prix #}
+                                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                                        <span class="badge bg-primary fs-6">
+                                                            {% if app.session.get('currency') == 'EUR' %}
+                                                                {{ (product.pricewithtax * 0.1)|number_format(2, '.', ' ') }} €
+                                                            {% else %}
+                                                                {{ product.pricewithtax|number_format(2, '.', ' ') }} Dhs
+                                                            {% endif %}
+                                                        </span>
+                                                        
+                                                        {% if app.user %}
+                                                            {% if product in app.user.wishlists %}
+                                                                <a href="{{ path('app_account_wishlist_remove', { id: product.id }) }}" 
+                                                                   class="btn btn-sm btn-warning p-1" 
+                                                                   title="Retirer des favoris">
+                                                                    <i class="fas fa-heart text-danger"></i>
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{{ path('app_account_wishlist_add', { id: product.id }) }}" 
+                                                                   class="btn btn-sm btn-outline-secondary p-1"
+                                                                   title="Ajouter aux favoris">
+                                                                    <i class="far fa-heart text-danger"></i>
+                                                                </a>
+                                                            {% endif %}
                                                         {% else %}
-                                                            {{ product.pricewithtax|format_currency('MAD') }}
-                                                            {# <small class="text-muted">({{ (item.product.pricewithtax / 10)|format_currency('EUR') }})</small> #}
-                                                        {% endif %}                                                    </div>
-                                                    <p class="card-text text-muted small">
-                                                        {{ product.description|striptags|slice(0, 60) ~ '...' }}
-                                                    </p>
-                                                </div>
+                                                            <a href="{{ path('app_login') }}" 
+                                                               class="btn btn-sm btn-outline-secondary p-1"
+                                                               title="Connectez-vous pour ajouter aux favoris">
+                                                                <i class="far fa-heart text-muted"></i>
+                                                            </a>
+                                                        {% endif %}
+                                                    </div>
 
-                                                <div class="card-footer bg-transparent border-top-0">
-                                                    <a href="{{ path('app_product', {slug: product.slug}) }}" 
-                                                       class="btn btn-sm btn-outline-primary w-100">
-                                                        <i class="fas fa-eye me-1"></i>Voir le produit
-                                                    </a>
+                                                    {# Titre et description #}
+                                                    <h5 class="card-title mt-2">{{ product.name }}</h5>
+                                                    <div class="mb-2">
+                                                        <small class="text-muted">Réf: {{ product.slug|upper }}</small>
+                                                    </div>
+                                                    <p class="card-text text-muted small flex-grow-1">
+                                                        {% if product.description|length > 80 %}
+                                                            {{ product.description|striptags|slice(0, 80) }}...
+                                                        {% else %}
+                                                            {{ product.description|striptags }}
+                                                        {% endif %}
+                                                    </p>
+
+                                                    {# Boutons d'action #}
+                                                    <div class="mt-auto pt-2">
+                                                        <div class="d-flex gap-2">
+                                                            <a href="{{ path('app_product', {'slug': product.slug}) }}" 
+                                                               class="btn btn-outline-primary flex-grow-1">
+                                                                <i class="fas fa-eye me-1"></i> Voir le produit
+                                                            </a>
+                                                            <a href="{{ path('app_cart_add', { id: product.id }) }}" 
+                                                               class="btn btn-success"
+                                                               title="Ajouter au panier">
+                                                                <i class="fas fa-shopping-cart"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -115,25 +165,145 @@
 {% block stylesheets %}
 {{ parent() }}
 <style>
-  
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card-img-container {
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.card-img-top {
+    transition: transform 0.5s ease;
+    object-fit: cover;
+}
+
+.product-card:hover .card-img-top {
+    transform: scale(1.08);
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    padding: 0.375rem 0.75rem;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+/* Style pour l'effet de zoom sur l'image */
+.card-img-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.03);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.product-card:hover .card-img-container::before {
+    opacity: 1;
+}
 </style>
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Animation au survol des cartes
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px)';
-                this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = '';
-                this.style.boxShadow = '';
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion des boutons wishlist
+    const wishlistButtons = document.querySelectorAll('a[href*="wishlist"]');
+    
+    wishlistButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // Animation du bouton
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.add('fa-bounce');
+                setTimeout(() => {
+                    icon.classList.remove('fa-bounce');
+                }, 1000);
+            }
         });
     });
+
+    // Animation des boutons d'ajout au panier
+    const cartButtons = document.querySelectorAll('a[href*="cart_add"]');
+    
+    cartButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.add('fa-spin');
+                setTimeout(() => {
+                    icon.classList.remove('fa-spin');
+                }, 500);
+            }
+        });
+    });
+
+    // Animation au survol des cartes
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+    });
+
+    // Amélioration du lazy loading pour les images
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.classList.add('fade-in');
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        document.querySelectorAll('.card-img-top').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+});
 </script>
 {% endblock %}

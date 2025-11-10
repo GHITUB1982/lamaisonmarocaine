@@ -5,6 +5,8 @@ namespace App\Controller;
 use Stripe\Stripe;
 use App\Class\Cart;
 use App\Entity\Order;
+use App\Entity\Cooperative;
+use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +14,6 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -127,8 +128,9 @@ final class PayementController extends AbstractController
             'stripe_session_id' => $stripe_session_id,
             'user' => $this->getUser(),
         ]);
-
-        if (!$order) {
+             // Récupérer la coopérative (vous devrez peut-être adapter cette partie)
+            $cooperative = $this->entityManager->getRepository(Cooperative::class)->findOneBy([]);
+                 if (!$order) {
             return $this->redirectToRoute('app_home');
         }
 
@@ -149,7 +151,10 @@ final class PayementController extends AbstractController
                 ->subject('Confirmation de votre commande - Kechlotus')
                 ->html(
                     $this->renderView('email/order_confirmation.html.twig', [
-                        'contact' => $user
+                        'user' => $user, 
+                        'order' => $order,
+                        'orderDetails' => $order->getOrderDetails(),
+                        'cooperative' => $cooperative, // Assurez-vous que $cooperative est défini quelque part
                     ])
                 )
                 ->text('Merci pour votre commande, nous donnerons suite dans les plus brefs délais.');
